@@ -13,9 +13,9 @@ const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-hero">
-            <span className="text-lg font-bold text-primary-foreground">S</span>
+            <span className="text-lg font-bold text-primary-foreground">T</span>
           </div>
-          <span className="font-serif text-xl font-semibold text-foreground">ServiceHub</span>
+          <span className="font-serif text-xl font-semibold text-foreground">Taska</span>
         </Link>
 
         {/* Desktop Navigation */}

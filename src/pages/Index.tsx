@@ -29,10 +29,10 @@ const Index = () => {
         <div className="container relative z-10 py-24 md:py-32 lg:py-40">
           <div className="max-w-2xl">
             <h1 className="font-serif text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl animate-fade-in">
-              Find Trusted Local Service Professionals
+              Affordable, Reliable Service For Your Home
             </h1>
             <p className="mt-4 text-lg text-primary-foreground/80 md:text-xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              Connect with verified painters, plumbers, cleaners, and more. Quality work, guaranteed satisfaction.
+              Connect with verified painters, plumbers, cleaners, and more across South Africa.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row animate-fade-in" style={{ animationDelay: "0.2s" }}>
@@ -138,7 +138,7 @@ const Index = () => {
               Are You a Service Professional?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-primary-foreground/90">
-              Join thousands of providers growing their business on ServiceHub. Get verified, get noticed, get hired.
+              Join thousands of providers growing their business on Taska. Get verified, get noticed, get hired.
             </p>
             <Link to="/provider/dashboard" className="mt-8 inline-block">
               <Button variant="heroOutline" size="xl">
