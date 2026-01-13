@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Services from "./pages/Services";
 import ProviderProfile from "./pages/ProviderProfile";
 import ProviderDashboard from "./pages/ProviderDashboard";
+import LogoSelection from "./pages/LogoSelection";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/services" element={<Services />} />
           <Route path="/provider/:id" element={<ProviderProfile />} />
           <Route path="/provider/dashboard" element={<ProviderDashboard />} />
+          <Route path="/logo-selection" element={<LogoSelection />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
