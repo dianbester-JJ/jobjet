@@ -40,7 +40,7 @@ const ProviderDashboard = () => {
         {/* Page Header */}
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
+            <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
               Provider Dashboard
             </h1>
             <p className="mt-2 text-muted-foreground">
@@ -95,7 +95,7 @@ const ProviderDashboard = () => {
             {/* Recent Activity */}
             <div className="grid gap-6 lg:grid-cols-2">
               <div className="rounded-xl border border-border bg-card p-6 shadow-card">
-                <h2 className="font-serif text-xl font-semibold text-foreground">Recent Inquiries</h2>
+                <h2 className="font-display text-xl font-semibold text-foreground">Recent Inquiries</h2>
                 <div className="mt-4 space-y-4">
                   {[1, 2, 3].map((inquiry) => (
                     <div
@@ -118,7 +118,7 @@ const ProviderDashboard = () => {
               </div>
 
               <div className="rounded-xl border border-border bg-card p-6 shadow-card">
-                <h2 className="font-serif text-xl font-semibold text-foreground">Recent Reviews</h2>
+                <h2 className="font-display text-xl font-semibold text-foreground">Recent Reviews</h2>
                 <div className="mt-4 space-y-4">
                   {[1, 2, 3].map((review) => (
                     <div
@@ -150,7 +150,7 @@ const ProviderDashboard = () => {
           <div className="rounded-xl border border-border bg-card p-8 text-center">
             <div className="mx-auto max-w-md">
               <Camera className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 font-serif text-xl font-semibold text-foreground">
+              <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
                 Create Your First Listing
               </h3>
               <p className="mt-2 text-muted-foreground">
@@ -181,7 +181,7 @@ const ProviderDashboard = () => {
         {activeTab === "messages" && (
           <div className="rounded-xl border border-border bg-card p-8 text-center">
             <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 font-serif text-xl font-semibold text-foreground">
+            <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
               No Messages Yet
             </h3>
             <p className="mt-2 text-muted-foreground">
@@ -193,7 +193,7 @@ const ProviderDashboard = () => {
         {/* Settings Tab */}
         {activeTab === "settings" && (
           <div className="max-w-2xl rounded-xl border border-border bg-card p-6">
-            <h2 className="font-serif text-xl font-semibold text-foreground">Profile Settings</h2>
+            <h2 className="font-display text-xl font-semibold text-foreground">Profile Settings</h2>
             <div className="mt-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-foreground">Business Name</label>

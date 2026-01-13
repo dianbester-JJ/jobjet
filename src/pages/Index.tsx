@@ -28,7 +28,7 @@ const Index = () => {
 
         <div className="container relative z-10 py-24 md:py-32 lg:py-40">
           <div className="max-w-2xl">
-            <h1 className="font-serif text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl animate-fade-in">
+            <h1 className="font-display text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl animate-fade-in">
               Affordable, Reliable Service For Your Home
             </h1>
             <p className="mt-4 text-lg text-primary-foreground/80 md:text-xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
@@ -77,7 +77,7 @@ const Index = () => {
       <section className="py-16 md:py-24">
         <div className="container">
           <div className="text-center">
-            <h2 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">
               Browse by Service
             </h2>
             <p className="mt-3 text-muted-foreground">
@@ -98,7 +98,7 @@ const Index = () => {
         <div className="container">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
+              <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">
                 Top Rated Providers
               </h2>
               <p className="mt-3 text-muted-foreground">
@@ -134,7 +134,7 @@ const Index = () => {
       <section className="py-16 md:py-24">
         <div className="container">
           <div className="overflow-hidden rounded-2xl bg-gradient-hero p-8 text-center md:p-16">
-            <h2 className="font-serif text-3xl font-bold text-primary-foreground md:text-4xl">
+            <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
               Are You a Service Professional?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-primary-foreground/90">

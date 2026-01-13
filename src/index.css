@@ -105,12 +105,12 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Open Sans', sans-serif;
   }
 
   h1, h2, h3 {
-    font-family: 'Bitter', serif;
-    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
   }
 }
 

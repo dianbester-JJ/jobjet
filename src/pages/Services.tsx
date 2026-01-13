@@ -37,7 +37,7 @@ const Services = () => {
       <main className="container py-8 md:py-12">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
+          <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
             Browse Services
           </h1>
           <p className="mt-2 text-muted-foreground">
@@ -102,7 +102,7 @@ const Services = () => {
         ) : (
           <div className="rounded-xl border border-border bg-card p-12 text-center">
             <div className="text-4xl">🔍</div>
-            <h3 className="mt-4 font-serif text-xl font-semibold text-foreground">No providers found</h3>
+            <h3 className="mt-4 font-display text-xl font-semibold text-foreground">No providers found</h3>
             <p className="mt-2 text-muted-foreground">
               Try adjusting your search or filters
             </p>
