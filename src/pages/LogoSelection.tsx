@@ -5,25 +5,60 @@ import { Check, ArrowLeft } from "lucide-react";
 import logoOption1 from "@/assets/logo-option-1.png";
 import logoOption2 from "@/assets/logo-option-2.png";
 import logoOption3 from "@/assets/logo-option-3.png";
+import logoOption4 from "@/assets/logo-option-4.png";
+import logoOption5 from "@/assets/logo-option-5.png";
+import logoOption6 from "@/assets/logo-option-6.png";
+import logoOption7 from "@/assets/logo-option-7.png";
 
 const logoOptions = [
   {
     id: 1,
-    name: "Option 1 - Shield & Check",
-    description: "Modern T with checkmark and gold accent, representing trust and reliability",
+    name: "Shield & Check",
+    description: "T with checkmark and gold accent - trust & reliability",
     image: logoOption1,
+    style: "Classic",
   },
   {
     id: 2,
-    name: "Option 2 - Home & T",
-    description: "House roof with integrated T letter, clearly communicates home services",
+    name: "Home & T",
+    description: "House roof with T letter - home services focus",
     image: logoOption2,
+    style: "Classic",
   },
   {
     id: 3,
-    name: "Option 3 - Dynamic Arrows",
-    description: "Four-way arrows with green gradient, suggests service in all directions",
+    name: "Dynamic Arrows",
+    description: "Four-way arrows with gradient - service everywhere",
     image: logoOption3,
+    style: "Classic",
+  },
+  {
+    id: 4,
+    name: "Hammer T",
+    description: "Minimalist T shaped like a hammer - DIY & tools",
+    image: logoOption4,
+    style: "Minimalist",
+  },
+  {
+    id: 5,
+    name: "Home Security",
+    description: "Navy & orange house with keyhole - trust & home",
+    image: logoOption5,
+    style: "Colorful",
+  },
+  {
+    id: 6,
+    name: "Crossed Tools",
+    description: "Paintbrush & wrench crossed - multi-service DIY",
+    image: logoOption6,
+    style: "Minimalist",
+  },
+  {
+    id: 7,
+    name: "Bold T Tag",
+    description: "Black & yellow modern T with price tag - bold & modern",
+    image: logoOption7,
+    style: "Bold",
   },
 ];
 
@@ -42,7 +77,7 @@ const LogoSelection = () => {
       </header>
 
       <main className="container py-12">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
               Choose Your Logo
@@ -52,7 +87,7 @@ const LogoSelection = () => {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {logoOptions.map((option) => (
               <button
                 key={option.id}
@@ -69,7 +104,11 @@ const LogoSelection = () => {
                   </div>
                 )}
                 
-                <div className="flex aspect-square items-center justify-center rounded-xl bg-background p-4">
+                <span className="absolute left-3 top-3 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  {option.style}
+                </span>
+                
+                <div className="mt-4 flex aspect-square items-center justify-center rounded-xl bg-background p-4">
                   <img
                     src={option.image}
                     alt={option.name}
