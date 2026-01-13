@@ -31,7 +31,7 @@ const ProviderCard = ({ provider }: ProviderCardProps) => {
       
       <div className="p-4">
         <div className="flex items-start justify-between">
-          <h3 className="font-serif text-lg font-semibold text-foreground">{provider.name}</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground">{provider.name}</h3>
           <div className="flex items-center gap-1 text-sm">
             <Star className="h-4 w-4 fill-primary text-primary" />
             <span className="font-medium">{provider.rating}</span>

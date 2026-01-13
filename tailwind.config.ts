@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Ubuntu', 'sans-serif'],
-        serif: ['Bitter', 'serif'],
+        sans: ['Open Sans', 'sans-serif'],
+        display: ['Montserrat', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

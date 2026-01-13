@@ -22,7 +22,7 @@ const ServiceCategoryCard = ({ category }: ServiceCategoryCardProps) => {
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <div className="flex items-center gap-2">
           <span className="text-2xl">{category.icon}</span>
-          <h3 className="font-serif text-lg font-semibold text-primary-foreground">
+          <h3 className="font-display text-lg font-semibold text-primary-foreground">
             {category.name}
           </h3>
         </div>

@@ -25,7 +25,7 @@ const ProviderProfile = () => {
       <div className="min-h-screen bg-gradient-warm">
         <Header />
         <div className="container py-16 text-center">
-          <h1 className="font-serif text-3xl font-bold text-foreground">Provider Not Found</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">Provider Not Found</h1>
           <p className="mt-4 text-muted-foreground">The provider you're looking for doesn't exist.</p>
           <Link to="/services">
             <Button className="mt-6">
@@ -80,7 +80,7 @@ const ProviderProfile = () => {
                       {category?.icon} {category?.name}
                     </span>
                   </div>
-                  <h1 className="mt-3 font-serif text-3xl font-bold text-foreground md:text-4xl">
+                  <h1 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
                     {provider.name}
                   </h1>
                 </div>
@@ -103,13 +103,13 @@ const ProviderProfile = () => {
               </div>
 
               <div className="mt-6">
-                <h2 className="font-serif text-xl font-semibold text-foreground">About</h2>
+                <h2 className="font-display text-xl font-semibold text-foreground">About</h2>
                 <p className="mt-2 text-muted-foreground leading-relaxed">{provider.description}</p>
               </div>
 
               {/* Reviews Section */}
               <div className="mt-8">
-                <h2 className="font-serif text-xl font-semibold text-foreground">Reviews</h2>
+                <h2 className="font-display text-xl font-semibold text-foreground">Reviews</h2>
                 <div className="mt-4 space-y-4">
                   {[1, 2, 3].map((review) => (
                     <div key={review} className="rounded-lg border border-border bg-card p-4">
