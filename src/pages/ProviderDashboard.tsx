@@ -1,230 +1,143 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
+import { Plus, Calendar, Clock, MapPin, Loader2, Briefcase, Star, DollarSign, Trash2 } from "lucide-react";
+import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 import { serviceCategories } from "@/data/services";
-import { 
-  Plus, 
-  Settings, 
-  BarChart3, 
-  MessageSquare, 
-  Calendar,
-  Camera,
-  DollarSign,
-  Users,
-  Star
-} from "lucide-react";
+
+const statusColors: Record<string, string> = {
+  pending: "bg-yellow-100 text-yellow-800",
+  confirmed: "bg-blue-100 text-blue-800",
+  completed: "bg-green-100 text-green-800",
+  cancelled: "bg-red-100 text-red-800",
+};
 
 const ProviderDashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
+  const [listings, setListings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const stats = [
-    { label: "Profile Views", value: "1,234", icon: Users, change: "+12%" },
-    { label: "Inquiries", value: "45", icon: MessageSquare, change: "+8%" },
-    { label: "Completed Jobs", value: "89", icon: Calendar, change: "+15%" },
-    { label: "Earnings", value: "$12,450", icon: DollarSign, change: "+22%" },
-  ];
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth?mode=signin");
+    }
+  }, [user, authLoading, navigate]);
 
-  const tabs = [
-    { id: "overview", label: "Overview", icon: BarChart3 },
-    { id: "listings", label: "My Listings", icon: Camera },
-    { id: "messages", label: "Messages", icon: MessageSquare },
-    { id: "settings", label: "Settings", icon: Settings },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+
+      const { data: listingsData } = await supabase
+        .from("provider_listings")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      setListings(listingsData || []);
+
+      const { data: bookingsData } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("provider_id", user.id)
+        .order("created_at", { ascending: false });
+
+      setBookings(bookingsData || []);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [user]);
+
+  const handleUpdateStatus = async (bookingId: string, newStatus: string) => {
+    await supabase.from("bookings").update({ status: newStatus }).eq("id", bookingId);
+    setBookings((prev) => prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b)));
+    toast({ title: "Status updated" });
+  };
+
+  const getCategoryIcon = (categoryId: string) => serviceCategories.find((c) => c.id === categoryId)?.icon || "🔧";
+
+  if (authLoading || loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-warm">
       <Header />
-
-      <main className="container py-8 md:py-12">
-        {/* Page Header */}
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
-              Provider Dashboard
-            </h1>
-            <p className="mt-2 text-muted-foreground">
-              Manage your services and connect with clients
-            </p>
-          </div>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add New Listing
-          </Button>
+      <main className="container py-8">
+        <div className="flex items-center justify-between">
+          <h1 className="font-display text-2xl font-bold">Provider Dashboard</h1>
+          <Link to="/create-listing">
+            <Button><Plus className="mr-2 h-4 w-4" />Create Listing</Button>
+          </Link>
         </div>
 
-        {/* Tabs */}
-        <div className="mb-8 flex gap-2 overflow-x-auto border-b border-border pb-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              }`}
-            >
-              <tab.icon className="h-4 w-4" />
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <Tabs defaultValue="bookings" className="mt-8">
+          <TabsList>
+            <TabsTrigger value="bookings">Bookings ({bookings.length})</TabsTrigger>
+            <TabsTrigger value="listings">Listings ({listings.length})</TabsTrigger>
+          </TabsList>
 
-        {/* Stats Grid */}
-        {activeTab === "overview" && (
-          <>
-            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-xl border border-border bg-card p-6 shadow-card"
-                >
-                  <div className="flex items-center justify-between">
-                    <stat.icon className="h-5 w-5 text-primary" />
-                    <span className="text-xs font-medium text-primary">{stat.change}</span>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+          <TabsContent value="bookings" className="mt-6 space-y-4">
+            {bookings.length === 0 ? (
+              <div className="rounded-xl border bg-card p-8 text-center">
+                <p className="text-muted-foreground">No bookings yet. Create a listing to start.</p>
+              </div>
+            ) : (
+              bookings.map((b) => (
+                <div key={b.id} className="rounded-xl border bg-card p-6">
+                  <div className="flex justify-between">
+                    <div>
+                      <Badge className={statusColors[b.status]}>{b.status}</Badge>
+                      <p className="mt-2">{format(new Date(b.service_date), "PPP")} at {b.service_time}</p>
+                      <p className="text-sm text-muted-foreground">{b.address}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xl font-bold text-primary">R{b.total_amount}</p>
+                      {b.status === "pending" && (
+                        <Button size="sm" className="mt-2" onClick={() => handleUpdateStatus(b.id, "confirmed")}>Confirm</Button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              ))
+            )}
+          </TabsContent>
 
-            {/* Recent Activity */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-xl border border-border bg-card p-6 shadow-card">
-                <h2 className="font-display text-xl font-semibold text-foreground">Recent Inquiries</h2>
-                <div className="mt-4 space-y-4">
-                  {[1, 2, 3].map((inquiry) => (
-                    <div
-                      key={inquiry}
-                      className="flex items-center justify-between border-b border-border pb-4 last:border-0 last:pb-0"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-muted" />
-                        <div>
-                          <p className="font-medium text-foreground">John Doe</p>
-                          <p className="text-sm text-muted-foreground">Interior painting</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Reply
-                      </Button>
-                    </div>
-                  ))}
+          <TabsContent value="listings" className="mt-6 grid gap-4 md:grid-cols-2">
+            {listings.length === 0 ? (
+              <div className="col-span-2 rounded-xl border bg-card p-8 text-center">
+                <p className="text-muted-foreground">No listings yet.</p>
+                <Link to="/create-listing"><Button className="mt-4">Create Listing</Button></Link>
+              </div>
+            ) : (
+              listings.map((l) => (
+                <div key={l.id} className="rounded-xl border bg-card p-6">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{getCategoryIcon(l.category_id)}</span>
+                    <h3 className="font-semibold">{l.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{l.location}</p>
+                  <p className="mt-2 font-semibold text-primary">R{l.hourly_rate}/hr</p>
                 </div>
-              </div>
-
-              <div className="rounded-xl border border-border bg-card p-6 shadow-card">
-                <h2 className="font-display text-xl font-semibold text-foreground">Recent Reviews</h2>
-                <div className="mt-4 space-y-4">
-                  {[1, 2, 3].map((review) => (
-                    <div
-                      key={review}
-                      className="border-b border-border pb-4 last:border-0 last:pb-0"
-                    >
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className="h-4 w-4 fill-primary text-primary"
-                          />
-                        ))}
-                      </div>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        "Amazing work! Very professional and timely. Would definitely recommend."
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">- Sarah M.</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Listings Tab */}
-        {activeTab === "listings" && (
-          <div className="rounded-xl border border-border bg-card p-8 text-center">
-            <div className="mx-auto max-w-md">
-              <Camera className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
-                Create Your First Listing
-              </h3>
-              <p className="mt-2 text-muted-foreground">
-                Add services you offer with photos of your work to attract more clients.
-              </p>
-              <div className="mt-6">
-                <label className="block text-left text-sm font-medium text-foreground mb-2">
-                  Select Service Category
-                </label>
-                <select className="w-full rounded-lg border border-input bg-background py-3 px-4 text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
-                  <option value="">Choose a category...</option>
-                  {serviceCategories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.icon} {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <Button className="mt-4">
-                <Plus className="mr-2 h-4 w-4" />
-                Create Listing
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Messages Tab */}
-        {activeTab === "messages" && (
-          <div className="rounded-xl border border-border bg-card p-8 text-center">
-            <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
-              No Messages Yet
-            </h3>
-            <p className="mt-2 text-muted-foreground">
-              When clients send you inquiries, they'll appear here.
-            </p>
-          </div>
-        )}
-
-        {/* Settings Tab */}
-        {activeTab === "settings" && (
-          <div className="max-w-2xl rounded-xl border border-border bg-card p-6">
-            <h2 className="font-display text-xl font-semibold text-foreground">Profile Settings</h2>
-            <div className="mt-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground">Business Name</label>
-                <input
-                  type="text"
-                  className="mt-1 w-full rounded-lg border border-input bg-background py-2 px-3 focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Your business name"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground">Description</label>
-                <textarea
-                  className="mt-1 w-full rounded-lg border border-input bg-background py-2 px-3 focus:outline-none focus:ring-2 focus:ring-ring"
-                  rows={4}
-                  placeholder="Describe your services..."
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground">Hourly Rate ($)</label>
-                <input
-                  type="number"
-                  className="mt-1 w-full rounded-lg border border-input bg-background py-2 px-3 focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="45"
-                />
-              </div>
-              <Button>Save Changes</Button>
-            </div>
-          </div>
-        )}
+              ))
+            )}
+          </TabsContent>
+        </Tabs>
       </main>
-
       <Footer />
     </div>
   );
