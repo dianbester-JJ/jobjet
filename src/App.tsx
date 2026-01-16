@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import Booking from "./pages/Booking";
 import CreateListing from "./pages/CreateListing";
 import CustomerDashboard from "./pages/CustomerDashboard";
+import VettingProcess from "./pages/VettingProcess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/booking/:listingId" element={<Booking />} />
             <Route path="/create-listing" element={<CreateListing />} />
             <Route path="/dashboard" element={<CustomerDashboard />} />
+            <Route path="/become-provider" element={<VettingProcess />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
