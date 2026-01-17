@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { serviceCategories } from "@/data/services";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FieldStatus {
   valid: boolean;
@@ -183,19 +184,46 @@ const VettingProcess = () => {
   };
 
   const handleSubmit = async () => {
+    if (!user) return;
+    
     setIsSubmitting(true);
     
-    // Here you would normally submit to the backend
-    // For now, we'll simulate a submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: "Application Submitted!",
-      description: "We will review your application and get back to you within 2-3 business days.",
-    });
-    
-    setIsSubmitting(false);
-    navigate("/provider/dashboard");
+    try {
+      // For now, we'll store the photo URLs as data URLs
+      // In production, you'd upload to storage first
+      const validWhatsappNumbers = whatsappNumbers.filter(n => validateWhatsApp(n));
+      
+      const { error } = await supabase.from("vetting_submissions").insert({
+        user_id: user.id,
+        full_name: `${firstName} ${lastName}`,
+        id_number: idNumber,
+        id_photo_url: idPhotoPreview,
+        has_criminal_history: hasCriminalHistory || false,
+        criminal_offence: hasCriminalHistory ? offenceDescription : null,
+        services: selectedServices,
+        other_service: hasOtherService ? otherServiceDescription : null,
+        verification_method: referralOption === "whatsapp" ? "referrals" : "photos",
+        referral_numbers: referralOption === "whatsapp" ? validWhatsappNumbers : null,
+        job_photo_urls: referralOption === "photos" ? jobPhotoPreviews : null,
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Application Submitted!",
+        description: "We will review your application and get back to you within 2-3 business days.",
+      });
+      
+      navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {

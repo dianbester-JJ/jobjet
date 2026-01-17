@@ -70,7 +70,7 @@ const CreateListing = () => {
       });
     }
 
-    // Create the listing
+    // Create the listing (requires admin approval)
     const { error } = await supabase.from("provider_listings").insert({
       user_id: user.id,
       title,
@@ -79,6 +79,7 @@ const CreateListing = () => {
       hourly_rate: parseFloat(hourlyRate),
       location,
       years_experience: yearsExperience ? parseInt(yearsExperience) : 0,
+      approved: false,
     });
 
     if (error) {
@@ -92,8 +93,8 @@ const CreateListing = () => {
     }
 
     toast({
-      title: "Listing created!",
-      description: "Your service listing is now live.",
+      title: "Listing submitted!",
+      description: "Your listing will be reviewed and approved shortly.",
     });
     navigate("/provider/dashboard");
   };
