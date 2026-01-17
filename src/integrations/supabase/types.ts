@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_emails: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           address: string | null
@@ -105,6 +123,8 @@ export type Database = {
       }
       provider_listings: {
         Row: {
+          admin_notes: string | null
+          approved: boolean | null
           category_id: string
           cover_photo_url: string | null
           created_at: string
@@ -119,6 +139,8 @@ export type Database = {
           years_experience: number | null
         }
         Insert: {
+          admin_notes?: string | null
+          approved?: boolean | null
           category_id: string
           cover_photo_url?: string | null
           created_at?: string
@@ -133,6 +155,8 @@ export type Database = {
           years_experience?: number | null
         }
         Update: {
+          admin_notes?: string | null
+          approved?: boolean | null
           category_id?: string
           cover_photo_url?: string | null
           created_at?: string
@@ -204,6 +228,63 @@ export type Database = {
         }
         Relationships: []
       }
+      vetting_submissions: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          criminal_offence: string | null
+          full_name: string
+          has_criminal_history: boolean
+          id: string
+          id_number: string
+          id_photo_url: string | null
+          job_photo_urls: string[] | null
+          other_service: string | null
+          referral_numbers: string[] | null
+          services: string[]
+          status: string
+          updated_at: string
+          user_id: string
+          verification_method: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          criminal_offence?: string | null
+          full_name: string
+          has_criminal_history?: boolean
+          id?: string
+          id_number: string
+          id_photo_url?: string | null
+          job_photo_urls?: string[] | null
+          other_service?: string | null
+          referral_numbers?: string[] | null
+          services: string[]
+          status?: string
+          updated_at?: string
+          user_id: string
+          verification_method: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          criminal_offence?: string | null
+          full_name?: string
+          has_criminal_history?: boolean
+          id?: string
+          id_number?: string
+          id_photo_url?: string | null
+          job_photo_urls?: string[] | null
+          other_service?: string | null
+          referral_numbers?: string[] | null
+          services?: string[]
+          status?: string
+          updated_at?: string
+          user_id?: string
+          verification_method?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -216,6 +297,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin: { Args: { _email: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "provider" | "customer"
