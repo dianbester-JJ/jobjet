@@ -126,12 +126,24 @@ const ProviderDashboard = () => {
             ) : (
               listings.map((l) => (
                 <div key={l.id} className="rounded-xl border bg-card p-6">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{getCategoryIcon(l.category_id)}</span>
-                    <h3 className="font-semibold">{l.title}</h3>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{getCategoryIcon(l.category_id)}</span>
+                      <h3 className="font-semibold">{l.title}</h3>
+                    </div>
+                    {l.approved ? (
+                      <Badge className="bg-green-100 text-green-800">Live</Badge>
+                    ) : (
+                      <Badge className="bg-yellow-100 text-yellow-800">Pending Approval</Badge>
+                    )}
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{l.location}</p>
                   <p className="mt-2 font-semibold text-primary">R{l.hourly_rate}/hr</p>
+                  {!l.approved && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Your listing is being reviewed and will be visible once approved.
+                    </p>
+                  )}
                 </div>
               ))
             )}
