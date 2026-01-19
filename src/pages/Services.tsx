@@ -1,25 +1,56 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProviderCard from "@/components/ProviderCard";
-import { serviceCategories, serviceProviders } from "@/data/services";
+import ListingCard from "@/components/ListingCard";
+import { serviceCategories } from "@/data/services";
 import { Button } from "@/components/ui/button";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Listing {
+  id: string;
+  title: string;
+  category_id: string;
+  description: string | null;
+  location: string | null;
+  hourly_rate: number;
+  years_experience: number | null;
+  verified: boolean | null;
+  cover_photo_url: string | null;
+}
 
 const Services = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category") || "all";
   const [searchQuery, setSearchQuery] = useState("");
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProviders = useMemo(() => {
-    return serviceProviders.filter((provider) => {
-      const matchesCategory = selectedCategory === "all" || provider.categoryId === selectedCategory;
-      const matchesSearch = provider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        provider.description.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [selectedCategory, searchQuery]);
+  useEffect(() => {
+    const fetchListings = async () => {
+      const { data, error } = await supabase
+        .from("provider_listings")
+        .select("*")
+        .eq("approved", true)
+        .order("created_at", { ascending: false });
+
+      if (!error && data) {
+        setListings(data);
+      }
+      setLoading(false);
+    };
+
+    fetchListings();
+  }, []);
+
+  const filteredListings = listings.filter((listing) => {
+    const matchesCategory = selectedCategory === "all" || listing.category_id === selectedCategory;
+    const matchesSearch = 
+      listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (listing.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
+    return matchesCategory && matchesSearch;
+  });
 
   const handleCategoryChange = (categoryId: string) => {
     if (categoryId === "all") {
@@ -86,17 +117,33 @@ const Services = () => {
 
         {/* Results Count */}
         <div className="mb-6 text-sm text-muted-foreground">
-          Showing {filteredProviders.length} provider{filteredProviders.length !== 1 ? "s" : ""}
-          {selectedCategory !== "all" && (
-            <span> in {serviceCategories.find((c) => c.id === selectedCategory)?.name}</span>
+          {loading ? (
+            "Loading..."
+          ) : (
+            <>
+              Showing {filteredListings.length} provider{filteredListings.length !== 1 ? "s" : ""}
+              {selectedCategory !== "all" && (
+                <span> in {serviceCategories.find((c) => c.id === selectedCategory)?.name}</span>
+              )}
+            </>
           )}
         </div>
 
-        {/* Providers Grid */}
-        {filteredProviders.length > 0 ? (
+        {/* Listings Grid */}
+        {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredProviders.map((provider) => (
-              <ProviderCard key={provider.id} provider={provider} />
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="rounded-xl bg-card p-4 animate-pulse">
+                <div className="aspect-[16/10] rounded-lg bg-muted" />
+                <div className="mt-4 h-4 w-3/4 rounded bg-muted" />
+                <div className="mt-2 h-3 w-full rounded bg-muted" />
+              </div>
+            ))}
+          </div>
+        ) : filteredListings.length > 0 ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredListings.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
         ) : (
