@@ -131,7 +131,10 @@ export type Database = {
           description: string | null
           hourly_rate: number
           id: string
+          latitude: number | null
           location: string | null
+          longitude: number | null
+          service_radius: number | null
           title: string
           updated_at: string
           user_id: string
@@ -147,7 +150,10 @@ export type Database = {
           description?: string | null
           hourly_rate: number
           id?: string
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
+          service_radius?: number | null
           title: string
           updated_at?: string
           user_id: string
@@ -163,7 +169,10 @@ export type Database = {
           description?: string | null
           hourly_rate?: number
           id?: string
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
+          service_radius?: number | null
           title?: string
           updated_at?: string
           user_id?: string

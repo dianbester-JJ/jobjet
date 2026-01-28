@@ -5,8 +5,9 @@ import Footer from "@/components/Footer";
 import ListingCard from "@/components/ListingCard";
 import { serviceCategories } from "@/data/services";
 import { Button } from "@/components/ui/button";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import LocationSelector from "@/components/LocationSelector";
 
 interface Listing {
   id: string;
@@ -24,6 +25,8 @@ const Services = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category") || "all";
   const [searchQuery, setSearchQuery] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +52,9 @@ const Services = () => {
     const matchesSearch = 
       listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (listing.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
-    return matchesCategory && matchesSearch;
+    const matchesLocation = !locationFilter || 
+      listing.location?.toLowerCase().includes(locationFilter.split(",")[0].toLowerCase());
+    return matchesCategory && matchesSearch && matchesLocation;
   });
 
   const handleCategoryChange = (categoryId: string) => {
@@ -77,21 +82,50 @@ const Services = () => {
         </div>
 
         {/* Search & Filters */}
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search providers..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-input bg-card py-3 pl-10 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-            />
+        <div className="mb-8 space-y-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search providers..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-input bg-card py-3 pl-10 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+            <div className="w-full md:w-64">
+              <LocationSelector
+                value={locationFilter}
+                onChange={(value) => setLocationFilter(value)}
+                placeholder="Filter by location..."
+              />
+            </div>
+            <Button 
+              variant="outline" 
+              className="md:hidden"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <SlidersHorizontal className="mr-2 h-4 w-4" />
+              Filters
+            </Button>
           </div>
-          <Button variant="outline" className="md:hidden">
-            <SlidersHorizontal className="mr-2 h-4 w-4" />
-            Filters
-          </Button>
+          
+          {/* Active filters */}
+          {locationFilter && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Filtering by:</span>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setLocationFilter("")}
+                className="gap-1"
+              >
+                {locationFilter}
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Category Pills */}
@@ -158,6 +192,7 @@ const Services = () => {
               className="mt-4"
               onClick={() => {
                 setSearchQuery("");
+                setLocationFilter("");
                 handleCategoryChange("all");
               }}
             >

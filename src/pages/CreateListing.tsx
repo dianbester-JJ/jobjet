@@ -10,8 +10,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ArrowLeft, Loader2, Briefcase, DollarSign, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, Loader2, Briefcase, DollarSign, Clock } from "lucide-react";
 import { serviceCategories } from "@/data/services";
+import LocationSelector from "@/components/LocationSelector";
+import ServiceRadiusMap from "@/components/ServiceRadiusMap";
+import { Town } from "@/data/southAfricanTowns";
 
 const CreateListing = () => {
   const navigate = useNavigate();
@@ -23,6 +26,8 @@ const CreateListing = () => {
   const [description, setDescription] = useState("");
   const [hourlyRate, setHourlyRate] = useState("");
   const [location, setLocation] = useState("");
+  const [selectedTown, setSelectedTown] = useState<Town | null>(null);
+  const [serviceRadius, setServiceRadius] = useState(25);
   const [yearsExperience, setYearsExperience] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -78,6 +83,9 @@ const CreateListing = () => {
       description,
       hourly_rate: parseFloat(hourlyRate),
       location,
+      latitude: selectedTown?.lat,
+      longitude: selectedTown?.lng,
+      service_radius: serviceRadius,
       years_experience: yearsExperience ? parseInt(yearsExperience) : 0,
       approved: false,
     });
@@ -212,19 +220,26 @@ const CreateListing = () => {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="location">Service Area *</Label>
-                <div className="relative mt-1">
-                  <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    id="location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="e.g., Cape Town, Western Cape"
-                    className="pl-10"
-                    required
-                  />
+              <div className="space-y-4">
+                <div>
+                  <Label>Service Area *</Label>
+                  <div className="mt-1">
+                    <LocationSelector
+                      value={location}
+                      onChange={(value, town) => {
+                        setLocation(value);
+                        setSelectedTown(town || null);
+                      }}
+                      placeholder="Select your service area..."
+                    />
+                  </div>
                 </div>
+
+                <ServiceRadiusMap
+                  selectedTown={selectedTown}
+                  radius={serviceRadius}
+                  onRadiusChange={setServiceRadius}
+                />
               </div>
 
               <Button type="submit" size="lg" className="w-full" disabled={submitting}>
