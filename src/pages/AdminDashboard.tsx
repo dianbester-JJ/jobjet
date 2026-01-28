@@ -100,11 +100,27 @@ const AdminDashboard = () => {
 
       const { data: listingsData } = await supabase
         .from("provider_listings")
-        .select("*, profiles:user_id(full_name, email)")
+        .select("*")
         .eq("approved", false)
         .order("created_at", { ascending: false });
 
-      setPendingListings(listingsData || []);
+      // Fetch profile info for each listing
+      if (listingsData && listingsData.length > 0) {
+        const userIds = [...new Set(listingsData.map((l) => l.user_id))];
+        const { data: profilesData } = await supabase
+          .from("profiles")
+          .select("id, full_name, email")
+          .in("id", userIds);
+
+        const profilesMap = new Map(profilesData?.map((p) => [p.id, p]) || []);
+        const listingsWithProfiles = listingsData.map((listing) => ({
+          ...listing,
+          profiles: profilesMap.get(listing.user_id) || null,
+        }));
+        setPendingListings(listingsWithProfiles);
+      } else {
+        setPendingListings([]);
+      }
       setLoading(false);
     };
 
