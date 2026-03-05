@@ -83,7 +83,7 @@ const LogoSelection = () => {
               Choose Your Logo
             </h1>
             <p className="mt-3 text-muted-foreground">
-              Select the logo that best represents Taska
+              Select the logo that best represents JobJet
             </p>
           </div>
 
@@ -151,7 +151,7 @@ const LogoSelection = () => {
                     />
                   </div>
                   <span className="font-sans text-xl font-semibold tracking-tight text-foreground">
-                    Taska
+                    JobJet
                   </span>
                 </div>
               </div>

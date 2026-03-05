@@ -138,7 +138,7 @@ const Index = () => {
               Are You a Service Professional?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-primary-foreground/90">
-              Join thousands of providers growing their business on Taska. Get verified, get noticed, get hired.
+              Join thousands of providers growing their business on JobJet. Get verified, get noticed, get hired.
             </p>
             <Link to="/provider/dashboard" className="mt-8 inline-block">
               <Button variant="heroOutline" size="xl">
