@@ -8,9 +8,9 @@ const Footer = () => {
           <div>
             <Link to="/" className="flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-hero">
-                <span className="text-lg font-bold text-primary-foreground">T</span>
+                <span className="text-lg font-bold text-primary-foreground">J</span>
               </div>
-              <span className="font-display text-xl font-semibold text-foreground">Taska</span>
+              <span className="font-display text-xl font-semibold text-foreground">JobJet</span>
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
               Affordable, Reliable Service For Your Home.
@@ -82,7 +82,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-          © 2025 Taska. All rights reserved.
+          © 2025 JobJet. All rights reserved.
         </div>
       </div>
     </footer>
