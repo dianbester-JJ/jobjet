@@ -70,11 +70,7 @@ const Booking = () => {
         .maybeSingle();
 
       if (listingError || !listingData) {
-        toast({
-          title: "Error",
-          description: "Could not find this service listing.",
-          variant: "destructive",
-        });
+        toast({ title: "Error", description: "Could not find this service listing.", variant: "destructive" });
         navigate("/services");
         return;
       }
@@ -100,11 +96,7 @@ const Booking = () => {
     e.preventDefault();
     
     if (!date || !time || !address || !listing || !user) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
+      toast({ title: "Missing information", description: "Please fill in all required fields.", variant: "destructive" });
       return;
     }
 
@@ -124,20 +116,13 @@ const Booking = () => {
     });
 
     if (error) {
-      toast({
-        title: "Booking failed",
-        description: "Could not create your booking. Please try again.",
-        variant: "destructive",
-      });
+      toast({ title: "Request failed", description: "Could not submit your booking request. Please try again.", variant: "destructive" });
       setSubmitting(false);
       return;
     }
 
     setSuccess(true);
-    toast({
-      title: "Booking confirmed!",
-      description: "Your service has been booked successfully.",
-    });
+    toast({ title: "Request submitted!", description: "The provider will review and respond to your booking request." });
   };
 
   if (loading || authLoading) {
@@ -158,14 +143,14 @@ const Booking = () => {
               <CheckCircle className="h-8 w-8 text-primary" />
             </div>
             <h1 className="mt-6 font-display text-3xl font-bold text-foreground">
-              Booking Confirmed!
+              Booking Request Sent!
             </h1>
             <p className="mt-4 text-muted-foreground">
-              Your booking has been submitted. The provider will review and confirm your appointment.
+              Your request has been sent to the provider. They will review and respond with availability. You can also message them directly.
             </p>
             <div className="mt-8 flex justify-center gap-4">
               <Link to="/dashboard">
-                <Button>View My Bookings</Button>
+                <Button>View My Requests</Button>
               </Link>
               <Link to="/services">
                 <Button variant="outline">Browse More Services</Button>
@@ -183,62 +168,50 @@ const Booking = () => {
       <Header />
       
       <main className="container py-8">
-        <Link to="/services" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        <Link to={`/listing/${listingId}`} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to services
+          Back to listing
         </Link>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-3">
-          {/* Booking Form */}
           <div className="lg:col-span-2">
             <div className="rounded-xl border border-border bg-card p-6 shadow-card">
               <h1 className="font-display text-2xl font-bold text-foreground">
-                Book Service
+                Request a Booking
               </h1>
               <p className="mt-1 text-muted-foreground">
-                Fill in the details below to complete your booking
+                Submit your preferred date and time — the provider will confirm availability
               </p>
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
-                    <Label>Date *</Label>
+                    <Label>Preferred Date *</Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className={cn(
-                            "mt-1 w-full justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
-                          )}
+                          className={cn("mt-1 w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {date ? format(date, "PPP") : "Select date"}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                        />
+                        <Calendar mode="single" selected={date} onSelect={setDate} disabled={(date) => date < new Date()} initialFocus />
                       </PopoverContent>
                     </Popover>
                   </div>
 
                   <div>
-                    <Label>Time *</Label>
+                    <Label>Preferred Time *</Label>
                     <Select value={time} onValueChange={setTime}>
                       <SelectTrigger className="mt-1">
                         <SelectValue placeholder="Select time" />
                       </SelectTrigger>
                       <SelectContent>
                         {timeSlots.map((slot) => (
-                          <SelectItem key={slot} value={slot}>
-                            {slot}
-                          </SelectItem>
+                          <SelectItem key={slot} value={slot}>{slot}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -246,16 +219,14 @@ const Booking = () => {
                 </div>
 
                 <div>
-                  <Label>Duration (hours) *</Label>
+                  <Label>Estimated Duration (hours) *</Label>
                   <Select value={hours} onValueChange={setHours}>
                     <SelectTrigger className="mt-1">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((h) => (
-                        <SelectItem key={h} value={h.toString()}>
-                          {h} hour{h > 1 ? "s" : ""}
-                        </SelectItem>
+                        <SelectItem key={h} value={h.toString()}>{h} hour{h > 1 ? "s" : ""}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -265,37 +236,20 @@ const Booking = () => {
                   <Label htmlFor="address">Service Address *</Label>
                   <div className="relative mt-1">
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="123 Main Street, Cape Town"
-                      className="pl-10"
-                      required
-                    />
+                    <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="123 Main Street, Cape Town" className="pl-10" required />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="notes">Additional Notes</Label>
-                  <Textarea
-                    id="notes"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Any special instructions or details..."
-                    className="mt-1"
-                    rows={4}
-                  />
+                  <Label htmlFor="notes">Describe what you need</Label>
+                  <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Tell the provider what work you need done..." className="mt-1" rows={4} />
                 </div>
 
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>
                   {submitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Processing...
-                    </>
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting...</>
                   ) : (
-                    <>Confirm Booking — R{totalAmount.toFixed(2)}</>
+                    <>Send Booking Request — R{totalAmount.toFixed(2)} est.</>
                   )}
                 </Button>
               </form>
@@ -305,18 +259,12 @@ const Booking = () => {
           {/* Order Summary */}
           <div>
             <div className="sticky top-24 rounded-xl border border-border bg-card p-6 shadow-card">
-              <h2 className="font-display text-lg font-semibold text-foreground">
-                Order Summary
-              </h2>
-
+              <h2 className="font-display text-lg font-semibold text-foreground">Request Summary</h2>
               <div className="mt-4 space-y-4">
                 <div>
                   <p className="font-medium text-foreground">{listing?.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    by {providerProfile?.full_name || "Provider"}
-                  </p>
+                  <p className="text-sm text-muted-foreground">by {providerProfile?.full_name || "Provider"}</p>
                 </div>
-
                 <div className="border-t border-border pt-4">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Hourly rate</span>
@@ -327,12 +275,14 @@ const Booking = () => {
                     <span>{hours} hour{parseInt(hours) > 1 ? "s" : ""}</span>
                   </div>
                 </div>
-
                 <div className="border-t border-border pt-4">
                   <div className="flex items-center justify-between font-semibold">
-                    <span>Total</span>
+                    <span>Estimated Total</span>
                     <span className="text-primary">R{totalAmount.toFixed(2)}</span>
                   </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Final amount to be agreed with the provider
+                  </p>
                 </div>
               </div>
             </div>

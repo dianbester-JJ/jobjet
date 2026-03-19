@@ -12,6 +12,7 @@ import ProviderDashboard from "./pages/ProviderDashboard";
 import LogoSelection from "./pages/LogoSelection";
 import Auth from "./pages/Auth";
 import Booking from "./pages/Booking";
+import Messages from "./pages/Messages";
 import CreateListing from "./pages/CreateListing";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import VettingProcess from "./pages/VettingProcess";
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/logo-selection" element={<LogoSelection />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/booking/:listingId" element={<Booking />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/create-listing" element={<CreateListing />} />
             <Route path="/dashboard" element={<CustomerDashboard />} />
             <Route path="/become-provider" element={<VettingProcess />} />

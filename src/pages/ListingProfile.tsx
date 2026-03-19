@@ -4,7 +4,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { serviceCategories } from "@/data/services";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -17,7 +19,8 @@ import {
   MessageSquare,
   Phone,
   Copy,
-  Check
+  Check,
+  Send
 } from "lucide-react";
 
 interface Listing {
@@ -39,9 +42,12 @@ interface Profile {
   email: string | null;
 }
 
-interface Booking {
+interface Review {
   id: string;
-  status: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  customer_id: string;
 }
 
 const ListingProfile = () => {
@@ -52,9 +58,12 @@ const ListingProfile = () => {
   
   const [listing, setListing] = useState<Listing | null>(null);
   const [providerProfile, setProviderProfile] = useState<Profile | null>(null);
-  const [hasBooking, setHasBooking] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewProfiles, setReviewProfiles] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [enquiryMessage, setEnquiryMessage] = useState("");
+  const [sendingEnquiry, setSendingEnquiry] = useState(false);
 
   const category = listing ? serviceCategories.find((c) => c.id === listing.category_id) : null;
 
@@ -62,7 +71,6 @@ const ListingProfile = () => {
     const fetchData = async () => {
       if (!id) return;
 
-      // Fetch listing
       const { data: listingData, error: listingError } = await supabase
         .from("provider_listings")
         .select("*")
@@ -76,7 +84,6 @@ const ListingProfile = () => {
 
       setListing(listingData);
 
-      // Fetch provider profile
       const { data: profileData } = await supabase
         .from("profiles")
         .select("full_name, phone, email")
@@ -85,33 +92,36 @@ const ListingProfile = () => {
 
       setProviderProfile(profileData);
 
-      // Check if current user has a confirmed booking with this listing
-      if (user) {
-        const { data: bookingData } = await supabase
-          .from("bookings")
-          .select("id, status")
-          .eq("listing_id", id)
-          .eq("customer_id", user.id)
-          .in("status", ["confirmed", "completed"])
-          .limit(1);
+      // Fetch real reviews for this provider
+      const { data: reviewsData } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("provider_id", listingData.user_id)
+        .order("created_at", { ascending: false });
 
-        setHasBooking((bookingData && bookingData.length > 0) || false);
+      if (reviewsData && reviewsData.length > 0) {
+        setReviews(reviewsData);
+        const customerIds = [...new Set(reviewsData.map(r => r.customer_id))];
+        const { data: customerProfiles } = await supabase
+          .from("profiles")
+          .select("id, full_name")
+          .in("id", customerIds);
+        if (customerProfiles) {
+          setReviewProfiles(new Map(customerProfiles.map(p => [p.id, p.full_name || "Customer"])));
+        }
       }
 
       setLoading(false);
     };
 
     fetchData();
-  }, [id, user]);
+  }, [id]);
 
   const handleCopyNumber = () => {
     if (providerProfile?.phone) {
       navigator.clipboard.writeText(providerProfile.phone);
       setCopied(true);
-      toast({
-        title: "Copied!",
-        description: "Phone number copied to clipboard",
-      });
+      toast({ title: "Copied!", description: "Phone number copied to clipboard" });
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -122,6 +132,42 @@ const ListingProfile = () => {
       window.open(`https://wa.me/${cleanNumber}`, "_blank");
     }
   };
+
+  const handleSendEnquiry = async () => {
+    if (!user) {
+      navigate("/auth?mode=signin");
+      return;
+    }
+    if (!enquiryMessage.trim() || !listing) return;
+
+    setSendingEnquiry(true);
+    const { error } = await (supabase as any).from("messages").insert({
+      sender_id: user.id,
+      receiver_id: listing.user_id,
+      listing_id: listing.id,
+      content: enquiryMessage.trim(),
+    });
+
+    if (error) {
+      toast({ title: "Error", description: "Could not send message. Please try again.", variant: "destructive" });
+    } else {
+      toast({ title: "Message sent!", description: "The provider will receive your message." });
+      setEnquiryMessage("");
+    }
+    setSendingEnquiry(false);
+  };
+
+  const handleMessageProvider = () => {
+    if (!user) {
+      navigate("/auth?mode=signin");
+      return;
+    }
+    navigate(`/messages?with=${listing?.user_id}`);
+  };
+
+  const avgRating = reviews.length > 0 
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) 
+    : null;
 
   if (loading) {
     return (
@@ -159,7 +205,6 @@ const ListingProfile = () => {
       <Header />
 
       <main className="container py-8 md:py-12">
-        {/* Breadcrumb */}
         <Link
           to="/services"
           className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-primary"
@@ -174,11 +219,7 @@ const ListingProfile = () => {
             {/* Cover Photo */}
             <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-muted">
               {listing.cover_photo_url ? (
-                <img
-                  src={listing.cover_photo_url}
-                  alt={listing.title}
-                  className="h-full w-full object-cover"
-                />
+                <img src={listing.cover_photo_url} alt={listing.title} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full items-center justify-center">
                   <span className="text-6xl">{category?.icon || "🔧"}</span>
@@ -200,6 +241,12 @@ const ListingProfile = () => {
                     <span className="rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground">
                       {category?.icon} {category?.name}
                     </span>
+                    {avgRating && (
+                      <span className="flex items-center gap-1 text-sm font-medium text-foreground">
+                        <Star className="h-4 w-4 fill-primary text-primary" />
+                        {avgRating} ({reviews.length})
+                      </span>
+                    )}
                   </div>
                   <h1 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
                     {listing.title}
@@ -232,42 +279,88 @@ const ListingProfile = () => {
                 </div>
               )}
 
-              {/* Reviews Section - Placeholder */}
+              {/* Enquiry Form */}
+              <div className="mt-8 rounded-xl border border-border bg-card p-6">
+                <h2 className="font-display text-xl font-semibold text-foreground">Send an Enquiry</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Describe what you need and the provider will get back to you
+                </p>
+                <Textarea
+                  value={enquiryMessage}
+                  onChange={(e) => setEnquiryMessage(e.target.value)}
+                  placeholder="Hi, I'm interested in your service. I need help with..."
+                  className="mt-4"
+                  rows={4}
+                />
+                <Button
+                  className="mt-3 w-full"
+                  onClick={handleSendEnquiry}
+                  disabled={sendingEnquiry || !enquiryMessage.trim()}
+                >
+                  {sendingEnquiry ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-4 w-4" />
+                      Send Enquiry
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Reviews Section */}
               <div className="mt-8">
-                <h2 className="font-display text-xl font-semibold text-foreground">Reviews</h2>
+                <h2 className="font-display text-xl font-semibold text-foreground">
+                  Reviews {reviews.length > 0 && `(${reviews.length})`}
+                </h2>
                 <div className="mt-4 space-y-4">
-                  {[1, 2, 3].map((review) => (
-                    <div key={review} className="rounded-lg border border-border bg-card p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="h-10 w-10 rounded-full bg-muted" />
-                          <div>
-                            <p className="font-medium text-foreground">Happy Customer</p>
-                            <p className="text-xs text-muted-foreground">2 weeks ago</p>
+                  {reviews.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No reviews yet for this provider.</p>
+                  ) : (
+                    reviews.map((review) => (
+                      <div key={review.id} className="rounded-lg border border-border bg-card p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                              <span className="text-sm font-medium text-muted-foreground">
+                                {(reviewProfiles.get(review.customer_id) || "C")[0]}
+                              </span>
+                            </div>
+                            <div>
+                              <p className="font-medium text-foreground">
+                                {reviewProfiles.get(review.customer_id) || "Customer"}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {format(new Date(review.created_at), "PPP")}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`h-4 w-4 ${
+                                  star <= review.rating
+                                    ? "fill-primary text-primary"
+                                    : "text-muted"
+                                }`}
+                              />
+                            ))}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className="h-4 w-4 fill-primary text-primary"
-                            />
-                          ))}
-                        </div>
+                        {review.comment && (
+                          <p className="mt-3 text-sm text-muted-foreground">{review.comment}</p>
+                        )}
                       </div>
-                      <p className="mt-3 text-sm text-muted-foreground">
-                        Excellent work! Professional, on time, and the quality exceeded my expectations. 
-                        Would highly recommend to anyone looking for this service.
-                      </p>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Sidebar */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
             <div className="rounded-xl border border-border bg-card p-6 shadow-card">
               <div className="text-center">
                 <div className="text-3xl font-bold text-foreground">R{listing.hourly_rate}</div>
@@ -278,17 +371,22 @@ const ListingProfile = () => {
                 <Link to={`/booking/${listing.id}`} className="block">
                   <Button className="w-full" size="lg">
                     <Calendar className="mr-2 h-4 w-4" />
-                    Book Appointment
+                    Request Booking
                   </Button>
                 </Link>
-              </div>
 
-              {/* Contact options - only shown after confirmed booking */}
-              {hasBooking && providerProfile?.phone && (
-                <div className="mt-6 space-y-3 border-t border-border pt-6">
-                  <p className="text-center text-sm font-medium text-foreground mb-4">
-                    Contact Provider
-                  </p>
+                <Button variant="outline" className="w-full" size="lg" onClick={handleMessageProvider}>
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Message Provider
+                </Button>
+              </div>
+            </div>
+
+            {/* Contact Info - Always visible */}
+            {providerProfile?.phone && (
+              <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+                <p className="text-sm font-medium text-foreground mb-4">Contact Provider</p>
+                <div className="space-y-3">
                   <Button 
                     variant="outline" 
                     className="w-full bg-green-50 border-green-200 hover:bg-green-100 text-green-700"
@@ -297,33 +395,13 @@ const ListingProfile = () => {
                     <Phone className="mr-2 h-4 w-4" />
                     WhatsApp
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={handleCopyNumber}
-                  >
-                    {copied ? (
-                      <Check className="mr-2 h-4 w-4" />
-                    ) : (
-                      <Copy className="mr-2 h-4 w-4" />
-                    )}
-                    {copied ? "Copied!" : "Copy Number"}
+                  <Button variant="outline" className="w-full" onClick={handleCopyNumber}>
+                    {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
+                    {copied ? "Copied!" : providerProfile.phone}
                   </Button>
-                  <Link to="/dashboard" className="block">
-                    <Button variant="outline" className="w-full">
-                      <MessageSquare className="mr-2 h-4 w-4" />
-                      Message
-                    </Button>
-                  </Link>
                 </div>
-              )}
-
-              {!hasBooking && (
-                <p className="mt-6 text-center text-xs text-muted-foreground">
-                  Book an appointment to get provider contact details
-                </p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </main>

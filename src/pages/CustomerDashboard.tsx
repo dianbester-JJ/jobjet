@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, Clock, MapPin, Loader2, Search, User } from "lucide-react";
+import { Calendar, Clock, MapPin, Loader2, Search, User, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 
 interface Booking {
@@ -20,13 +20,8 @@ interface Booking {
   address: string;
   notes: string;
   created_at: string;
-  listing: {
-    title: string;
-    category_id: string;
-  };
-  provider: {
-    full_name: string;
-  };
+  listing: { title: string; category_id: string };
+  provider: { full_name: string };
 }
 
 const statusColors: Record<string, string> = {
@@ -34,6 +29,13 @@ const statusColors: Record<string, string> = {
   confirmed: "bg-blue-100 text-blue-800",
   completed: "bg-green-100 text-green-800",
   cancelled: "bg-red-100 text-red-800",
+};
+
+const statusLabels: Record<string, string> = {
+  pending: "Awaiting Response",
+  confirmed: "Accepted",
+  completed: "Completed",
+  cancelled: "Declined",
 };
 
 const CustomerDashboard = () => {
@@ -44,59 +46,31 @@ const CustomerDashboard = () => {
   const [profile, setProfile] = useState<{ full_name: string; email: string } | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth?mode=signin");
-    }
+    if (!authLoading && !user) navigate("/auth?mode=signin");
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
 
-      // Fetch profile
       const { data: profileData } = await supabase
         .from("profiles")
         .select("full_name, email")
         .eq("id", user.id)
         .maybeSingle();
-
       setProfile(profileData);
 
-      // Fetch bookings with related data
       const { data: bookingsData } = await supabase
         .from("bookings")
-        .select(`
-          id,
-          service_date,
-          service_time,
-          hours_requested,
-          total_amount,
-          status,
-          address,
-          notes,
-          created_at,
-          listing_id,
-          provider_id
-        `)
+        .select("id, service_date, service_time, hours_requested, total_amount, status, address, notes, created_at, listing_id, provider_id")
         .eq("customer_id", user.id)
         .order("created_at", { ascending: false });
 
       if (bookingsData) {
-        // Fetch related listing and provider data
-        const enrichedBookings = await Promise.all(
+        const enriched = await Promise.all(
           bookingsData.map(async (booking) => {
-            const { data: listing } = await supabase
-              .from("provider_listings")
-              .select("title, category_id")
-              .eq("id", booking.listing_id)
-              .maybeSingle();
-
-            const { data: provider } = await supabase
-              .from("profiles")
-              .select("full_name")
-              .eq("id", booking.provider_id)
-              .maybeSingle();
-
+            const { data: listing } = await supabase.from("provider_listings").select("title, category_id").eq("id", booking.listing_id).maybeSingle();
+            const { data: provider } = await supabase.from("profiles").select("full_name").eq("id", booking.provider_id).maybeSingle();
             return {
               ...booking,
               listing: listing || { title: "Unknown Service", category_id: "" },
@@ -104,13 +78,11 @@ const CustomerDashboard = () => {
             };
           })
         );
-
-        setBookings(enrichedBookings);
+        setBookings(enriched);
       }
 
       setLoading(false);
     };
-
     fetchData();
   }, [user]);
 
@@ -119,12 +91,8 @@ const CustomerDashboard = () => {
     navigate("/");
   };
 
-  const upcomingBookings = bookings.filter(
-    (b) => b.status === "pending" || b.status === "confirmed"
-  );
-  const pastBookings = bookings.filter(
-    (b) => b.status === "completed" || b.status === "cancelled"
-  );
+  const activeRequests = bookings.filter((b) => b.status === "pending" || b.status === "confirmed");
+  const pastRequests = bookings.filter((b) => b.status === "completed" || b.status === "cancelled");
 
   if (authLoading || loading) {
     return (
@@ -137,63 +105,52 @@ const CustomerDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-warm">
       <Header />
-
       <main className="container py-8">
-        {/* Profile Header */}
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <User className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-bold text-foreground">
-                {profile?.full_name || "My Account"}
-              </h1>
+              <h1 className="font-display text-2xl font-bold text-foreground">{profile?.full_name || "My Account"}</h1>
               <p className="text-muted-foreground">{profile?.email || user?.email}</p>
             </div>
           </div>
           <div className="flex gap-3">
+            <Link to="/messages">
+              <Button variant="outline">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Messages
+              </Button>
+            </Link>
             <Link to="/services">
               <Button>
                 <Search className="mr-2 h-4 w-4" />
                 Find Services
               </Button>
             </Link>
-            <Button variant="outline" onClick={handleSignOut}>
-              Sign Out
-            </Button>
+            <Button variant="outline" onClick={handleSignOut}>Sign Out</Button>
           </div>
         </div>
 
-        {/* Bookings */}
         <div className="mt-8">
-          <Tabs defaultValue="upcoming" className="w-full">
+          <Tabs defaultValue="active" className="w-full">
             <TabsList>
-              <TabsTrigger value="upcoming">
-                Upcoming ({upcomingBookings.length})
-              </TabsTrigger>
-              <TabsTrigger value="past">
-                Past ({pastBookings.length})
-              </TabsTrigger>
+              <TabsTrigger value="active">Active Requests ({activeRequests.length})</TabsTrigger>
+              <TabsTrigger value="past">Past ({pastRequests.length})</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="upcoming" className="mt-6">
-              {upcomingBookings.length === 0 ? (
+            <TabsContent value="active" className="mt-6">
+              {activeRequests.length === 0 ? (
                 <div className="rounded-xl border border-border bg-card p-8 text-center">
                   <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 font-display text-lg font-semibold">
-                    No upcoming bookings
-                  </h3>
-                  <p className="mt-2 text-muted-foreground">
-                    Browse our services to book your first appointment
-                  </p>
-                  <Link to="/services" className="mt-4 inline-block">
-                    <Button>Browse Services</Button>
-                  </Link>
+                  <h3 className="mt-4 font-display text-lg font-semibold">No active requests</h3>
+                  <p className="mt-2 text-muted-foreground">Browse services and send a booking request or enquiry</p>
+                  <Link to="/services" className="mt-4 inline-block"><Button>Browse Services</Button></Link>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {upcomingBookings.map((booking) => (
+                  {activeRequests.map((booking) => (
                     <BookingCard key={booking.id} booking={booking} />
                   ))}
                 </div>
@@ -201,19 +158,15 @@ const CustomerDashboard = () => {
             </TabsContent>
 
             <TabsContent value="past" className="mt-6">
-              {pastBookings.length === 0 ? (
+              {pastRequests.length === 0 ? (
                 <div className="rounded-xl border border-border bg-card p-8 text-center">
                   <Clock className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 font-display text-lg font-semibold">
-                    No past bookings
-                  </h3>
-                  <p className="mt-2 text-muted-foreground">
-                    Your completed bookings will appear here
-                  </p>
+                  <h3 className="mt-4 font-display text-lg font-semibold">No past requests</h3>
+                  <p className="mt-2 text-muted-foreground">Your completed requests will appear here</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {pastBookings.map((booking) => (
+                  {pastRequests.map((booking) => (
                     <BookingCard key={booking.id} booking={booking} />
                   ))}
                 </div>
@@ -222,7 +175,6 @@ const CustomerDashboard = () => {
           </Tabs>
         </div>
       </main>
-
       <Footer />
     </div>
   );
@@ -234,17 +186,12 @@ const BookingCard = ({ booking }: { booking: Booking }) => {
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <h3 className="font-display text-lg font-semibold text-foreground">
-              {booking.listing.title}
-            </h3>
+            <h3 className="font-display text-lg font-semibold text-foreground">{booking.listing.title}</h3>
             <Badge className={statusColors[booking.status]}>
-              {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+              {statusLabels[booking.status] || booking.status}
             </Badge>
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">
-            by {booking.provider.full_name}
-          </p>
-
+          <p className="mt-1 text-sm text-muted-foreground">by {booking.provider.full_name}</p>
           <div className="mt-4 flex flex-wrap gap-4 text-sm">
             <div className="flex items-center gap-1 text-muted-foreground">
               <Calendar className="h-4 w-4" />
@@ -260,11 +207,9 @@ const BookingCard = ({ booking }: { booking: Booking }) => {
             </div>
           </div>
         </div>
-
         <div className="text-right">
-          <p className="text-2xl font-bold text-primary">
-            R{booking.total_amount.toFixed(2)}
-          </p>
+          <p className="text-2xl font-bold text-primary">R{booking.total_amount.toFixed(2)}</p>
+          <p className="text-xs text-muted-foreground">estimated</p>
         </div>
       </div>
     </div>
