@@ -113,7 +113,7 @@ const Messages = () => {
     const fetchMessages = async () => {
       if (!user || !activeConversation) return;
 
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("messages")
         .select("*")
         .or(
