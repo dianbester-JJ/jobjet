@@ -54,7 +54,7 @@ const Messages = () => {
     const fetchConversations = async () => {
       if (!user) return;
 
-      const { data: msgs } = await supabase
+      const { data: msgs } = await (supabase as any)
         .from("messages")
         .select("*")
         .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
