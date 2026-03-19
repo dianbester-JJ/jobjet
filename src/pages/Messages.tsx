@@ -154,7 +154,7 @@ const Messages = () => {
             ) {
               setMessages((prev) => [...prev, msg]);
               if (msg.receiver_id === user.id) {
-                supabase.from("messages").update({ read: true }).eq("id", msg.id);
+                (supabase as any).from("messages").update({ read: true }).eq("id", msg.id);
               }
             }
           }
