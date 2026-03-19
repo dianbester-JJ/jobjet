@@ -37,6 +37,7 @@ const App = () => (
             <Route path="/logo-selection" element={<LogoSelection />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/booking/:listingId" element={<Booking />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/create-listing" element={<CreateListing />} />
             <Route path="/dashboard" element={<CustomerDashboard />} />
             <Route path="/become-provider" element={<VettingProcess />} />
