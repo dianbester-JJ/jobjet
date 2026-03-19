@@ -175,7 +175,7 @@ const Messages = () => {
     if (!newMessage.trim() || !user || !activeConversation || sending) return;
 
     setSending(true);
-    await supabase.from("messages").insert({
+    await (supabase as any).from("messages").insert({
       sender_id: user.id,
       receiver_id: activeConversation,
       content: newMessage.trim(),

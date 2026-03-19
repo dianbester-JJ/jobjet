@@ -141,7 +141,7 @@ const ListingProfile = () => {
     if (!enquiryMessage.trim() || !listing) return;
 
     setSendingEnquiry(true);
-    const { error } = await supabase.from("messages").insert({
+    const { error } = await (supabase as any).from("messages").insert({
       sender_id: user.id,
       receiver_id: listing.user_id,
       listing_id: listing.id,

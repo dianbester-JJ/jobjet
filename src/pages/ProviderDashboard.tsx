@@ -85,7 +85,7 @@ const ProviderDashboard = () => {
 
   const handleQuickResponse = async (booking: any, message: string) => {
     if (!user) return;
-    await supabase.from("messages").insert({
+    await (supabase as any).from("messages").insert({
       sender_id: user.id,
       receiver_id: booking.customer_id,
       booking_id: booking.id,
