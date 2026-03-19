@@ -129,7 +129,7 @@ const Messages = () => {
           .filter((m) => m.receiver_id === user.id && !m.read)
           .map((m) => m.id);
         if (unreadIds.length > 0) {
-          await supabase
+          await (supabase as any)
             .from("messages")
             .update({ read: true })
             .in("id", unreadIds);
