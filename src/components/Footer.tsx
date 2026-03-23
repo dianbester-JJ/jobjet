@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import jobjetLogo from "@/assets/jobjet-logo.png";
 
 const Footer = () => {
   return (
