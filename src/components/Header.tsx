@@ -27,9 +27,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-hero">
-            <span className="text-lg font-bold text-primary-foreground">J</span>
-          </div>
+          <img src={jobjetLogo} alt="JobJet" className="h-9 w-9 object-contain" />
           <span className="font-display text-xl font-semibold text-foreground">JobJet</span>
         </Link>
 
