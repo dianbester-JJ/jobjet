@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { User, Briefcase, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import jobjetLogo from "@/assets/jobjet-logo.png";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
