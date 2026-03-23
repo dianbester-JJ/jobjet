@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import jobjetLogo from "@/assets/jobjet-logo.png";
 
 const Footer = () => {
   return (
@@ -7,9 +8,7 @@ const Footer = () => {
         <div className="grid gap-8 md:grid-cols-4">
           <div>
             <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-hero">
-                <span className="text-lg font-bold text-primary-foreground">J</span>
-              </div>
+              <img src={jobjetLogo} alt="JobJet" className="h-9 w-9 object-contain" />
               <span className="font-display text-xl font-semibold text-foreground">JobJet</span>
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
