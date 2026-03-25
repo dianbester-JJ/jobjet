@@ -193,6 +193,15 @@ const Auth = () => {
                   Must be at least 6 characters
                 </p>
               )}
+              {mode === "signin" && (
+                <button
+                  type="button"
+                  onClick={() => setMode("forgot")}
+                  className="mt-1 text-xs font-medium text-primary hover:text-primary/80"
+                >
+                  Forgot your password?
+                </button>
+              )}
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
