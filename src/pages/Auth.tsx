@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Mail, Lock, User, Loader2 } from "lucide-react";
+import jobjetLogo from "@/assets/jobjet-logo.png";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
@@ -116,10 +117,7 @@ const Auth = () => {
             </Link>
 
             <div className="mt-6 flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-hero">
-                <span className="text-lg font-bold text-primary-foreground">J</span>
-              </div>
-              <span className="font-display text-xl font-semibold text-foreground">JobJet</span>
+              <img src={jobjetLogo} alt="JobJet" className="h-10 w-auto object-contain" />
             </div>
 
             <h2 className="mt-8 font-display text-2xl font-bold text-foreground">
