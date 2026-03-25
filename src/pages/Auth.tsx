@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Mail, Lock, User, Loader2 } from "lucide-react";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const defaultMode = searchParams.get("mode") === "signup" ? "signup" : "signin";
-  const [mode, setMode] = useState<"signin" | "signup">(defaultMode);
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">(defaultMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -30,7 +31,20 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      if (mode === "signup") {
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) {
+          toast({ title: "Error", description: error.message, variant: "destructive" });
+        } else {
+          toast({
+            title: "Check your email",
+            description: "We've sent you a password reset link.",
+          });
+          setMode("signin");
+        }
+      } else if (mode === "signup") {
         if (!fullName.trim()) {
           toast({
             title: "Name required",
@@ -109,10 +123,21 @@ const Auth = () => {
             </div>
 
             <h2 className="mt-8 font-display text-2xl font-bold text-foreground">
-              {mode === "signin" ? "Welcome back" : "Create your account"}
+              {mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your account" : "Reset your password"}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {mode === "signin" ? (
+              {mode === "forgot" ? (
+                <>
+                  Remember your password?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setMode("signin")}
+                    className="font-medium text-primary hover:text-primary/80"
+                  >
+                    Sign in
+                  </button>
+                </>
+              ) : mode === "signin" ? (
                 <>
                   Don't have an account?{" "}
                   <button
@@ -173,6 +198,7 @@ const Auth = () => {
               </div>
             </div>
 
+            {mode !== "forgot" && (
             <div>
               <Label htmlFor="password">Password</Label>
               <div className="relative mt-1">
@@ -193,16 +219,26 @@ const Auth = () => {
                   Must be at least 6 characters
                 </p>
               )}
+              {mode === "signin" && (
+                <button
+                  type="button"
+                  onClick={() => setMode("forgot")}
+                  className="mt-1 text-xs font-medium text-primary hover:text-primary/80"
+                >
+                  Forgot your password?
+                </button>
+              )}
             </div>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {mode === "signin" ? "Signing in..." : "Creating account..."}
+                  {mode === "signin" ? "Signing in..." : mode === "forgot" ? "Sending..." : "Creating account..."}
                 </>
               ) : (
-                <>{mode === "signin" ? "Sign in" : "Create account"}</>
+                <>{mode === "signin" ? "Sign in" : mode === "forgot" ? "Send reset link" : "Create account"}</>
               )}
             </Button>
           </form>
