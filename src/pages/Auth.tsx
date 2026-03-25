@@ -123,10 +123,21 @@ const Auth = () => {
             </div>
 
             <h2 className="mt-8 font-display text-2xl font-bold text-foreground">
-              {mode === "signin" ? "Welcome back" : "Create your account"}
+              {mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your account" : "Reset your password"}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {mode === "signin" ? (
+              {mode === "forgot" ? (
+                <>
+                  Remember your password?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setMode("signin")}
+                    className="font-medium text-primary hover:text-primary/80"
+                  >
+                    Sign in
+                  </button>
+                </>
+              ) : mode === "signin" ? (
                 <>
                   Don't have an account?{" "}
                   <button
