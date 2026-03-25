@@ -42,6 +42,7 @@ const App = () => (
             <Route path="/create-listing" element={<CreateListing />} />
             <Route path="/dashboard" element={<CustomerDashboard />} />
             <Route path="/become-provider" element={<VettingProcess />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin" element={<AdminDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
