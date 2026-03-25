@@ -198,6 +198,7 @@ const Auth = () => {
               </div>
             </div>
 
+            {mode !== "forgot" && (
             <div>
               <Label htmlFor="password">Password</Label>
               <div className="relative mt-1">
@@ -228,6 +229,7 @@ const Auth = () => {
                 </button>
               )}
             </div>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
