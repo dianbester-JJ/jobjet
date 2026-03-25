@@ -62,12 +62,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        sa: {
-          green: "hsl(var(--sa-green))",
-          gold: "hsl(var(--sa-gold))",
-          red: "hsl(var(--sa-red))",
-          blue: "hsl(var(--sa-blue))",
-          black: "hsl(var(--sa-black))",
+        brand: {
+          navy: "hsl(var(--brand-navy))",
+          teal: "hsl(var(--brand-teal))",
+          "teal-light": "hsl(var(--brand-teal-light))",
         },
       },
       borderRadius: {
