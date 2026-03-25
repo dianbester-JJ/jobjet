@@ -235,10 +235,10 @@ const Auth = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {mode === "signin" ? "Signing in..." : "Creating account..."}
+                  {mode === "signin" ? "Signing in..." : mode === "forgot" ? "Sending..." : "Creating account..."}
                 </>
               ) : (
-                <>{mode === "signin" ? "Sign in" : "Create account"}</>
+                <>{mode === "signin" ? "Sign in" : mode === "forgot" ? "Send reset link" : "Create account"}</>
               )}
             </Button>
           </form>
