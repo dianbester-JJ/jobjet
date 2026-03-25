@@ -17,6 +17,7 @@ import CreateListing from "./pages/CreateListing";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import VettingProcess from "./pages/VettingProcess";
 import AdminDashboard from "./pages/AdminDashboard";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
