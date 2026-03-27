@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ArrowLeft, CalendarIcon, Clock, MapPin, Loader2, CheckCircle } from "lucide-react";
+import { ArrowLeft, CalendarIcon, MapPin, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -31,8 +31,8 @@ interface Profile {
 }
 
 const timeSlots = [
-  "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
+  "04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00","12:00",
+  "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00",
 ];
 
 const Booking = () => {
@@ -45,36 +45,32 @@ const Booking = () => {
   const [providerProfile, setProviderProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const [date, setDate] = useState<Date | undefined>();
   const [time, setTime] = useState("");
   const [hours, setHours] = useState("2");
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth?mode=signin");
-    }
+    if (!authLoading && !user) navigate("/auth?mode=signin");
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
     const fetchListing = async () => {
       if (!listingId) return;
-
-      const { data: listingData, error: listingError } = await supabase
+      const { data: listingData, error } = await supabase
         .from("provider_listings")
         .select("*")
         .eq("id", listingId)
         .maybeSingle();
 
-      if (listingError || !listingData) {
+      if (error || !listingData) {
         toast({ title: "Error", description: "Could not find this service listing.", variant: "destructive" });
         navigate("/services");
         return;
       }
-
       setListing(listingData);
 
       const { data: profileData } = await supabase
@@ -82,11 +78,9 @@ const Booking = () => {
         .select("full_name")
         .eq("id", listingData.user_id)
         .maybeSingle();
-
       setProviderProfile(profileData);
       setLoading(false);
     };
-
     fetchListing();
   }, [listingId, navigate, toast]);
 
@@ -94,7 +88,6 @@ const Booking = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!date || !time || !address || !listing || !user) {
       toast({ title: "Missing information", description: "Please fill in all required fields.", variant: "destructive" });
       return;
@@ -102,27 +95,42 @@ const Booking = () => {
 
     setSubmitting(true);
 
-    const { error } = await supabase.from("bookings").insert({
-      customer_id: user.id,
-      provider_id: listing.user_id,
-      listing_id: listing.id,
-      service_date: format(date, "yyyy-MM-dd"),
-      service_time: time,
-      hours_requested: parseInt(hours),
-      total_amount: totalAmount,
-      address,
-      notes,
-      status: "pending",
-    });
+    // Create booking
+    const { data: bookingData, error: bookingError } = await supabase
+      .from("bookings")
+      .insert({
+        customer_id: user.id,
+        provider_id: listing.user_id,
+        listing_id: listing.id,
+        service_date: format(date, "yyyy-MM-dd"),
+        service_time: time,
+        hours_requested: parseInt(hours),
+        total_amount: totalAmount,
+        address,
+        notes,
+        status: "pending",
+      })
+      .select("id")
+      .single();
 
-    if (error) {
-      toast({ title: "Request failed", description: "Could not submit your booking request. Please try again.", variant: "destructive" });
+    if (bookingError || !bookingData) {
+      toast({ title: "Request failed", description: "Could not submit your booking request.", variant: "destructive" });
       setSubmitting(false);
       return;
     }
 
-    setSuccess(true);
-    toast({ title: "Request submitted!", description: "The provider will review and respond to your booking request." });
+    // Send booking request as a message
+    await (supabase as any).from("messages").insert({
+      sender_id: user.id,
+      receiver_id: listing.user_id,
+      listing_id: listing.id,
+      booking_id: bookingData.id,
+      content: message.trim() || "Booking request sent",
+      message_type: "booking_request",
+    });
+
+    toast({ title: "Booking request sent!", description: "The provider will see your request in their messages." });
+    navigate(`/messages?with=${listing.user_id}`);
   };
 
   if (loading || authLoading) {
@@ -133,40 +141,9 @@ const Booking = () => {
     );
   }
 
-  if (success) {
-    return (
-      <div className="min-h-screen bg-gradient-warm">
-        <Header />
-        <main className="container py-16">
-          <div className="mx-auto max-w-lg text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <CheckCircle className="h-8 w-8 text-primary" />
-            </div>
-            <h1 className="mt-6 font-display text-3xl font-bold text-foreground">
-              Booking Request Sent!
-            </h1>
-            <p className="mt-4 text-muted-foreground">
-              Your request has been sent to the provider. They will review and respond with availability. You can also message them directly.
-            </p>
-            <div className="mt-8 flex justify-center gap-4">
-              <Link to="/dashboard">
-                <Button>View My Requests</Button>
-              </Link>
-              <Link to="/services">
-                <Button variant="outline">Browse More Services</Button>
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-warm">
       <Header />
-      
       <main className="container py-8">
         <Link to={`/listing/${listingId}`} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -180,7 +157,7 @@ const Booking = () => {
                 Request a Booking
               </h1>
               <p className="mt-1 text-muted-foreground">
-                Submit your preferred date and time — the provider will confirm availability
+                Your request will be sent as a message — the provider can accept or decline
               </p>
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -189,16 +166,13 @@ const Booking = () => {
                     <Label>Preferred Date *</Label>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn("mt-1 w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
-                        >
+                        <Button variant="outline" className={cn("mt-1 w-full justify-start text-left font-normal", !date && "text-muted-foreground")}>
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {date ? format(date, "PPP") : "Select date"}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar mode="single" selected={date} onSelect={setDate} disabled={(date) => date < new Date()} initialFocus />
+                        <Calendar mode="single" selected={date} onSelect={setDate} disabled={(d) => d < new Date()} initialFocus className={cn("p-3 pointer-events-auto")} />
                       </PopoverContent>
                     </Popover>
                   </div>
@@ -206,9 +180,7 @@ const Booking = () => {
                   <div>
                     <Label>Preferred Time *</Label>
                     <Select value={time} onValueChange={setTime}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select time" />
-                      </SelectTrigger>
+                      <SelectTrigger className="mt-1"><SelectValue placeholder="Select time" /></SelectTrigger>
                       <SelectContent>
                         {timeSlots.map((slot) => (
                           <SelectItem key={slot} value={slot}>{slot}</SelectItem>
@@ -221,11 +193,9 @@ const Booking = () => {
                 <div>
                   <Label>Estimated Duration (hours) *</Label>
                   <Select value={hours} onValueChange={setHours}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
+                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map((h) => (
+                      {[1,2,3,4,5,6,7,8].map((h) => (
                         <SelectItem key={h} value={h.toString()}>{h} hour{h > 1 ? "s" : ""}</SelectItem>
                       ))}
                     </SelectContent>
@@ -242,12 +212,17 @@ const Booking = () => {
 
                 <div>
                   <Label htmlFor="notes">Describe what you need</Label>
-                  <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Tell the provider what work you need done..." className="mt-1" rows={4} />
+                  <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Tell the provider what work you need done..." className="mt-1" rows={3} />
+                </div>
+
+                <div>
+                  <Label htmlFor="message">Message to provider (optional)</Label>
+                  <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Add a personal message to the provider..." className="mt-1" rows={2} />
                 </div>
 
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>
                   {submitting ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting...</>
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Sending...</>
                   ) : (
                     <>Send Booking Request — R{totalAmount.toFixed(2)} est.</>
                   )}
@@ -256,7 +231,7 @@ const Booking = () => {
             </div>
           </div>
 
-          {/* Order Summary */}
+          {/* Summary */}
           <div>
             <div className="sticky top-24 rounded-xl border border-border bg-card p-6 shadow-card">
               <h2 className="font-display text-lg font-semibold text-foreground">Request Summary</h2>
@@ -289,7 +264,6 @@ const Booking = () => {
           </div>
         </div>
       </main>
-
       <Footer />
     </div>
   );
