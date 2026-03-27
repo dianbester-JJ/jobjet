@@ -143,7 +143,7 @@ const Messages = () => {
 
       // Load booking data for booking_request messages
       if (data) {
-        const bookingIds = [...new Set(data.filter((m: Message) => m.booking_id).map((m: Message) => m.booking_id))];
+        const bookingIds = [...new Set(data.filter((m: Message) => m.booking_id).map((m: Message) => m.booking_id))] as string[];
         if (bookingIds.length > 0) {
           const { data: bookings } = await supabase
             .from("bookings")
