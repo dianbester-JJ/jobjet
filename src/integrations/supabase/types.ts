@@ -88,6 +88,60 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          booking_id: string | null
+          content: string
+          created_at: string
+          id: string
+          is_quick_response: boolean
+          listing_id: string | null
+          message_type: string
+          read: boolean
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_quick_response?: boolean
+          listing_id?: string | null
+          message_type?: string
+          read?: boolean
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_quick_response?: boolean
+          listing_id?: string | null
+          message_type?: string
+          read?: boolean
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "provider_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -120,6 +174,50 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      provider_calendar_entries: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          end_time: string | null
+          entry_date: string
+          id: string
+          notes: string | null
+          provider_id: string
+          start_time: string
+          title: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          end_time?: string | null
+          entry_date: string
+          id?: string
+          notes?: string | null
+          provider_id: string
+          start_time: string
+          title: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          end_time?: string | null
+          entry_date?: string
+          id?: string
+          notes?: string | null
+          provider_id?: string
+          start_time?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_calendar_entries_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       provider_listings: {
         Row: {
