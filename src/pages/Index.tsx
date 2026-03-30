@@ -42,9 +42,9 @@ const Index = () => {
                   Find a Service
                 </Button>
               </Link>
-              <Link to="/provider/dashboard">
+              <Link to="/become-provider">
                 <Button variant="heroOutline" size="xl">
-                  Join as Provider
+                  Join as a Pro
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -99,10 +99,10 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">
-                Top Rated Providers
+                Top Rated Pros
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Highly reviewed professionals in your area
+                Highly reviewed Pros in your area
               </p>
             </div>
             <Link to="/services" className="hidden md:block">
@@ -122,7 +122,7 @@ const Index = () => {
           <div className="mt-8 text-center md:hidden">
             <Link to="/services">
               <Button variant="outline">
-                View All Providers
+                View All Pros
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -135,14 +135,14 @@ const Index = () => {
         <div className="container">
           <div className="overflow-hidden rounded-2xl bg-gradient-hero p-8 text-center md:p-16">
             <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
-              Are You a Service Professional?
+              Are You a Service Pro?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-primary-foreground/90">
-              Join thousands of providers growing their business on JobJet. Get verified, get noticed, get hired.
+              Join thousands of Pros growing their business on JobJet. Get verified, get noticed, get hired.
             </p>
-            <Link to="/provider/dashboard" className="mt-8 inline-block">
+            <Link to="/become-provider" className="mt-8 inline-block">
               <Button variant="heroOutline" size="xl">
-                Start Your Provider Profile
+                Start Your Pro Profile
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>

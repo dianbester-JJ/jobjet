@@ -129,7 +129,7 @@ const Booking = () => {
       message_type: "booking_request",
     });
 
-    toast({ title: "Booking request sent!", description: "The provider will see your request in their messages." });
+    toast({ title: "Booking request sent!", description: "The Pro will see your request in their messages." });
     navigate(`/messages?with=${listing.user_id}`);
   };
 
@@ -157,7 +157,7 @@ const Booking = () => {
                 Request a Booking
               </h1>
               <p className="mt-1 text-muted-foreground">
-                Your request will be sent as a message — the provider can accept or decline
+                Your request will be sent as a message — the Pro can accept or decline
               </p>
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -211,8 +211,8 @@ const Booking = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="message">Message to provider (optional)</Label>
-                  <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell the provider what you need or add a personal message..." className="mt-1" rows={3} />
+                  <Label htmlFor="message">Message to Pro (optional)</Label>
+                  <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell the Pro what you need or add a personal message..." className="mt-1" rows={3} />
                 </div>
 
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>
@@ -233,7 +233,7 @@ const Booking = () => {
               <div className="mt-4 space-y-4">
                 <div>
                   <p className="font-medium text-foreground">{listing?.title}</p>
-                  <p className="text-sm text-muted-foreground">by {providerProfile?.full_name || "Provider"}</p>
+                  <p className="text-sm text-muted-foreground">by {providerProfile?.full_name || "Pro"}</p>
                 </div>
                 <div className="border-t border-border pt-4">
                   <div className="flex items-center justify-between text-sm">
@@ -251,7 +251,7 @@ const Booking = () => {
                     <span className="text-primary">R{totalAmount.toFixed(2)}</span>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Final amount to be agreed with the provider
+                    Final amount to be agreed with the Pro
                   </p>
                 </div>
               </div>

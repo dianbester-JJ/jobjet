@@ -53,7 +53,7 @@ const ProviderDashboard = () => {
       <Header />
       <main className="container py-8">
         <div className="flex items-center justify-between">
-          <h1 className="font-display text-2xl font-bold">Provider Dashboard</h1>
+          <h1 className="font-display text-2xl font-bold">Pro Dashboard</h1>
           <div className="flex gap-3">
             <Link to="/messages">
               <Button variant="outline">

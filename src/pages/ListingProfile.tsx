@@ -151,7 +151,7 @@ const ListingProfile = () => {
     if (error) {
       toast({ title: "Error", description: "Could not send message. Please try again.", variant: "destructive" });
     } else {
-      toast({ title: "Message sent!", description: "The provider will receive your message." });
+      toast({ title: "Message sent!", description: "The Pro will receive your message." });
       setEnquiryMessage("");
     }
     setSendingEnquiry(false);
@@ -228,7 +228,7 @@ const ListingProfile = () => {
               {listing.verified && (
                 <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-card/90 px-3 py-1.5 text-sm font-medium text-primary backdrop-blur-sm">
                   <BadgeCheck className="h-4 w-4" />
-                  Verified Provider
+                  Verified Pro
                 </div>
               )}
             </div>
@@ -283,7 +283,7 @@ const ListingProfile = () => {
               <div className="mt-8 rounded-xl border border-border bg-card p-6">
                 <h2 className="font-display text-xl font-semibold text-foreground">Send an Enquiry</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Describe what you need and the provider will get back to you
+                  Describe what you need and the Pro will get back to you
                 </p>
                 <Textarea
                   value={enquiryMessage}
@@ -377,7 +377,7 @@ const ListingProfile = () => {
 
                 <Button variant="outline" className="w-full" size="lg" onClick={handleMessageProvider}>
                   <MessageSquare className="mr-2 h-4 w-4" />
-                  Message Provider
+                  Message Pro
                 </Button>
               </div>
             </div>
@@ -385,7 +385,7 @@ const ListingProfile = () => {
             {/* Contact Info - Always visible */}
             {providerProfile?.phone && (
               <div className="rounded-xl border border-border bg-card p-6 shadow-card">
-                <p className="text-sm font-medium text-foreground mb-4">Contact Provider</p>
+                <p className="text-sm font-medium text-foreground mb-4">Contact Pro</p>
                 <div className="space-y-3">
                   <Button 
                     variant="outline" 

@@ -7,9 +7,8 @@ const Footer = () => {
       <div className="container py-12">
         <div className="grid gap-8 md:grid-cols-4">
           <div>
-            <Link to="/" className="flex items-center gap-2">
-              <img src={jobjetLogo} alt="JobJet" className="h-9 w-9 object-contain" />
-              <span className="font-display text-xl font-semibold text-foreground">JobJet</span>
+            <Link to="/" className="inline-block">
+              <img src={jobjetLogo} alt="JobJet" className="h-12 w-auto object-contain" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
               Affordable, Reliable Service For Your Home.
@@ -17,7 +16,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="mb-3 font-semibold text-foreground">For Clients</h4>
+            <h4 className="mb-3 font-semibold text-foreground">For Customers</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link to="/services" className="hover:text-primary">
@@ -38,16 +37,16 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="mb-3 font-semibold text-foreground">For Providers</h4>
+            <h4 className="mb-3 font-semibold text-foreground">For Pros</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link to="/provider/dashboard" className="hover:text-primary">
-                  Join as Provider
+                <Link to="/become-provider" className="hover:text-primary">
+                  Join as a Pro
                 </Link>
               </li>
               <li>
                 <Link to="/provider/dashboard" className="hover:text-primary">
-                  Provider Dashboard
+                  Pro Dashboard
                 </Link>
               </li>
               <li>
