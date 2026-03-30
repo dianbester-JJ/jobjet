@@ -59,7 +59,7 @@ const Header = () => {
       <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between gap-4">
           <Link to="/" className="flex-shrink-0">
-            <img src={jobjetLogo} alt="JobJet" className="h-12 w-auto object-contain" />
+            <img src={jobjetLogo} alt="JobJet" className="h-16 w-auto object-contain" />
           </Link>
 
           {/* Desktop Navigation */}

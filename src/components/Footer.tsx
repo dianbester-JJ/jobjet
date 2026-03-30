@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid gap-8 md:grid-cols-4">
           <div>
             <Link to="/" className="inline-block">
-              <img src={jobjetLogo} alt="JobJet" className="h-12 w-auto object-contain" />
+              <img src={jobjetLogo} alt="JobJet" className="h-16 w-auto object-contain" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
               Affordable, Reliable Service For Your Home.
