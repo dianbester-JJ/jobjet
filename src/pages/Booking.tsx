@@ -211,13 +211,8 @@ const Booking = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="notes">Describe what you need</Label>
-                  <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Tell the provider what work you need done..." className="mt-1" rows={3} />
-                </div>
-
-                <div>
                   <Label htmlFor="message">Message to provider (optional)</Label>
-                  <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Add a personal message to the provider..." className="mt-1" rows={2} />
+                  <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell the provider what you need or add a personal message..." className="mt-1" rows={3} />
                 </div>
 
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>
