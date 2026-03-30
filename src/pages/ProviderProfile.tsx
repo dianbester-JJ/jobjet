@@ -25,8 +25,8 @@ const ProviderProfile = () => {
       <div className="min-h-screen bg-gradient-warm">
         <Header />
         <div className="container py-16 text-center">
-          <h1 className="font-display text-3xl font-bold text-foreground">Provider Not Found</h1>
-          <p className="mt-4 text-muted-foreground">The provider you're looking for doesn't exist.</p>
+          <h1 className="font-display text-3xl font-bold text-foreground">Pro Not Found</h1>
+          <p className="mt-4 text-muted-foreground">The Pro you're looking for doesn't exist.</p>
           <Link to="/services">
             <Button className="mt-6">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -66,7 +66,7 @@ const ProviderProfile = () => {
               {provider.verified && (
                 <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-card/90 px-3 py-1.5 text-sm font-medium text-primary backdrop-blur-sm">
                   <BadgeCheck className="h-4 w-4" />
-                  Verified Provider
+                  Verified Pro
                 </div>
               )}
             </div>
