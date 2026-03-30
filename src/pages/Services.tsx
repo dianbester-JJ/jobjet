@@ -24,7 +24,7 @@ interface Listing {
 const Services = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category") || "all";
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [locationFilter, setLocationFilter] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [listings, setListings] = useState<Listing[]>([]);
@@ -183,7 +183,7 @@ const Services = () => {
         ) : (
           <div className="rounded-xl border border-border bg-card p-12 text-center">
             <div className="text-4xl">🔍</div>
-            <h3 className="mt-4 font-display text-xl font-semibold text-foreground">No providers found</h3>
+            <h3 className="mt-4 font-display text-xl font-semibold text-foreground">No Pros found</h3>
             <p className="mt-2 text-muted-foreground">
               Try adjusting your search or filters
             </p>

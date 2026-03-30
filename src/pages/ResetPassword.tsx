@@ -52,7 +52,7 @@ const ResetPassword = () => {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <img src={jobjetLogo} alt="JobJet" className="mx-auto h-12 w-12 object-contain" />
+          <img src={jobjetLogo} alt="JobJet" className="mx-auto h-14 w-auto object-contain" />
           <h2 className="mt-4 font-display text-xl font-bold text-foreground">Invalid or expired link</h2>
           <p className="mt-2 text-sm text-muted-foreground">Please request a new password reset.</p>
           <Button className="mt-4" onClick={() => navigate("/auth")}>Back to sign in</Button>
@@ -65,7 +65,7 @@ const ResetPassword = () => {
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center gap-2">
-          <img src={jobjetLogo} alt="JobJet" className="h-10 w-10 object-contain" />
+          <img src={jobjetLogo} alt="JobJet" className="h-14 w-auto object-contain" />
           <h2 className="font-display text-2xl font-bold text-foreground">Set new password</h2>
           <p className="text-sm text-muted-foreground">Enter your new password below.</p>
         </div>

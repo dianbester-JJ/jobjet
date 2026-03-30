@@ -116,8 +116,8 @@ const Auth = () => {
               Back to home
             </Link>
 
-            <div className="mt-6 flex items-center gap-2">
-              <img src={jobjetLogo} alt="JobJet" className="h-10 w-auto object-contain" />
+            <div className="mt-6">
+              <img src={jobjetLogo} alt="JobJet" className="h-14 w-auto object-contain" />
             </div>
 
             <h2 className="mt-8 font-display text-2xl font-bold text-foreground">
@@ -252,7 +252,7 @@ const Auth = () => {
               Find trusted service providers
             </h3>
             <p className="mt-4 text-lg text-primary-foreground/80">
-              Book painters, plumbers, cleaners and more — all verified professionals.
+              Book painters, plumbers, cleaners and more — all verified Pros.
             </p>
           </div>
         </div>
