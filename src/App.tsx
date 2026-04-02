@@ -18,6 +18,9 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import VettingProcess from "./pages/VettingProcess";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResetPassword from "./pages/ResetPassword";
+import Bookings from "./pages/Bookings";
+import PersonalDetails from "./pages/PersonalDetails";
+import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

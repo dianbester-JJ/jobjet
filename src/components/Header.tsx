@@ -190,12 +190,37 @@ const Header = () => {
                 </Button>
               </Link>
               {user && (
-                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">
-                    <User className="mr-2 h-4 w-4" />
-                    My Bookings
-                  </Button>
-                </Link>
+                <>
+                  <Link to="/bookings" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      Bookings
+                    </Button>
+                  </Link>
+                  <Link to="/personal-details" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      Personal Details
+                    </Button>
+                  </Link>
+                  <Link to="/help" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      Help
+                    </Button>
+                  </Link>
+                  {isProvider ? (
+                    <Link to="/provider/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start">
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        Messages
+                      </Button>
+                    </Link>
+                  )}
+                </>
               )}
               <div className="mt-2 flex gap-2">
                 {user ? (
