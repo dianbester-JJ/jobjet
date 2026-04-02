@@ -26,7 +26,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [roleDialogMode, setRoleDialogMode] = useState<"signin" | "signup">("signin");
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading, isProvider } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
