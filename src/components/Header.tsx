@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { User, Menu, X, LogOut, Search } from "lucide-react";
+import { User, Menu, X, LogOut, Search, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import jobjetLogo from "@/assets/jobjet-logo.png";
@@ -26,7 +26,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [roleDialogMode, setRoleDialogMode] = useState<"signin" | "signup">("signin");
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading, isProvider } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -92,31 +92,52 @@ const Header = () => {
           {/* Desktop CTA */}
           <div className="hidden items-center gap-3 md:flex">
             {loading ? null : user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <User className="mr-1 h-4 w-4" />
-                    My Account
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard" className="cursor-pointer">
-                      My Bookings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/provider/dashboard" className="cursor-pointer">
-                      Pro Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                {isProvider ? (
+                  <Link to="/provider/dashboard">
+                    <Button variant="outline" size="sm">
+                      Dashboard
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link to="/messages">
+                    <Button variant="outline" size="sm">
+                      <MessageSquare className="mr-1 h-4 w-4" />
+                      Messages
+                    </Button>
+                  </Link>
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <User className="mr-1 h-4 w-4" />
+                      My Account
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link to="/personal-details" className="cursor-pointer">
+                        Personal Details
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/bookings" className="cursor-pointer">
+                        Bookings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/help" className="cursor-pointer">
+                        Help
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <>
                 <Button variant="outline" size="sm" onClick={() => openRoleDialog("signin")}>
@@ -169,12 +190,37 @@ const Header = () => {
                 </Button>
               </Link>
               {user && (
-                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">
-                    <User className="mr-2 h-4 w-4" />
-                    My Bookings
-                  </Button>
-                </Link>
+                <>
+                  <Link to="/bookings" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      Bookings
+                    </Button>
+                  </Link>
+                  <Link to="/personal-details" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      Personal Details
+                    </Button>
+                  </Link>
+                  <Link to="/help" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      Help
+                    </Button>
+                  </Link>
+                  {isProvider ? (
+                    <Link to="/provider/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start">
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        Messages
+                      </Button>
+                    </Link>
+                  )}
+                </>
               )}
               <div className="mt-2 flex gap-2">
                 {user ? (

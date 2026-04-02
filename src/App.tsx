@@ -18,6 +18,9 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import VettingProcess from "./pages/VettingProcess";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResetPassword from "./pages/ResetPassword";
+import Bookings from "./pages/Bookings";
+import PersonalDetails from "./pages/PersonalDetails";
+import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +47,9 @@ const App = () => (
             <Route path="/become-provider" element={<VettingProcess />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/personal-details" element={<PersonalDetails />} />
+            <Route path="/help" element={<Help />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
