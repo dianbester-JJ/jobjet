@@ -63,11 +63,11 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Star className="h-5 w-5 text-primary" />
-              <span>5,000+ Reviews</span>
+              <span>Ratings By Real Customers</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="h-5 w-5 text-primary" />
-              <span>Same Day Service</span>
+              <span>Book or Contact a Pro Directly</span>
             </div>
           </div>
         </div>
