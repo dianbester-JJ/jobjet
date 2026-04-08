@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { serviceCategories } from "@/data/services";
 import { MapPin, Clock, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatRate } from "@/lib/rateUtils";
 
 interface Listing {
   id: string;
@@ -13,6 +14,9 @@ interface Listing {
   years_experience: number | null;
   verified: boolean | null;
   cover_photo_url: string | null;
+  rate_type?: string | null;
+  rate_unit?: string | null;
+  working_hours_per_day?: number | null;
 }
 
 interface ListingCardProps {
@@ -21,6 +25,12 @@ interface ListingCardProps {
 
 const ListingCard = ({ listing }: ListingCardProps) => {
   const category = serviceCategories.find((c) => c.id === listing.category_id);
+  const { amount, label, subtitle } = formatRate(
+    listing.hourly_rate,
+    listing.rate_type,
+    listing.rate_unit,
+    listing.working_hours_per_day
+  );
 
   return (
     <div className="group overflow-hidden rounded-xl bg-card shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1">
@@ -73,8 +83,11 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 
         <div className="mt-4 flex items-center justify-between">
           <div>
-            <span className="text-lg font-bold text-foreground">R{listing.hourly_rate}</span>
-            <span className="text-sm text-muted-foreground">/hour</span>
+            <span className="text-lg font-bold text-foreground">{amount}</span>
+            <span className="text-sm text-muted-foreground">{label}</span>
+            {subtitle && (
+              <p className="text-xs text-muted-foreground">{subtitle}</p>
+            )}
           </div>
           <Link to={`/listing/${listing.id}`}>
             <Button size="sm">View Profile</Button>

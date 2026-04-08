@@ -232,11 +232,14 @@ export type Database = {
           latitude: number | null
           location: string | null
           longitude: number | null
+          rate_type: string
+          rate_unit: string | null
           service_radius: number | null
           title: string
           updated_at: string
           user_id: string
           verified: boolean | null
+          working_hours_per_day: number | null
           years_experience: number | null
         }
         Insert: {
@@ -251,11 +254,14 @@ export type Database = {
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          rate_type?: string
+          rate_unit?: string | null
           service_radius?: number | null
           title: string
           updated_at?: string
           user_id: string
           verified?: boolean | null
+          working_hours_per_day?: number | null
           years_experience?: number | null
         }
         Update: {
@@ -270,11 +276,14 @@ export type Database = {
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          rate_type?: string
+          rate_unit?: string | null
           service_radius?: number | null
           title?: string
           updated_at?: string
           user_id?: string
           verified?: boolean | null
+          working_hours_per_day?: number | null
           years_experience?: number | null
         }
         Relationships: []

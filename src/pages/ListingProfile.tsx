@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { formatRate } from "@/lib/rateUtils";
 import { 
   Star, 
   MapPin, 
@@ -34,6 +35,9 @@ interface Listing {
   years_experience: number | null;
   verified: boolean | null;
   cover_photo_url: string | null;
+  rate_type?: string | null;
+  rate_unit?: string | null;
+  working_hours_per_day?: number | null;
 }
 
 interface Profile {
@@ -363,8 +367,16 @@ const ListingProfile = () => {
           <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
             <div className="rounded-xl border border-border bg-card p-6 shadow-card">
               <div className="text-center">
-                <div className="text-3xl font-bold text-foreground">R{listing.hourly_rate}</div>
-                <p className="text-muted-foreground">per hour</p>
+              {(() => {
+                const { amount, label, subtitle } = formatRate(listing.hourly_rate, listing.rate_type, listing.rate_unit, listing.working_hours_per_day);
+                return (
+                  <>
+                    <div className="text-3xl font-bold text-foreground">{amount}</div>
+                    <p className="text-muted-foreground">{label.replace("/", "per ")}</p>
+                    {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+                  </>
+                );
+              })()}
               </div>
 
               <div className="mt-6 space-y-3">
