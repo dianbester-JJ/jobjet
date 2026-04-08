@@ -9,7 +9,7 @@ import Services from "./pages/Services";
 import ProviderProfile from "./pages/ProviderProfile";
 import ListingProfile from "./pages/ListingProfile";
 import ProviderDashboard from "./pages/ProviderDashboard";
-import LogoSelection from "./pages/LogoSelection";
+
 import Auth from "./pages/Auth";
 import Booking from "./pages/Booking";
 import Messages from "./pages/Messages";
@@ -38,7 +38,7 @@ const App = () => (
             <Route path="/provider/:id" element={<ProviderProfile />} />
             <Route path="/listing/:id" element={<ListingProfile />} />
             <Route path="/provider/dashboard" element={<ProviderDashboard />} />
-            <Route path="/logo-selection" element={<LogoSelection />} />
+            
             <Route path="/auth" element={<Auth />} />
             <Route path="/booking/:listingId" element={<Booking />} />
             <Route path="/messages" element={<Messages />} />
