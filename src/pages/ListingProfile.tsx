@@ -225,8 +225,8 @@ const ListingProfile = () => {
               {listing.cover_photo_url ? (
                 <img src={listing.cover_photo_url} alt={listing.title} className="h-full w-full object-cover" />
               ) : (
-                <div className="flex h-full items-center justify-center">
-                  <span className="text-6xl">{category?.icon || "🔧"}</span>
+                <div className="flex h-full items-center justify-center bg-muted">
+                  <span className="text-lg font-medium text-muted-foreground">{category?.name || "Service"}</span>
                 </div>
               )}
               {listing.verified && (

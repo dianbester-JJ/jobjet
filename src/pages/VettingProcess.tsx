@@ -448,7 +448,7 @@ const VettingProcess = () => {
               <div className="border-b pb-4 mb-6">
                 <h2 className="text-xl font-semibold text-foreground">Background Check</h2>
                 <p className="text-muted-foreground mt-1">
-                  🔒 This information is confidential and helps us ensure safety for all users
+                  This information is confidential and helps us ensure safety for all users
                 </p>
               </div>
 
@@ -615,7 +615,7 @@ const VettingProcess = () => {
               <div className="border-b pb-4 mb-6">
                 <h2 className="text-xl font-semibold text-foreground">Prove Your Experience</h2>
                 <p className="text-muted-foreground mt-1">
-                  📋 Choose ONE option below to verify your work experience
+                  Choose ONE option below to verify your work experience
                 </p>
               </div>
 
@@ -642,7 +642,7 @@ const VettingProcess = () => {
                   {referralOption === "whatsapp" && (
                     <div className="px-4 pb-4 space-y-4">
                       <div className="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
-                        📱 We will contact these clients via WhatsApp to verify your work quality
+                        We will contact these clients via WhatsApp to verify your work quality
                       </div>
                       
                       {whatsappNumbers.map((number, index) => (
@@ -758,8 +758,8 @@ const VettingProcess = () => {
 
                       <p className="text-xs text-muted-foreground">
                         {jobPhotos.length < 3 
-                          ? `⚠️ Please upload at least ${3 - jobPhotos.length} more photo(s)`
-                          : `✅ ${jobPhotos.length} photo(s) uploaded`
+                          ? `Please upload at least ${3 - jobPhotos.length} more photo(s)`
+                          : `${jobPhotos.length} photo(s) uploaded`
                         }
                       </p>
                     </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, CheckCircle, XCircle } from "lucide-react";
+import { Calendar, Clock, MapPin, CheckCircle, XCircle, Clipboard } from "lucide-react";
 import { format } from "date-fns";
 
 interface BookingRequestCardProps {
@@ -34,8 +34,9 @@ const BookingRequestCard = ({ booking, isProvider, onAccept, onDecline }: Bookin
   return (
     <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-          📋 Booking Request
+        <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+          <Clipboard className="h-3.5 w-3.5" />
+          Booking Request
         </p>
         <Badge className={status.className}>{status.label}</Badge>
       </div>

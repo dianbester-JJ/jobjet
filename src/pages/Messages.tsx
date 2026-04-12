@@ -112,7 +112,7 @@ const Messages = () => {
           other_user_id: otherId,
           other_user_name: profileMap.get(otherId) || "User",
           last_message: lastMsg.message_type === "booking_request"
-            ? "📋 Booking Request"
+            ? "Booking Request"
             : lastMsg.content,
           last_message_time: lastMsg.created_at,
           unread_count: unread,
@@ -303,7 +303,7 @@ const Messages = () => {
       sender_id: user.id,
       receiver_id: activeConversation,
       booking_id: bookingId,
-      content: "✅ Booking request accepted!",
+      content: "Booking request accepted!",
       message_type: "booking_accepted",
     });
     // Auto-create calendar entry
@@ -328,7 +328,7 @@ const Messages = () => {
       sender_id: user.id,
       receiver_id: activeConversation,
       booking_id: bookingId,
-      content: "❌ Booking request declined.",
+      content: "Booking request declined.",
       message_type: "booking_declined",
     });
     toast({ title: "Booking declined" });

@@ -37,8 +37,8 @@ const ProviderDashboard = () => {
     fetchData();
   }, [user]);
 
-  const getCategoryIcon = (categoryId: string) =>
-    serviceCategories.find((c) => c.id === categoryId)?.icon || "🔧";
+  const getCategoryName = (categoryId: string) =>
+    serviceCategories.find((c) => c.id === categoryId)?.name || "Service";
 
   if (authLoading || loading) {
     return (
@@ -88,7 +88,7 @@ const ProviderDashboard = () => {
                 <div key={l.id} className="rounded-xl border border-border bg-card p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl">{getCategoryIcon(l.category_id)}</span>
+                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">{getCategoryName(l.category_id)}</span>
                       <h3 className="font-semibold">{l.title}</h3>
                     </div>
                     {l.approved ? (

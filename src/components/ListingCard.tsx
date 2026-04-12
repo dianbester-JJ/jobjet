@@ -42,8 +42,8 @@ const ListingCard = ({ listing }: ListingCardProps) => {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <span className="text-4xl">{category?.icon || "🔧"}</span>
+          <div className="flex h-full items-center justify-center bg-muted">
+            <span className="text-sm font-medium text-muted-foreground">{category?.name || "Service"}</span>
           </div>
         )}
         {listing.verified && (
