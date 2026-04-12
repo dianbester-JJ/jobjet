@@ -7,8 +7,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Loader2, Save } from "lucide-react";
+import BecomeProviderForm from "@/components/BecomeProviderForm";
+import { Loader2, Save, Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const PersonalDetails = () => {
   const navigate = useNavigate();
