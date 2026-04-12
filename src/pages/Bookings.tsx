@@ -44,7 +44,7 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 
 const Bookings = () => {
   const navigate = useNavigate();
-  const { user, loading: authLoading, isProvider } = useAuth();
+  const { user, loading: authLoading, isPro: isProvider } = useAuth();
   const [bookings, setBookings] = useState<BookingRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());

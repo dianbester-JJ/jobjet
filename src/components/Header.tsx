@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import jobjetLogo from "@/assets/jobjet-logo.png";
 import { Input } from "@/components/ui/input";
+import RoleSwitcher from "@/components/RoleSwitcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,15 +19,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import BecomeProviderForm from "@/components/BecomeProviderForm";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
-  const [roleDialogMode, setRoleDialogMode] = useState<"signin" | "signup">("signin");
-  const { user, signOut, loading, isProvider } = useAuth();
+  const [becomeProviderOpen, setBecomeProviderOpen] = useState(false);
+  const { user, signOut, loading, isPro, roles } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -37,20 +38,6 @@ const Header = () => {
     if (searchQuery.trim()) {
       navigate(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
-    }
-  };
-
-  const openRoleDialog = (mode: "signin" | "signup") => {
-    setRoleDialogMode(mode);
-    setRoleDialogOpen(true);
-  };
-
-  const handleRoleSelect = (role: "customer" | "pro") => {
-    setRoleDialogOpen(false);
-    if (role === "pro") {
-      navigate(`/auth?mode=${roleDialogMode}&role=pro`);
-    } else {
-      navigate(`/auth?mode=${roleDialogMode}&role=customer`);
     }
   };
 
@@ -93,7 +80,7 @@ const Header = () => {
           <div className="hidden items-center gap-3 md:flex">
             {loading ? null : user ? (
               <>
-                {isProvider ? (
+                {isPro ? (
                   <Link to="/provider/dashboard">
                     <Button variant="outline" size="sm">
                       Dashboard
@@ -114,7 +101,15 @@ const Header = () => {
                       My Account
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuContent align="end" className="w-56">
+                    {roles.includes("pro") && (
+                      <>
+                        <div className="px-1 py-1">
+                          <RoleSwitcher />
+                        </div>
+                        <DropdownMenuSeparator />
+                      </>
+                    )}
                     <DropdownMenuItem asChild>
                       <Link to="/personal-details" className="cursor-pointer">
                         Personal Details
@@ -130,6 +125,15 @@ const Header = () => {
                         Help
                       </Link>
                     </DropdownMenuItem>
+                    {!roles.includes("pro") && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => setBecomeProviderOpen(true)} className="cursor-pointer">
+                          <Briefcase className="mr-2 h-4 w-4" />
+                          Become a Provider
+                        </DropdownMenuItem>
+                      </>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
@@ -140,13 +144,17 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Button variant="outline" size="sm" onClick={() => openRoleDialog("signin")}>
-                  <User className="mr-1 h-4 w-4" />
-                  Sign In
-                </Button>
-                <Button size="sm" onClick={() => openRoleDialog("signup")}>
-                  Get Started
-                </Button>
+                <Link to="/auth?mode=signin">
+                  <Button variant="outline" size="sm">
+                    <User className="mr-1 h-4 w-4" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth?mode=signup">
+                  <Button size="sm">
+                    Get Started
+                  </Button>
+                </Link>
               </>
             )}
           </div>
@@ -191,6 +199,11 @@ const Header = () => {
               </Link>
               {user && (
                 <>
+                  {roles.includes("pro") && (
+                    <div className="px-3 py-2">
+                      <RoleSwitcher />
+                    </div>
+                  )}
                   <Link to="/bookings" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">
                       Bookings
@@ -206,7 +219,7 @@ const Header = () => {
                       Help
                     </Button>
                   </Link>
-                  {isProvider ? (
+                  {isPro ? (
                     <Link to="/provider/dashboard" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="ghost" className="w-full justify-start">
                         Dashboard
@@ -220,6 +233,12 @@ const Header = () => {
                       </Button>
                     </Link>
                   )}
+                  {!roles.includes("pro") && (
+                    <Button variant="ghost" className="w-full justify-start" onClick={() => { setMobileMenuOpen(false); setBecomeProviderOpen(true); }}>
+                      <Briefcase className="mr-2 h-4 w-4" />
+                      Become a Provider
+                    </Button>
+                  )}
                 </>
               )}
               <div className="mt-2 flex gap-2">
@@ -230,12 +249,16 @@ const Header = () => {
                   </Button>
                 ) : (
                   <>
-                    <Button variant="outline" className="flex-1" onClick={() => { setMobileMenuOpen(false); openRoleDialog("signin"); }}>
-                      Sign In
-                    </Button>
-                    <Button className="flex-1" onClick={() => { setMobileMenuOpen(false); openRoleDialog("signup"); }}>
-                      Get Started
-                    </Button>
+                    <Link to="/auth?mode=signin" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" className="w-full">
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link to="/auth?mode=signup" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full">
+                        Get Started
+                      </Button>
+                    </Link>
                   </>
                 )}
               </div>
@@ -244,32 +267,18 @@ const Header = () => {
         )}
       </header>
 
-      {/* Role Selection Dialog */}
-      <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
+      {/* Become a Provider Dialog */}
+      <Dialog open={becomeProviderOpen} onOpenChange={setBecomeProviderOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center font-display text-xl">
-              {roleDialogMode === "signin" ? "Sign in as" : "Sign up as"}
+              Become a Provider
             </DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 pt-4">
-            <button
-              onClick={() => handleRoleSelect("customer")}
-              className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 transition-all hover:border-primary hover:bg-primary/5"
-            >
-              <User className="h-10 w-10 text-primary" strokeWidth={1.5} />
-              <span className="font-display text-lg font-semibold text-foreground">Customer</span>
-              <span className="text-xs text-muted-foreground text-center">I need a service done</span>
-            </button>
-            <button
-              onClick={() => handleRoleSelect("pro")}
-              className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 transition-all hover:border-primary hover:bg-primary/5"
-            >
-              <Briefcase className="h-10 w-10 text-primary" strokeWidth={1.5} />
-              <span className="font-display text-lg font-semibold text-foreground">Pro</span>
-              <span className="text-xs text-muted-foreground text-center">I offer services</span>
-            </button>
-          </div>
+          <p className="text-sm text-muted-foreground text-center">
+            Switching to a provider account lets you list your services and receive job requests. You can switch back to customer mode anytime.
+          </p>
+          <BecomeProviderForm onComplete={() => setBecomeProviderOpen(false)} />
         </DialogContent>
       </Dialog>
     </>

@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import jobjetLogo from "@/assets/jobjet-logo.png";
 
 const Footer = () => {
+  const { user, roles } = useAuth();
+  const showBecomePro = user && !roles.includes("pro");
+
   return (
     <footer className="border-t border-border bg-muted/30">
       <div className="container py-12">
@@ -83,6 +87,21 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+
+        {/* Become a Provider CTA for customers */}
+        {showBecomePro && (
+          <div className="mt-8 rounded-xl border border-primary/20 bg-primary/5 p-6 text-center">
+            <h3 className="font-display text-lg font-semibold text-foreground">Want to offer your services?</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              List your skills, set your rates, and start receiving job requests from customers in your area.
+            </p>
+            <Link to="/become-provider">
+              <button className="mt-3 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
+                Become a Provider
+              </button>
+            </Link>
+          </div>
+        )}
 
         <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
           © 2025 JobJet. All rights reserved.
