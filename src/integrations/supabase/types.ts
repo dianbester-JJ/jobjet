@@ -144,6 +144,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          active_role: string
           avatar_url: string | null
           created_at: string
           email: string | null
@@ -151,9 +152,11 @@ export type Database = {
           id: string
           location: string | null
           phone: string | null
+          roles: string[]
           updated_at: string
         }
         Insert: {
+          active_role?: string
           avatar_url?: string | null
           created_at?: string
           email?: string | null
@@ -161,9 +164,11 @@ export type Database = {
           id: string
           location?: string | null
           phone?: string | null
+          roles?: string[]
           updated_at?: string
         }
         Update: {
+          active_role?: string
           avatar_url?: string | null
           created_at?: string
           email?: string | null
@@ -171,6 +176,7 @@ export type Database = {
           id?: string
           location?: string | null
           phone?: string | null
+          roles?: string[]
           updated_at?: string
         }
         Relationships: []
