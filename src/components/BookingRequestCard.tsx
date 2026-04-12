@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, CheckCircle, XCircle } from "lucide-react";
+import { Calendar, Clock, MapPin, CheckCircle, XCircle, Clipboard } from "lucide-react";
 import { format } from "date-fns";
 
 interface BookingRequestCardProps {
