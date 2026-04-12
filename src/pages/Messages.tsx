@@ -199,7 +199,12 @@ const Messages = () => {
               (msg.sender_id === user.id && msg.receiver_id === activeConversation) ||
               (msg.sender_id === activeConversation && msg.receiver_id === user.id)
             ) {
-              setMessages((prev) => [...prev, msg]);
+              setMessages((prev) => {
+                if (prev.some((m) => m.id === msg.id || (m.content === msg.content && m.sender_id === msg.sender_id && Math.abs(new Date(m.created_at).getTime() - new Date(msg.created_at).getTime()) < 5000))) {
+                  return prev;
+                }
+                return [...prev, msg];
+              });
               if (msg.receiver_id === user.id) {
                 await (supabase as any).from("messages").update({ read: true }).eq("id", msg.id);
               }
