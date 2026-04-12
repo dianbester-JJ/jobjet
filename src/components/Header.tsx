@@ -257,7 +257,7 @@ const Header = () => {
               onClick={() => handleRoleSelect("customer")}
               className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 transition-all hover:border-primary hover:bg-primary/5"
             >
-              <span className="text-4xl">🏠</span>
+              <User className="h-10 w-10 text-primary" strokeWidth={1.5} />
               <span className="font-display text-lg font-semibold text-foreground">Customer</span>
               <span className="text-xs text-muted-foreground text-center">I need a service done</span>
             </button>
@@ -265,7 +265,7 @@ const Header = () => {
               onClick={() => handleRoleSelect("pro")}
               className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 transition-all hover:border-primary hover:bg-primary/5"
             >
-              <span className="text-4xl">🔧</span>
+              <Briefcase className="h-10 w-10 text-primary" strokeWidth={1.5} />
               <span className="font-display text-lg font-semibold text-foreground">Pro</span>
               <span className="text-xs text-muted-foreground text-center">I offer services</span>
             </button>
