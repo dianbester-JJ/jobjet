@@ -98,8 +98,40 @@ const PersonalDetails = () => {
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             Save Changes
           </Button>
+
+          {/* Become a Provider section */}
+          {!roles.includes("pro") && (
+            <div className="mt-8 rounded-xl border border-border p-5">
+              <div className="flex items-start gap-3">
+                <Briefcase className="h-5 w-5 text-primary mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground">Become a Provider</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Switching to a provider account lets you list your services and receive job requests. You can switch back to customer mode anytime.
+                  </p>
+                  <Button variant="outline" size="sm" className="mt-3" onClick={() => setBecomeProviderOpen(true)}>
+                    Get Started
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
+
+      {/* Become Provider Dialog */}
+      <Dialog open={becomeProviderOpen} onOpenChange={setBecomeProviderOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center font-display text-xl">Become a Provider</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground text-center">
+            Switching to a provider account lets you list your services and receive job requests. You can switch back to customer mode anytime.
+          </p>
+          <BecomeProviderForm onComplete={() => setBecomeProviderOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
