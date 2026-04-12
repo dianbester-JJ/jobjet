@@ -199,7 +199,12 @@ const Messages = () => {
               (msg.sender_id === user.id && msg.receiver_id === activeConversation) ||
               (msg.sender_id === activeConversation && msg.receiver_id === user.id)
             ) {
-              setMessages((prev) => [...prev, msg]);
+              setMessages((prev) => {
+                if (prev.some((m) => m.id === msg.id || (m.content === msg.content && m.sender_id === msg.sender_id && Math.abs(new Date(m.created_at).getTime() - new Date(msg.created_at).getTime()) < 5000))) {
+                  return prev;
+                }
+                return [...prev, msg];
+              });
               if (msg.receiver_id === user.id) {
                 await (supabase as any).from("messages").update({ read: true }).eq("id", msg.id);
               }
@@ -242,18 +247,45 @@ const Messages = () => {
   const handleSend = async () => {
     if (!newMessage.trim() || !user || !activeConversation || sending) return;
     setSending(true);
+    const content = newMessage.trim();
+    const optimisticMsg: Message = {
+      id: crypto.randomUUID(),
+      sender_id: user.id,
+      receiver_id: activeConversation,
+      listing_id: null,
+      booking_id: null,
+      content,
+      message_type: "text",
+      is_quick_response: false,
+      read: false,
+      created_at: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, optimisticMsg]);
+    setNewMessage("");
     await (supabase as any).from("messages").insert({
       sender_id: user.id,
       receiver_id: activeConversation,
-      content: newMessage.trim(),
+      content,
       message_type: "text",
     });
-    setNewMessage("");
     setSending(false);
   };
 
   const handleQuickResponse = async (msg: string) => {
     if (!user || !activeConversation) return;
+    const optimisticMsg: Message = {
+      id: crypto.randomUUID(),
+      sender_id: user.id,
+      receiver_id: activeConversation,
+      listing_id: null,
+      booking_id: null,
+      content: msg,
+      message_type: "text",
+      is_quick_response: true,
+      read: false,
+      created_at: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, optimisticMsg]);
     await (supabase as any).from("messages").insert({
       sender_id: user.id,
       receiver_id: activeConversation,
