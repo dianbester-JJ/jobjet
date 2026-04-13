@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatRate } from "@/lib/rateUtils";
+import ReviewForm from "@/components/ReviewForm";
 import { 
   Star, 
   MapPin, 
@@ -52,6 +53,12 @@ interface Review {
   comment: string | null;
   created_at: string;
   customer_id: string;
+  image_urls: string[] | null;
+}
+
+interface EligibleBooking {
+  id: string;
+  service_date: string;
 }
 
 const ListingProfile = () => {
@@ -68,8 +75,33 @@ const ListingProfile = () => {
   const [copied, setCopied] = useState(false);
   const [enquiryMessage, setEnquiryMessage] = useState("");
   const [sendingEnquiry, setSendingEnquiry] = useState(false);
+  const [eligibleBookings, setEligibleBookings] = useState<EligibleBooking[]>([]);
+  const [selectedBookingId, setSelectedBookingId] = useState<string>("");
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   const category = listing ? serviceCategories.find((c) => c.id === listing.category_id) : null;
+
+  const fetchReviews = async (providerId: string) => {
+    const { data: reviewsData } = await supabase
+      .from("reviews")
+      .select("*")
+      .eq("provider_id", providerId)
+      .order("created_at", { ascending: false });
+
+    if (reviewsData && reviewsData.length > 0) {
+      setReviews(reviewsData as Review[]);
+      const customerIds = [...new Set(reviewsData.map(r => r.customer_id))];
+      const { data: customerProfiles } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", customerIds);
+      if (customerProfiles) {
+        setReviewProfiles(new Map(customerProfiles.map(p => [p.id, p.full_name || "Customer"])));
+      }
+    } else {
+      setReviews([]);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,31 +127,49 @@ const ListingProfile = () => {
         .maybeSingle();
 
       setProviderProfile(profileData);
-
-      // Fetch real reviews for this provider
-      const { data: reviewsData } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("provider_id", listingData.user_id)
-        .order("created_at", { ascending: false });
-
-      if (reviewsData && reviewsData.length > 0) {
-        setReviews(reviewsData);
-        const customerIds = [...new Set(reviewsData.map(r => r.customer_id))];
-        const { data: customerProfiles } = await supabase
-          .from("profiles")
-          .select("id, full_name")
-          .in("id", customerIds);
-        if (customerProfiles) {
-          setReviewProfiles(new Map(customerProfiles.map(p => [p.id, p.full_name || "Customer"])));
-        }
-      }
-
+      await fetchReviews(listingData.user_id);
       setLoading(false);
     };
 
     fetchData();
   }, [id]);
+
+  // Fetch eligible bookings for review (confirmed bookings with past/today service date, not yet reviewed)
+  useEffect(() => {
+    const fetchEligible = async () => {
+      if (!user || !listing) return;
+
+      const today = new Date().toISOString().split("T")[0];
+
+      // Get confirmed bookings for this listing where customer is current user and service_date <= today
+      const { data: bookings } = await supabase
+        .from("bookings")
+        .select("id, service_date")
+        .eq("customer_id", user.id)
+        .eq("listing_id", listing.id)
+        .eq("status", "confirmed")
+        .lte("service_date", today);
+
+      if (!bookings || bookings.length === 0) {
+        setEligibleBookings([]);
+        return;
+      }
+
+      // Filter out bookings that already have a review
+      const bookingIds = bookings.map(b => b.id);
+      const { data: existingReviews } = await supabase
+        .from("reviews")
+        .select("booking_id")
+        .in("booking_id", bookingIds);
+
+      const reviewedIds = new Set((existingReviews || []).map(r => r.booking_id));
+      const eligible = bookings.filter(b => !reviewedIds.has(b.id));
+      setEligibleBookings(eligible);
+      if (eligible.length === 1) setSelectedBookingId(eligible[0].id);
+    };
+
+    fetchEligible();
+  }, [user, listing, reviews]);
 
   const handleCopyNumber = () => {
     if (providerProfile?.phone) {
@@ -167,6 +217,12 @@ const ListingProfile = () => {
       return;
     }
     navigate(`/messages?with=${listing?.user_id}`);
+  };
+
+  const handleReviewSubmitted = () => {
+    if (listing) {
+      fetchReviews(listing.user_id);
+    }
   };
 
   const avgRating = reviews.length > 0 
@@ -243,7 +299,7 @@ const ListingProfile = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground">
-                      {category?.icon} {category?.name}
+                      {category?.name}
                     </span>
                     {avgRating && (
                       <span className="flex items-center gap-1 text-sm font-medium text-foreground">
@@ -312,6 +368,34 @@ const ListingProfile = () => {
                 </Button>
               </div>
 
+              {/* Review Form - only if eligible */}
+              {eligibleBookings.length > 0 && selectedBookingId && listing && (
+                <div className="mt-8">
+                  {eligibleBookings.length > 1 && (
+                    <div className="mb-4">
+                      <label className="text-sm font-medium text-foreground">Select booking to review:</label>
+                      <select
+                        value={selectedBookingId}
+                        onChange={(e) => setSelectedBookingId(e.target.value)}
+                        className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground"
+                      >
+                        {eligibleBookings.map((b) => (
+                          <option key={b.id} value={b.id}>
+                            Booking on {format(new Date(b.service_date), "PPP")}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  <ReviewForm
+                    bookingId={selectedBookingId}
+                    providerId={listing.user_id}
+                    customerId={user!.id}
+                    onReviewSubmitted={handleReviewSubmitted}
+                  />
+                </div>
+              )}
+
               {/* Reviews Section */}
               <div className="mt-8">
                 <h2 className="font-display text-xl font-semibold text-foreground">
@@ -355,6 +439,19 @@ const ListingProfile = () => {
                         {review.comment && (
                           <p className="mt-3 text-sm text-muted-foreground">{review.comment}</p>
                         )}
+                        {review.image_urls && review.image_urls.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {review.image_urls.map((url, i) => (
+                              <button
+                                key={i}
+                                onClick={() => setExpandedImage(url)}
+                                className="h-20 w-20 overflow-hidden rounded-lg border border-border transition-opacity hover:opacity-80"
+                              >
+                                <img src={url} alt="" className="h-full w-full object-cover" />
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))
                   )}
@@ -394,7 +491,6 @@ const ListingProfile = () => {
               </div>
             </div>
 
-            {/* Contact Info - Always visible */}
             {providerProfile?.phone && (
               <div className="rounded-xl border border-border bg-card p-6 shadow-card">
                 <p className="text-sm font-medium text-foreground mb-4">Contact Pro</p>
@@ -417,6 +513,20 @@ const ListingProfile = () => {
           </div>
         </div>
       </main>
+
+      {/* Image lightbox */}
+      {expandedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setExpandedImage(null)}
+        >
+          <img
+            src={expandedImage}
+            alt="Review image"
+            className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain"
+          />
+        </div>
+      )}
 
       <Footer />
     </div>
