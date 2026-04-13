@@ -310,6 +310,7 @@ export type Database = {
           created_at: string
           customer_id: string
           id: string
+          image_urls: string[] | null
           provider_id: string
           rating: number
         }
@@ -319,6 +320,7 @@ export type Database = {
           created_at?: string
           customer_id: string
           id?: string
+          image_urls?: string[] | null
           provider_id: string
           rating: number
         }
@@ -328,6 +330,7 @@ export type Database = {
           created_at?: string
           customer_id?: string
           id?: string
+          image_urls?: string[] | null
           provider_id?: string
           rating?: number
         }
