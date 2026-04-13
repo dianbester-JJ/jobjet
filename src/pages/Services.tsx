@@ -144,7 +144,7 @@ const Services = () => {
               size="sm"
               onClick={() => handleCategoryChange(category.id)}
             >
-              {category.icon} {category.name}
+              {category.name}
             </Button>
           ))}
         </div>
@@ -182,7 +182,7 @@ const Services = () => {
           </div>
         ) : (
           <div className="rounded-xl border border-border bg-card p-12 text-center">
-            <div className="text-4xl">🔍</div>
+            <Search className="mx-auto h-10 w-10 text-muted-foreground" />
             <h3 className="mt-4 font-display text-xl font-semibold text-foreground">No Pros found</h3>
             <p className="mt-2 text-muted-foreground">
               Try adjusting your search or filters

@@ -53,7 +53,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
           </div>
         )}
         <div className="absolute bottom-3 left-3 rounded-full bg-card/90 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-          {category?.icon} {category?.name}
+          {category?.name}
         </div>
       </div>
       

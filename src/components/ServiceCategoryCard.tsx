@@ -20,12 +20,9 @@ const ServiceCategoryCard = ({ category }: ServiceCategoryCardProps) => {
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-4">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">{category.icon}</span>
-          <h3 className="font-display text-lg font-semibold text-primary-foreground">
-            {category.name}
-          </h3>
-        </div>
+        <h3 className="font-display text-lg font-semibold text-primary-foreground">
+          {category.name}
+        </h3>
         <p className="mt-1 text-sm text-primary-foreground/80">{category.description}</p>
       </div>
     </Link>

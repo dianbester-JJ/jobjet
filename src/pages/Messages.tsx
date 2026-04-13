@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookingRequestCard from "@/components/BookingRequestCard";
-import { Loader2, Send, MessageSquare } from "lucide-react";
+import { Loader2, Send, MessageSquare, Paperclip, FileText, X, Image as ImageIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -23,6 +23,9 @@ interface Message {
   is_quick_response: boolean;
   read: boolean;
   created_at: string;
+  attachment_url?: string | null;
+  attachment_name?: string | null;
+  attachment_type?: string | null;
 }
 
 interface Conversation {
@@ -68,6 +71,10 @@ const Messages = () => {
   const [sending, setSending] = useState(false);
   const [isProviderInConv, setIsProviderInConv] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [attachmentFile, setAttachmentFile] = useState<File | null>(null);
+  const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth?mode=signin");
@@ -244,10 +251,56 @@ const Messages = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Maximum file size is 10MB", variant: "destructive" });
+      return;
+    }
+    setAttachmentFile(file);
+    if (file.type.startsWith("image/")) {
+      const url = URL.createObjectURL(file);
+      setAttachmentPreview(url);
+    } else {
+      setAttachmentPreview(null);
+    }
+  };
+
+  const clearAttachment = () => {
+    setAttachmentFile(null);
+    setAttachmentPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const uploadAttachment = async (file: File): Promise<{ url: string; name: string; type: string } | null> => {
+    const ext = file.name.split(".").pop();
+    const path = `${user!.id}/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("message-attachments").upload(path, file);
+    if (error) {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+      return null;
+    }
+    const { data: urlData } = supabase.storage.from("message-attachments").getPublicUrl(path);
+    return { url: urlData.publicUrl, name: file.name, type: file.type };
+  };
+
   const handleSend = async () => {
-    if (!newMessage.trim() || !user || !activeConversation || sending) return;
+    if ((!newMessage.trim() && !attachmentFile) || !user || !activeConversation || sending) return;
     setSending(true);
-    const content = newMessage.trim();
+    setUploading(!!attachmentFile);
+
+    let attachment: { url: string; name: string; type: string } | null = null;
+    if (attachmentFile) {
+      attachment = await uploadAttachment(attachmentFile);
+      if (!attachment) {
+        setSending(false);
+        setUploading(false);
+        return;
+      }
+    }
+
+    const content = newMessage.trim() || (attachment ? attachment.name : "");
     const optimisticMsg: Message = {
       id: crypto.randomUUID(),
       sender_id: user.id,
@@ -255,20 +308,29 @@ const Messages = () => {
       listing_id: null,
       booking_id: null,
       content,
-      message_type: "text",
+      message_type: attachment ? "attachment" : "text",
       is_quick_response: false,
       read: false,
       created_at: new Date().toISOString(),
+      attachment_url: attachment?.url || null,
+      attachment_name: attachment?.name || null,
+      attachment_type: attachment?.type || null,
     };
     setMessages((prev) => [...prev, optimisticMsg]);
     setNewMessage("");
+    clearAttachment();
+
     await (supabase as any).from("messages").insert({
       sender_id: user.id,
       receiver_id: activeConversation,
       content,
-      message_type: "text",
+      message_type: attachment ? "attachment" : "text",
+      attachment_url: attachment?.url || null,
+      attachment_name: attachment?.name || null,
+      attachment_type: attachment?.type || null,
     });
     setSending(false);
+    setUploading(false);
   };
 
   const handleQuickResponse = async (msg: string) => {
@@ -466,7 +528,31 @@ const Messages = () => {
                             : "bg-muted"
                         )}
                       >
-                        <p className="text-sm">{msg.content}</p>
+                        {msg.attachment_url && (
+                          <div className="mb-1">
+                            {msg.attachment_type?.startsWith("image/") ? (
+                              <a href={msg.attachment_url} target="_blank" rel="noopener noreferrer">
+                                <img src={msg.attachment_url} alt={msg.attachment_name || "Image"} className="max-w-full max-h-48 rounded-lg object-cover" />
+                              </a>
+                            ) : (
+                              <a
+                                href={msg.attachment_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={cn(
+                                  "flex items-center gap-2 rounded-lg border p-2 text-xs",
+                                  isMine ? "border-primary-foreground/30 text-primary-foreground" : "border-border text-foreground"
+                                )}
+                              >
+                                <FileText className="h-4 w-4 shrink-0" />
+                                <span className="truncate">{msg.attachment_name || "File"}</span>
+                              </a>
+                            )}
+                          </div>
+                        )}
+                        {msg.content && !(msg.attachment_url && msg.content === msg.attachment_name) && (
+                          <p className="text-sm">{msg.content}</p>
+                        )}
                         <p className={cn(
                           "text-[10px] mt-1",
                           isMine ? "text-primary-foreground/70" : "text-muted-foreground"
@@ -501,7 +587,36 @@ const Messages = () => {
 
                 {/* Input */}
                 <div className="border-t border-border p-4">
+                  {attachmentFile && (
+                    <div className="mb-2 flex items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-2">
+                      {attachmentPreview ? (
+                        <img src={attachmentPreview} alt="Preview" className="h-10 w-10 rounded object-cover" />
+                      ) : (
+                        <FileText className="h-5 w-5 text-muted-foreground" />
+                      )}
+                      <span className="flex-1 truncate text-xs text-foreground">{attachmentFile.name}</span>
+                      <button onClick={clearAttachment} className="text-muted-foreground hover:text-foreground">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
                   <div className="flex gap-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      className="hidden"
+                      accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx"
+                      onChange={handleFileSelect}
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={sending}
+                      title="Attach file"
+                    >
+                      <Paperclip className="h-4 w-4" />
+                    </Button>
                     <Input
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
@@ -509,8 +624,8 @@ const Messages = () => {
                       placeholder="Type a message..."
                       className="flex-1"
                     />
-                    <Button onClick={handleSend} disabled={sending || !newMessage.trim()}>
-                      <Send className="h-4 w-4" />
+                    <Button onClick={handleSend} disabled={sending || (!newMessage.trim() && !attachmentFile)}>
+                      {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                     </Button>
                   </div>
                 </div>
