@@ -144,7 +144,7 @@ const Services = () => {
               size="sm"
               onClick={() => handleCategoryChange(category.id)}
             >
-              {category.icon} {category.name}
+              {category.name}
             </Button>
           ))}
         </div>
