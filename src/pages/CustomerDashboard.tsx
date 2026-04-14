@@ -177,6 +177,7 @@ const CustomerDashboard = () => {
       </main>
       
     </div>
+    </AppLayout>
   );
 };
 

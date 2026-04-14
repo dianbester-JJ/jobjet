@@ -200,6 +200,7 @@ const Bookings = () => {
       </main>
       
     </div>
+    </AppLayout>
   );
 };
 
