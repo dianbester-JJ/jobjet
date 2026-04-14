@@ -102,6 +102,7 @@ const CustomerDashboard = () => {
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
@@ -176,12 +177,12 @@ const CustomerDashboard = () => {
       </main>
       
     </div>
+    </AppLayout>
   );
 };
 
 const BookingCard = ({ booking }: { booking: Booking }) => {
   return (
-    <AppLayout>
     <div className="rounded-xl border border-border bg-card p-6 shadow-card">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
         <div className="flex-1">
@@ -213,8 +214,7 @@ const BookingCard = ({ booking }: { booking: Booking }) => {
         </div>
       </div>
     </div>
-    </AppLayout>
-      );
+  );
 };
 
 export default CustomerDashboard;

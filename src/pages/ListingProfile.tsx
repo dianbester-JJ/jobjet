@@ -260,6 +260,7 @@ const ListingProfile = () => {
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
 
@@ -531,7 +532,8 @@ const ListingProfile = () => {
 
       
     </div>
-      );
+    </AppLayout>
+  );
 };
 
 export default ListingProfile;

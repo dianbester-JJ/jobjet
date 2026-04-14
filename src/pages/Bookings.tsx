@@ -112,6 +112,7 @@ const Bookings = () => {
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-background">
       
       <main className="container py-8">
@@ -199,6 +200,7 @@ const Bookings = () => {
       </main>
       
     </div>
+    </AppLayout>
   );
 };
 
@@ -223,7 +225,6 @@ const BookingItem = ({
   const status = statusConfig[booking.status] || { label: booking.status, className: "bg-muted text-muted-foreground" };
 
   return (
-    <AppLayout>
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <button onClick={onToggle} className="flex w-full items-center justify-between text-left">
         <div className="flex-1">
@@ -264,8 +265,7 @@ const BookingItem = ({
         </div>
       )}
     </div>
-    </AppLayout>
-      );
+  );
 };
 
 export default Bookings;

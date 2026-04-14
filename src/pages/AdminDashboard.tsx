@@ -223,6 +223,7 @@ const AdminDashboard = () => {
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
@@ -646,6 +647,7 @@ const AdminDashboard = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 };
 
@@ -657,7 +659,6 @@ const VettingCard = ({
   onView: () => void;
 }) => {
   return (
-    <AppLayout>
     <div className="rounded-xl border bg-card p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
@@ -698,8 +699,7 @@ const VettingCard = ({
         </Button>
       </div>
     </div>
-    </AppLayout>
-      );
+  );
 };
 
 export default AdminDashboard;
