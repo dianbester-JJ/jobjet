@@ -1,5 +1,4 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { Mail, Phone, MapPin, MessageSquare } from "lucide-react";
 import {
   Accordion,
@@ -10,8 +9,9 @@ import {
 
 const Help = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+        <AppLayout>
+        <div className="min-h-screen bg-background">
+      
       <main className="container py-8">
         <h1 className="font-display text-3xl font-bold text-foreground">Help & Support</h1>
         <p className="mt-2 text-muted-foreground">Get in touch or find answers to common questions.</p>
@@ -72,9 +72,10 @@ const Help = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      
     </div>
-  );
+        </AppLayout>
+      );
 };
 
 export default Help;

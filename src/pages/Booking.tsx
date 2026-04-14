@@ -10,8 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { ArrowLeft, CalendarIcon, MapPin, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -135,15 +134,16 @@ const Booking = () => {
 
   if (loading || authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
       <main className="container py-8">
         <Link to={`/listing/${listingId}`} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -259,9 +259,10 @@ const Booking = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default Booking;

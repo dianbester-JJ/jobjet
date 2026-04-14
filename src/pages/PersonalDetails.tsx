@@ -5,8 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import BecomeProviderForm from "@/components/BecomeProviderForm";
 import { Loader2, Save, Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -64,15 +63,16 @@ const PersonalDetails = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-background">
-      <Header />
+      
       <main className="container max-w-lg py-8">
         <h1 className="font-display text-2xl font-bold text-foreground">Personal Details</h1>
         <p className="mt-1 text-muted-foreground">Manage your account information.</p>
@@ -132,9 +132,10 @@ const PersonalDetails = () => {
         </DialogContent>
       </Dialog>
 
-      <Footer />
+      
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default PersonalDetails;

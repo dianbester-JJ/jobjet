@@ -6,8 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import {
   Loader2,
   Check,
@@ -213,7 +212,7 @@ const AdminDashboard = () => {
 
   if (authLoading || checkingAdmin || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -225,7 +224,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
       <main className="container py-8">
         <div className="flex items-center gap-3 mb-8">
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
@@ -362,7 +361,7 @@ const AdminDashboard = () => {
           </TabsContent>
         </Tabs>
       </main>
-      <Footer />
+      
 
       {/* Vetting Submission Dialog */}
       <Dialog
@@ -658,6 +657,7 @@ const VettingCard = ({
   onView: () => void;
 }) => {
   return (
+    <AppLayout>
     <div className="rounded-xl border bg-card p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
@@ -698,7 +698,8 @@ const VettingCard = ({
         </Button>
       </div>
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default AdminDashboard;

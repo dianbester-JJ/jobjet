@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import BookingRequestCard from "@/components/BookingRequestCard";
 import { Loader2, Send, MessageSquare, Paperclip, FileText, X, Image as ImageIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -405,7 +404,7 @@ const Messages = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -413,7 +412,7 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
       <main className="container py-8">
         <h1 className="font-display text-2xl font-bold text-foreground mb-6">Messages</h1>
 
@@ -517,6 +516,7 @@ const Messages = () => {
 
                     // Regular message
                     return (
+                      <AppLayout>
                       <div
                         key={msg.id}
                         className={cn(
@@ -560,6 +560,7 @@ const Messages = () => {
                           {format(new Date(msg.created_at), "HH:mm")}
                         </p>
                       </div>
+                      </AppLayout>
                     );
                   })}
                   <div ref={messagesEndRef} />
@@ -634,9 +635,9 @@ const Messages = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      
     </div>
-  );
+      );
 };
 
 export default Messages;

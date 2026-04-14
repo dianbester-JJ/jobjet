@@ -1,7 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { serviceCategories } from "@/data/services";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -231,12 +230,12 @@ const ListingProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-warm">
-        <Header />
+            <div className="min-h-screen bg-gradient-warm">
+        
         <div className="container py-16 text-center">
           <p className="text-muted-foreground">Loading...</p>
         </div>
-        <Footer />
+        
       </div>
     );
   }
@@ -244,7 +243,7 @@ const ListingProfile = () => {
   if (!listing) {
     return (
       <div className="min-h-screen bg-gradient-warm">
-        <Header />
+        
         <div className="container py-16 text-center">
           <h1 className="font-display text-3xl font-bold text-foreground">Listing Not Found</h1>
           <p className="mt-4 text-muted-foreground">The listing you're looking for doesn't exist.</p>
@@ -255,14 +254,14 @@ const ListingProfile = () => {
             </Button>
           </Link>
         </div>
-        <Footer />
+        
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
 
       <main className="container py-8 md:py-12">
         <Link
@@ -467,11 +466,13 @@ const ListingProfile = () => {
               {(() => {
                 const { amount, label, subtitle } = formatRate(listing.hourly_rate, listing.rate_type, listing.rate_unit, listing.working_hours_per_day);
                 return (
+                  <AppLayout>
                   <>
                     <div className="text-3xl font-bold text-foreground">{amount}</div>
                     <p className="text-muted-foreground">{label.replace("/", "per ")}</p>
                     {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
                   </>
+                  </AppLayout>
                 );
               })()}
               </div>
@@ -528,9 +529,9 @@ const ListingProfile = () => {
         </div>
       )}
 
-      <Footer />
+      
     </div>
-  );
+      );
 };
 
 export default ListingProfile;

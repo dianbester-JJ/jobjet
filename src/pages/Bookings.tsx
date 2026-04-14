@@ -6,8 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -106,7 +105,7 @@ const Bookings = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -114,7 +113,7 @@ const Bookings = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      
       <main className="container py-8">
         <h1 className="font-display text-2xl font-bold text-foreground">My Bookings</h1>
         <p className="mt-1 text-muted-foreground">
@@ -198,7 +197,7 @@ const Bookings = () => {
           </TabsContent>
         </Tabs>
       </main>
-      <Footer />
+      
     </div>
   );
 };
@@ -224,6 +223,7 @@ const BookingItem = ({
   const status = statusConfig[booking.status] || { label: booking.status, className: "bg-muted text-muted-foreground" };
 
   return (
+    <AppLayout>
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <button onClick={onToggle} className="flex w-full items-center justify-between text-left">
         <div className="flex-1">
@@ -264,7 +264,8 @@ const BookingItem = ({
         </div>
       )}
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default Bookings;

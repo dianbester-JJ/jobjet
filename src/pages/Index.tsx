@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, ArrowRight, Shield, Star, Clock } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import ServiceCategoryCard from "@/components/ServiceCategoryCard";
 import ProviderCard from "@/components/ProviderCard";
 import { serviceCategories, serviceProviders } from "@/data/services";
@@ -12,8 +11,9 @@ const Index = () => {
   const featuredProviders = serviceProviders.slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-gradient-warm">
-      <Header />
+        <AppLayout>
+        <div className="min-h-screen bg-gradient-warm">
+      
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
@@ -150,9 +150,10 @@ const Index = () => {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
-  );
+        </AppLayout>
+      );
 };
 
 export default Index;

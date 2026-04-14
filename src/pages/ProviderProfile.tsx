@@ -1,6 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { serviceProviders, serviceCategories } from "@/data/services";
 import { Button } from "@/components/ui/button";
 import { 
@@ -22,8 +21,8 @@ const ProviderProfile = () => {
 
   if (!provider) {
     return (
-      <div className="min-h-screen bg-gradient-warm">
-        <Header />
+            <div className="min-h-screen bg-gradient-warm">
+        
         <div className="container py-16 text-center">
           <h1 className="font-display text-3xl font-bold text-foreground">Pro Not Found</h1>
           <p className="mt-4 text-muted-foreground">The Pro you're looking for doesn't exist.</p>
@@ -34,14 +33,15 @@ const ProviderProfile = () => {
             </Button>
           </Link>
         </div>
-        <Footer />
+        
       </div>
     );
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
 
       <main className="container py-8 md:py-12">
         {/* Breadcrumb */}
@@ -179,9 +179,10 @@ const ProviderProfile = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default ProviderProfile;

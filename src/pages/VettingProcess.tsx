@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { serviceCategories } from "@/data/services";
 import { cn } from "@/lib/utils";
@@ -228,15 +227,16 @@ const VettingProcess = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-muted/30">
-      <Header />
+      
       
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         {/* Header */}
@@ -818,9 +818,10 @@ const VettingProcess = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default VettingProcess;

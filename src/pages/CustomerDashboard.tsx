@@ -5,8 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { Calendar, Clock, MapPin, Loader2, Search, User, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 
@@ -96,7 +95,7 @@ const CustomerDashboard = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -104,7 +103,7 @@ const CustomerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
       <main className="container py-8">
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div className="flex items-center gap-4">
@@ -175,13 +174,14 @@ const CustomerDashboard = () => {
           </Tabs>
         </div>
       </main>
-      <Footer />
+      
     </div>
   );
 };
 
 const BookingCard = ({ booking }: { booking: Booking }) => {
   return (
+    <AppLayout>
     <div className="rounded-xl border border-border bg-card p-6 shadow-card">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
         <div className="flex-1">
@@ -213,7 +213,8 @@ const BookingCard = ({ booking }: { booking: Booking }) => {
         </div>
       </div>
     </div>
-  );
+    </AppLayout>
+      );
 };
 
 export default CustomerDashboard;

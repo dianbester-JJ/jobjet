@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import jobjetLogo from "@/assets/jobjet-logo.png";
+import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
 
 const Footer = () => {
   const { user, roles } = useAuth();
