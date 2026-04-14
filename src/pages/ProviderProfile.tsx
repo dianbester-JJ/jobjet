@@ -21,8 +21,7 @@ const ProviderProfile = () => {
 
   if (!provider) {
     return (
-      <AppLayout>
-      <div className="min-h-screen bg-gradient-warm">
+            <div className="min-h-screen bg-gradient-warm">
         
         <div className="container py-16 text-center">
           <h1 className="font-display text-3xl font-bold text-foreground">Pro Not Found</h1>
@@ -40,6 +39,7 @@ const ProviderProfile = () => {
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
 
@@ -182,7 +182,7 @@ const ProviderProfile = () => {
       
     </div>
     </AppLayout>
-  );
+      );
 };
 
 export default ProviderProfile;

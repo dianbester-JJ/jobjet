@@ -41,14 +41,14 @@ const ProviderDashboard = () => {
 
   if (authLoading || loading) {
     return (
-      <AppLayout>
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
@@ -113,7 +113,7 @@ const ProviderDashboard = () => {
       
     </div>
     </AppLayout>
-  );
+      );
 };
 
 export default ProviderDashboard;

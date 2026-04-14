@@ -105,8 +105,7 @@ const Bookings = () => {
 
   if (authLoading || loading) {
     return (
-      <AppLayout>
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -224,6 +223,7 @@ const BookingItem = ({
   const status = statusConfig[booking.status] || { label: booking.status, className: "bg-muted text-muted-foreground" };
 
   return (
+    <AppLayout>
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <button onClick={onToggle} className="flex w-full items-center justify-between text-left">
         <div className="flex-1">
@@ -265,7 +265,7 @@ const BookingItem = ({
       )}
     </div>
     </AppLayout>
-  );
+      );
 };
 
 export default Bookings;

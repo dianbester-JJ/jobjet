@@ -404,8 +404,7 @@ const Messages = () => {
 
   if (authLoading || loading) {
     return (
-      <AppLayout>
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -517,6 +516,7 @@ const Messages = () => {
 
                     // Regular message
                     return (
+                      <AppLayout>
                       <div
                         key={msg.id}
                         className={cn(
@@ -560,6 +560,7 @@ const Messages = () => {
                           {format(new Date(msg.created_at), "HH:mm")}
                         </p>
                       </div>
+                      </AppLayout>
                     );
                   })}
                   <div ref={messagesEndRef} />
@@ -636,8 +637,7 @@ const Messages = () => {
       </main>
       
     </div>
-    </AppLayout>
-  );
+      );
 };
 
 export default Messages;

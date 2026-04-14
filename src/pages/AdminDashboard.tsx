@@ -212,8 +212,7 @@ const AdminDashboard = () => {
 
   if (authLoading || checkingAdmin || loading) {
     return (
-      <AppLayout>
-      <div className="flex min-h-screen items-center justify-center">
+            <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -658,6 +657,7 @@ const VettingCard = ({
   onView: () => void;
 }) => {
   return (
+    <AppLayout>
     <div className="rounded-xl border bg-card p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
@@ -699,7 +699,7 @@ const VettingCard = ({
       </div>
     </div>
     </AppLayout>
-  );
+      );
 };
 
 export default AdminDashboard;

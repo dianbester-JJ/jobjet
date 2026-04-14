@@ -230,8 +230,7 @@ const ListingProfile = () => {
 
   if (loading) {
     return (
-      <AppLayout>
-      <div className="min-h-screen bg-gradient-warm">
+            <div className="min-h-screen bg-gradient-warm">
         
         <div className="container py-16 text-center">
           <p className="text-muted-foreground">Loading...</p>
@@ -467,11 +466,13 @@ const ListingProfile = () => {
               {(() => {
                 const { amount, label, subtitle } = formatRate(listing.hourly_rate, listing.rate_type, listing.rate_unit, listing.working_hours_per_day);
                 return (
+                  <AppLayout>
                   <>
                     <div className="text-3xl font-bold text-foreground">{amount}</div>
                     <p className="text-muted-foreground">{label.replace("/", "per ")}</p>
                     {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
                   </>
+                  </AppLayout>
                 );
               })()}
               </div>
@@ -530,8 +531,7 @@ const ListingProfile = () => {
 
       
     </div>
-    </AppLayout>
-  );
+      );
 };
 
 export default ListingProfile;

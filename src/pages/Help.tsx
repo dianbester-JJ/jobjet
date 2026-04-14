@@ -9,8 +9,8 @@ import {
 
 const Help = () => {
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-background">
+        <AppLayout>
+        <div className="min-h-screen bg-background">
       
       <main className="container py-8">
         <h1 className="font-display text-3xl font-bold text-foreground">Help & Support</h1>
@@ -74,8 +74,8 @@ const Help = () => {
       </main>
       
     </div>
-    </AppLayout>
-  );
+        </AppLayout>
+      );
 };
 
 export default Help;

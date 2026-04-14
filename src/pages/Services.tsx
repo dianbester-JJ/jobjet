@@ -66,8 +66,8 @@ const Services = () => {
   };
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-gradient-warm">
+        <AppLayout>
+        <div className="min-h-screen bg-gradient-warm">
       
 
       <main className="container py-8 md:py-12">
@@ -204,8 +204,8 @@ const Services = () => {
 
       
     </div>
-    </AppLayout>
-  );
+        </AppLayout>
+      );
 };
 
 export default Services;
