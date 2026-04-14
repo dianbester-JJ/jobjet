@@ -5,8 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import ProviderCalendar from "@/components/ProviderCalendar";
 import { Plus, Loader2, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -50,7 +49,7 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
       <main className="container py-8">
         <div className="flex items-center justify-between">
           <h1 className="font-display text-2xl font-bold">Pro Dashboard</h1>
@@ -110,7 +109,7 @@ const ProviderDashboard = () => {
           </TabsContent>
         </Tabs>
       </main>
-      <Footer />
+      
     </div>
   );
 };

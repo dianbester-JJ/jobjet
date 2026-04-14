@@ -8,8 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import { ArrowLeft, Loader2, Briefcase, DollarSign, Clock } from "lucide-react";
 import { serviceCategories } from "@/data/services";
 import LocationSelector from "@/components/LocationSelector";
@@ -117,7 +116,7 @@ const CreateListing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
 
       <main className="container py-8">
         <Link to="/provider/dashboard" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
@@ -285,7 +284,7 @@ const CreateListing = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 };

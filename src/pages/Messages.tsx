@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import BookingRequestCard from "@/components/BookingRequestCard";
 import { Loader2, Send, MessageSquare, Paperclip, FileText, X, Image as ImageIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -413,7 +412,7 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
       <main className="container py-8">
         <h1 className="font-display text-2xl font-bold text-foreground mb-6">Messages</h1>
 
@@ -634,7 +633,7 @@ const Messages = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppLayout from "@/components/AppLayout";
 import ListingCard from "@/components/ListingCard";
 import { serviceCategories } from "@/data/services";
 import { Button } from "@/components/ui/button";
@@ -68,7 +67,7 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
-      <Header />
+      
 
       <main className="container py-8 md:py-12">
         {/* Page Header */}
@@ -202,7 +201,7 @@ const Services = () => {
         )}
       </main>
 
-      <Footer />
+      
     </div>
   );
 };
