@@ -647,6 +647,7 @@ const AdminDashboard = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 };
 
