@@ -411,6 +411,7 @@ const Messages = () => {
   }
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
@@ -637,7 +638,8 @@ const Messages = () => {
       </main>
       
     </div>
-      );
+    </AppLayout>
+  );
 };
 
 export default Messages;
