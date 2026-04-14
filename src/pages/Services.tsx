@@ -66,6 +66,7 @@ const Services = () => {
   };
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
 
@@ -203,6 +204,7 @@ const Services = () => {
 
       
     </div>
+    </AppLayout>
   );
 };
 

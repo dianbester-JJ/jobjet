@@ -11,6 +11,7 @@ const Index = () => {
   const featuredProviders = serviceProviders.slice(0, 4);
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
 
@@ -151,6 +152,7 @@ const Index = () => {
 
       
     </div>
+    </AppLayout>
   );
 };
 

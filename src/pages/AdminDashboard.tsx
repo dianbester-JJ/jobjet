@@ -212,6 +212,7 @@ const AdminDashboard = () => {
 
   if (authLoading || checkingAdmin || loading) {
     return (
+      <AppLayout>
       <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
@@ -697,6 +698,7 @@ const VettingCard = ({
         </Button>
       </div>
     </div>
+    </AppLayout>
   );
 };
 

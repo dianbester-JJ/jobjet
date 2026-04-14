@@ -9,6 +9,7 @@ import {
 
 const Help = () => {
   return (
+    <AppLayout>
     <div className="min-h-screen bg-background">
       
       <main className="container py-8">
@@ -73,6 +74,7 @@ const Help = () => {
       </main>
       
     </div>
+    </AppLayout>
   );
 };
 

@@ -21,6 +21,7 @@ const ProviderProfile = () => {
 
   if (!provider) {
     return (
+      <AppLayout>
       <div className="min-h-screen bg-gradient-warm">
         
         <div className="container py-16 text-center">
@@ -180,6 +181,7 @@ const ProviderProfile = () => {
 
       
     </div>
+    </AppLayout>
   );
 };
 

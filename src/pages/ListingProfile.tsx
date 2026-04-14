@@ -230,6 +230,7 @@ const ListingProfile = () => {
 
   if (loading) {
     return (
+      <AppLayout>
       <div className="min-h-screen bg-gradient-warm">
         
         <div className="container py-16 text-center">
@@ -529,6 +530,7 @@ const ListingProfile = () => {
 
       
     </div>
+    </AppLayout>
   );
 };
 
