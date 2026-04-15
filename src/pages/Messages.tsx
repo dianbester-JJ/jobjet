@@ -411,7 +411,7 @@ const Messages = () => {
   }
 
   return (
-    <AppLayout>
+    <AppLayout hideFooter>
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
