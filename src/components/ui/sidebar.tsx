@@ -51,11 +51,11 @@ const SidebarProvider = React.forwardRef<
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
 
-  // Read persisted sidebar state from cookie
-  const getPersistedState = () => {
+  // Read persisted sidebar state from localStorage
+  const getPersistedState = (): boolean => {
     try {
-      const cookie = document.cookie.split("; ").find((c) => c.startsWith(`${SIDEBAR_COOKIE_NAME}=`));
-      if (cookie) return cookie.split("=")[1] === "true";
+      const stored = localStorage.getItem(SIDEBAR_COOKIE_NAME);
+      if (stored !== null) return stored === "true";
     } catch {}
     return defaultOpen;
   };
