@@ -411,7 +411,7 @@ const Messages = () => {
   }
 
   return (
-    <AppLayout hideFooter>
+    <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
@@ -517,7 +517,7 @@ const Messages = () => {
 
                     // Regular message
                     return (
-                      <AppLayout>
+                      <>
                       <div
                         key={msg.id}
                         className={cn(
@@ -561,7 +561,7 @@ const Messages = () => {
                           {format(new Date(msg.created_at), "HH:mm")}
                         </p>
                       </div>
-                      </AppLayout>
+                      </>
                     );
                   })}
                   <div ref={messagesEndRef} />
