@@ -15,6 +15,7 @@ import Booking from "./pages/Booking";
 import Messages from "./pages/Messages";
 import CreateListing from "./pages/CreateListing";
 import CustomerDashboard from "./pages/CustomerDashboard";
+import EditListing from "./pages/EditListing";
 import VettingProcess from "./pages/VettingProcess";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResetPassword from "./pages/ResetPassword";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/booking/:listingId" element={<Booking />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/create-listing" element={<CreateListing />} />
+            <Route path="/edit-listing/:id" element={<EditListing />} />
             <Route path="/dashboard" element={<CustomerDashboard />} />
             <Route path="/become-provider" element={<VettingProcess />} />
             <Route path="/reset-password" element={<ResetPassword />} />
