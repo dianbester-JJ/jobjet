@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
 import ProviderCalendar from "@/components/ProviderCalendar";
-import { Plus, Loader2, MessageSquare } from "lucide-react";
+import { Plus, Loader2, MessageSquare, Pencil } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { serviceCategories } from "@/data/services";
 
@@ -91,12 +91,22 @@ const ProviderDashboard = () => {
                       <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">{getCategoryName(l.category_id)}</span>
                       <h3 className="font-semibold">{l.title}</h3>
                     </div>
-                    {l.approved ? (
-                      <Badge className="bg-green-100 text-green-800">Live</Badge>
-                    ) : (
-                      <Badge className="bg-yellow-100 text-yellow-800">Pending Approval</Badge>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {l.approved ? (
+                        <Badge className="bg-green-100 text-green-800">Live</Badge>
+                      ) : (
+                        <Badge className="bg-yellow-100 text-yellow-800">Pending Approval</Badge>
+                      )}
+                      <Link to={`/edit-listing/${l.id}`}>
+                        <Button variant="outline" size="sm">
+                          <Pencil className="mr-1 h-3 w-3" /> Edit
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
+                  {l.cover_photo_url && (
+                    <img src={l.cover_photo_url} alt={l.title} className="mt-3 h-32 w-full rounded-lg object-cover" />
+                  )}
                   <p className="mt-2 text-sm text-muted-foreground">{l.location}</p>
                   <p className="mt-2 font-semibold text-primary">R{l.hourly_rate}/hr</p>
                   {!l.approved && (

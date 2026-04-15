@@ -242,6 +242,7 @@ export type Database = {
           cover_photo_url: string | null
           created_at: string
           description: string | null
+          gallery_urls: string[] | null
           hourly_rate: number
           id: string
           latitude: number | null
@@ -264,6 +265,7 @@ export type Database = {
           cover_photo_url?: string | null
           created_at?: string
           description?: string | null
+          gallery_urls?: string[] | null
           hourly_rate: number
           id?: string
           latitude?: number | null
@@ -286,6 +288,7 @@ export type Database = {
           cover_photo_url?: string | null
           created_at?: string
           description?: string | null
+          gallery_urls?: string[] | null
           hourly_rate?: number
           id?: string
           latitude?: number | null
