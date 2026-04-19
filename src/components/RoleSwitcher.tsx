@@ -21,7 +21,7 @@ const RoleSwitcher = () => {
       onClick={handleToggle}
       className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-accent transition-colors"
     >
-      <span className="font-medium text-foreground">
+      <span className="font-medium text-white">
         {isPro ? "Pro Mode" : "Customer Mode"}
       </span>
       <div
