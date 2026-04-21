@@ -78,6 +78,17 @@ const PersonalDetails = () => {
         <p className="mt-1 text-muted-foreground">Manage your account information.</p>
 
         <div className="mt-6 space-y-4">
+          <div className="rounded-lg border border-border bg-muted/30 p-4 flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Account Type</p>
+              <p className="font-semibold text-foreground">
+                {roles.includes("pro") ? "Pro Account" : "Customer Account"}
+              </p>
+            </div>
+            <span className={`text-xs font-medium px-3 py-1 rounded-full ${roles.includes("pro") ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+              {roles.includes("pro") ? "Pro" : "Customer"}
+            </span>
+          </div>
           <div>
             <Label htmlFor="fullName">Full Name</Label>
             <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
