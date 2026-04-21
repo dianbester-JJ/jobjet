@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
-import { ArrowLeft, Loader2, Briefcase, DollarSign, Clock, ImagePlus, X, Trash2 } from "lucide-react";
+import { ArrowLeft, Loader2, Briefcase, Clock, ImagePlus, X, Trash2 } from "lucide-react";
 import { serviceCategories } from "@/data/services";
 import LocationSelector from "@/components/LocationSelector";
 import ServiceRadiusMap from "@/components/ServiceRadiusMap";
@@ -304,7 +304,7 @@ const EditListing = () => {
                     <div>
                       <Label htmlFor="rate">Rate (ZAR) *</Label>
                       <div className="relative mt-1">
-                        <DollarSign className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">R</span>
                         <Input id="rate" type="number" value={rate} onChange={(e) => setRate(e.target.value)} className="pl-10" min="0" required />
                       </div>
                     </div>
