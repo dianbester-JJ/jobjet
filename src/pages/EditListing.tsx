@@ -291,7 +291,7 @@ const EditListing = () => {
                   <Label className="text-base font-semibold">Pricing *</Label>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <Label>Rate Type</Label>
+                      <Label>Rate Unit</Label>
                       <Select value={rateType} onValueChange={(v) => setRateType(v as RateType)}>
                         <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
                         <SelectContent>
@@ -321,27 +321,22 @@ const EditListing = () => {
                   )}
 
                   {rateType === "custom" && (
-                    <div className="space-y-3">
-                      <div>
-                        <Label>Unit</Label>
-                        <Select value={rateUnit} onValueChange={setRateUnit}>
-                          <SelectTrigger className="mt-1"><SelectValue placeholder="Select a unit" /></SelectTrigger>
-                          <SelectContent>
-                            {COMMON_CUSTOM_UNITS.map((unit) => (
-                              <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                            ))}
-                            <SelectItem value="other">Other (type your own)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      {rateUnit === "other" && (
-                        <div>
-                          <Label htmlFor="customUnit">Custom Unit *</Label>
-                          <Input id="customUnit" value={customUnitText} onChange={(e) => setCustomUnitText(e.target.value)} className="mt-1" required />
-                        </div>
-                      )}
+                  <div>
+                    <Label htmlFor="customUnit">Custom Unit *</Label>
+                    <div className="mt-1 flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">per</span>
+                      <Input
+                        id="customUnit"
+                        value={customUnitText}
+                        onChange={(e) => setCustomUnitText(e.target.value)}
+                        placeholder='e.g., metre, bag, room'
+                        className="flex-1"
+                        required
+                      />
                     </div>
-                  )}
+                    <p className="mt-1 text-xs text-muted-foreground">This will show as "per [your unit]" on your listing</p>
+                  </div>
+                )}
                 </div>
 
                 <div>
