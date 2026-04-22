@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Mail, Lock, User, Loader2 } from "lucide-react";
-import jobjetLogo from "@/assets/jobjet-logo.png";
+import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
