@@ -53,7 +53,7 @@ const ProviderDashboard = () => {
       
       <main className="container py-8">
         <div className="flex items-center justify-between">
-          <h1 className="font-display text-2xl font-bold">Pro Dashboard</h1>
+          <h1 className="font-display text-2xl font-bold">Listings</h1>
           <div className="flex gap-3">
             <Link to="/messages">
               <Button variant="outline">
@@ -69,14 +69,9 @@ const ProviderDashboard = () => {
 
         <Tabs defaultValue="calendar" className="mt-8">
           <TabsList>
-            <TabsTrigger value="calendar">My Calendar</TabsTrigger>
             <TabsTrigger value="listings">Listings ({listings.length})</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="calendar" className="mt-6">
-            <ProviderCalendar />
-          </TabsContent>
-
+          
           <TabsContent value="listings" className="mt-6 grid gap-4 md:grid-cols-2">
             {listings.length === 0 ? (
               <div className="col-span-2 rounded-xl border border-border bg-card p-8 text-center">
