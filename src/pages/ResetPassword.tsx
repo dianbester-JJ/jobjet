@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Lock, Loader2 } from "lucide-react";
-import jobjetLogo from "@/assets/jobjet-logo.png";
+import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
