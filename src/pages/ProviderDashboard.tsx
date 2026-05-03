@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
-import ProviderCalendar from "@/components/ProviderCalendar";
 import { Plus, Loader2, MessageSquare, Pencil } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { serviceCategories } from "@/data/services";
@@ -67,7 +66,7 @@ const ProviderDashboard = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="calendar" className="mt-8">
+        <Tabs defaultValue="listings" className="mt-8">
           <TabsList>
             <TabsTrigger value="listings">Listings ({listings.length})</TabsTrigger>
           </TabsList>
