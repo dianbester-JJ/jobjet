@@ -49,10 +49,9 @@ const AppSidebar = () => {
   ];
 
   const proNav = [
-    { title: "Dashboard", url: "/provider/dashboard", icon: LayoutDashboard },
-    { title: "Create Listing", url: "/create-listing", icon: PlusCircle },
+    { title: "Listings", url: "/provider/dashboard", icon: LayoutDashboard },
   ];
-
+  
   return (
     <>
       <Sidebar collapsible="icon">
