@@ -1,4 +1,4 @@
-import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, PlusCircle, HelpCircle } from "lucide-react";
+import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, HelpCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import RoleSwitcher from "@/components/RoleSwitcher";
