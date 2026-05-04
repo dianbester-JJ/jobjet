@@ -46,6 +46,37 @@ const CreateListing = () => {
     }
   }, [user, authLoading, navigate]);
 
+  const uploadPhoto = async (file: File): Promise<string | null> => {
+    if (!user) return null;
+    const ext = file.name.split(".").pop();
+    const path = `${user.id}/new/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("listing-photos").upload(path, file);
+    if (error) {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+      return null;
+    }
+    const { data: urlData } = supabase.storage.from("listing-photos").getPublicUrl(path);
+    return urlData.publicUrl;
+  };
+
+  const handleImagesAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    setUploading(true);
+    const newUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const url = await uploadPhoto(file);
+      if (url) newUrls.push(url);
+    }
+    setImages((prev) => [...prev, ...newUrls]);
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
