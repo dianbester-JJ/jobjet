@@ -1,7 +1,6 @@
 import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, HelpCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import RoleSwitcher from "@/components/RoleSwitcher";
 import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
 import {
   Sidebar,
@@ -18,14 +17,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import BecomeProviderForm from "@/components/BecomeProviderForm";
 
 const AppSidebar = () => {
   const location = useLocation();
