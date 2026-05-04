@@ -33,6 +33,9 @@ const CreateListing = () => {
   const [selectedTown, setSelectedTown] = useState<Town | null>(null);
   const [serviceRadius, setServiceRadius] = useState(25);
   const [yearsExperience, setYearsExperience] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const resolvedUnit = rateUnit === "other" ? customUnitText : rateUnit;
