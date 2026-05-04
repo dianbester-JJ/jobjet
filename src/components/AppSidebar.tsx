@@ -1,7 +1,6 @@
 import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, HelpCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import RoleSwitcher from "@/components/RoleSwitcher";
 import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
 import {
   Sidebar,
@@ -18,21 +17,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import BecomeProviderForm from "@/components/BecomeProviderForm";
 
 const AppSidebar = () => {
   const location = useLocation();
   const { user, signOut, loading, isPro, roles } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const [becomeProviderOpen, setBecomeProviderOpen] = useState(false);
+  
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -146,24 +137,6 @@ const AppSidebar = () => {
         <SidebarFooter className="p-3">
           {!loading && user && (
             <div className="space-y-2">
-              {roles.includes("pro") && !collapsed && (
-                <div className="rounded-md border border-border p-1">
-                  <RoleSwitcher />
-                </div>
-              )}
-
-              {!roles.includes("pro") && !collapsed && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start text-xs"
-                  onClick={() => setBecomeProviderOpen(true)}
-                >
-                  <Briefcase className="mr-2 h-3.5 w-3.5" />
-                  Become a Provider
-                </Button>
-              )}
-
               <Button
                 variant="ghost"
                 size="sm"
@@ -192,20 +165,6 @@ const AppSidebar = () => {
           )}
         </SidebarFooter>
       </Sidebar>
-
-      <Dialog open={becomeProviderOpen} onOpenChange={setBecomeProviderOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center font-display text-xl">
-              Become a Provider
-            </DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground text-center">
-            Switching to a provider account lets you list your services and receive job requests. You can switch back to customer mode anytime.
-          </p>
-          <BecomeProviderForm onComplete={() => setBecomeProviderOpen(false)} />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };

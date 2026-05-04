@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import jobjetLogo from "@/assets/jobjet-logo.png";
 import { Input } from "@/components/ui/input";
-import RoleSwitcher from "@/components/RoleSwitcher";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -102,14 +102,6 @@ const Header = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    {roles.includes("pro") && (
-                      <>
-                        <div className="px-1 py-1">
-                          <RoleSwitcher />
-                        </div>
-                        <DropdownMenuSeparator />
-                      </>
-                    )}
                     <DropdownMenuItem asChild>
                       <Link to="/personal-details" className="cursor-pointer">
                         Personal Details
@@ -199,11 +191,6 @@ const Header = () => {
               </Link>
               {user && (
                 <>
-                  {roles.includes("pro") && (
-                    <div className="px-3 py-2">
-                      <RoleSwitcher />
-                    </div>
-                  )}
                   <Link to="/bookings" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">
                       Bookings
