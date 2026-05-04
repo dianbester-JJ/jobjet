@@ -96,16 +96,7 @@ const EditListing = () => {
     return urlData.publicUrl;
   };
 
-  const handleCoverPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    const url = await uploadPhoto(file);
-    if (url) setCoverPhotoUrl(url);
-    setUploading(false);
-  };
-
-  const handleGalleryAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImagesAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
     setUploading(true);
@@ -114,13 +105,13 @@ const EditListing = () => {
       const url = await uploadPhoto(file);
       if (url) newUrls.push(url);
     }
-    setGalleryUrls((prev) => [...prev, ...newUrls]);
+    setImages((prev) => [...prev, ...newUrls]);
     setUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeGalleryPhoto = (index: number) => {
-    setGalleryUrls((prev) => prev.filter((_, i) => i !== index));
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
