@@ -107,38 +107,27 @@ const PersonalDetails = () => {
             Save Changes
           </Button>
 
-          {/* Become a Provider section */}
+          {/* Become a Pro section */}
           {!roles.includes("pro") && (
             <div className="mt-8 rounded-xl border border-border p-5">
               <div className="flex items-start gap-3">
                 <Briefcase className="h-5 w-5 text-primary mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground">Become a Provider</h3>
+                  <h3 className="font-semibold text-foreground">Become a Pro</h3>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Switching to a provider account lets you list your services and receive job requests. You can switch back to customer mode anytime.
+                    Apply to offer your services on JobJet. Your application will be reviewed by an administrator and either approved or rejected — you'll be notified once a decision is made.
                   </p>
-                  <Button variant="outline" size="sm" className="mt-3" onClick={() => setBecomeProviderOpen(true)}>
-                    Get Started
-                  </Button>
+                  <Link to="/become-provider">
+                    <Button variant="outline" size="sm" className="mt-3">
+                      Apply to become a Pro
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
           )}
         </div>
       </main>
-
-      {/* Become Provider Dialog */}
-      <Dialog open={becomeProviderOpen} onOpenChange={setBecomeProviderOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center font-display text-xl">Become a Provider</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground text-center">
-            Switching to a provider account lets you list your services and receive job requests. You can switch back to customer mode anytime.
-          </p>
-          <BecomeProviderForm onComplete={() => setBecomeProviderOpen(false)} />
-        </DialogContent>
-      </Dialog>
 
       
     </div>
