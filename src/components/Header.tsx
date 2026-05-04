@@ -102,14 +102,6 @@ const Header = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    {roles.includes("pro") && (
-                      <>
-                        <div className="px-1 py-1">
-                          <RoleSwitcher />
-                        </div>
-                        <DropdownMenuSeparator />
-                      </>
-                    )}
                     <DropdownMenuItem asChild>
                       <Link to="/personal-details" className="cursor-pointer">
                         Personal Details
