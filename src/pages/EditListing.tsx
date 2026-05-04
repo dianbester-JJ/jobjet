@@ -140,8 +140,8 @@ const EditListing = () => {
         longitude: selectedTown?.lng,
         service_radius: serviceRadius,
         years_experience: yearsExperience ? parseInt(yearsExperience) : 0,
-        cover_photo_url: coverPhotoUrl,
-        gallery_urls: galleryUrls,
+        cover_photo_url: images[0] || null,
+        gallery_urls: images.slice(1),
       } as any)
       .eq("id", id)
       .eq("user_id", user.id);
