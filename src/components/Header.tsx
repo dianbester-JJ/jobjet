@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import jobjetLogo from "@/assets/jobjet-logo.png";
 import { Input } from "@/components/ui/input";
-import RoleSwitcher from "@/components/RoleSwitcher";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
