@@ -23,7 +23,7 @@ const AppSidebar = () => {
   const { user, signOut, loading, isPro, roles } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const [becomeProviderOpen, setBecomeProviderOpen] = useState(false);
+  
 
   const isActive = (path: string) => location.pathname === path;
 
