@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
-import { ArrowLeft, Loader2, Briefcase, Clock, ImagePlus, X, Trash2 } from "lucide-react";
+import { ArrowLeft, Loader2, Briefcase, Clock, ImagePlus, X } from "lucide-react";
 import { serviceCategories } from "@/data/services";
 import LocationSelector from "@/components/LocationSelector";
 import ServiceRadiusMap from "@/components/ServiceRadiusMap";
