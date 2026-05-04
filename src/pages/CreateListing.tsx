@@ -335,7 +335,7 @@ const CreateListing = () => {
                 <ServiceRadiusMap selectedTown={selectedTown} radius={serviceRadius} onRadiusChange={setServiceRadius} />
               </div>
 
-              <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+              <Button type="submit" size="lg" className="w-full" disabled={submitting || uploading}>
                 {submitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
