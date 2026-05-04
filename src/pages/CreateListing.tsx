@@ -203,6 +203,50 @@ const CreateListing = () => {
                 <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe your service, experience, and what makes you stand out..." className="mt-1" rows={4} />
               </div>
 
+              {/* Listing Images */}
+              <div>
+                <Label>Listing Images</Label>
+                <p className="mt-1 text-xs text-muted-foreground">The first image will be used as the cover photo.</p>
+                <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4">
+                  {images.map((url, i) => (
+                    <div key={i} className="relative aspect-square">
+                      <img src={url} alt={`Listing ${i + 1}`} className="h-full w-full rounded-lg object-cover" />
+                      {i === 0 && (
+                        <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">Cover</span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        aria-label="Remove image"
+                        className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-muted-foreground/70 text-background shadow hover:bg-muted-foreground transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                  <label className="flex aspect-square cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors">
+                    <div className="text-center">
+                      <ImagePlus className="mx-auto h-6 w-6 text-muted-foreground" />
+                      <p className="mt-1 text-xs text-muted-foreground">Add</p>
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={handleImagesAdd}
+                    />
+                  </label>
+                </div>
+                {uploading && (
+                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Uploading...
+                  </div>
+                )}
+              </div>
+
+
               {/* Rate Section */}
               <div className="space-y-4 rounded-lg border border-border bg-muted/30 p-4">
                 <Label className="text-base font-semibold">Pricing *</Label>
