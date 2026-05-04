@@ -35,8 +35,7 @@ const EditListing = () => {
   const [selectedTown, setSelectedTown] = useState<Town | null>(null);
   const [serviceRadius, setServiceRadius] = useState(25);
   const [yearsExperience, setYearsExperience] = useState("");
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(null);
-  const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
