@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
-import { ArrowLeft, Loader2, Briefcase, Clock } from "lucide-react";
+import { ArrowLeft, Loader2, Briefcase, Clock, ImagePlus, X } from "lucide-react";
 import { serviceCategories } from "@/data/services";
 import LocationSelector from "@/components/LocationSelector";
 import ServiceRadiusMap from "@/components/ServiceRadiusMap";
@@ -33,6 +33,9 @@ const CreateListing = () => {
   const [selectedTown, setSelectedTown] = useState<Town | null>(null);
   const [serviceRadius, setServiceRadius] = useState(25);
   const [yearsExperience, setYearsExperience] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const resolvedUnit = rateUnit === "other" ? customUnitText : rateUnit;
@@ -42,6 +45,37 @@ const CreateListing = () => {
       navigate("/auth?mode=signin");
     }
   }, [user, authLoading, navigate]);
+
+  const uploadPhoto = async (file: File): Promise<string | null> => {
+    if (!user) return null;
+    const ext = file.name.split(".").pop();
+    const path = `${user.id}/new/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("listing-photos").upload(path, file);
+    if (error) {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+      return null;
+    }
+    const { data: urlData } = supabase.storage.from("listing-photos").getPublicUrl(path);
+    return urlData.publicUrl;
+  };
+
+  const handleImagesAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    setUploading(true);
+    const newUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const url = await uploadPhoto(file);
+      if (url) newUrls.push(url);
+    }
+    setImages((prev) => [...prev, ...newUrls]);
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +127,8 @@ const CreateListing = () => {
       longitude: selectedTown?.lng,
       service_radius: serviceRadius,
       years_experience: yearsExperience ? parseInt(yearsExperience) : 0,
+      cover_photo_url: images[0] || null,
+      gallery_urls: images.slice(1),
       approved: false,
     });
 
@@ -166,6 +202,50 @@ const CreateListing = () => {
                 <Label htmlFor="description">Description</Label>
                 <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe your service, experience, and what makes you stand out..." className="mt-1" rows={4} />
               </div>
+
+              {/* Listing Images */}
+              <div>
+                <Label>Listing Images</Label>
+                <p className="mt-1 text-xs text-muted-foreground">The first image will be used as the cover photo.</p>
+                <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4">
+                  {images.map((url, i) => (
+                    <div key={i} className="relative aspect-square">
+                      <img src={url} alt={`Listing ${i + 1}`} className="h-full w-full rounded-lg object-cover" />
+                      {i === 0 && (
+                        <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">Cover</span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        aria-label="Remove image"
+                        className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-muted-foreground/70 text-background shadow hover:bg-muted-foreground transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                  <label className="flex aspect-square cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors">
+                    <div className="text-center">
+                      <ImagePlus className="mx-auto h-6 w-6 text-muted-foreground" />
+                      <p className="mt-1 text-xs text-muted-foreground">Add</p>
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={handleImagesAdd}
+                    />
+                  </label>
+                </div>
+                {uploading && (
+                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Uploading...
+                  </div>
+                )}
+              </div>
+
 
               {/* Rate Section */}
               <div className="space-y-4 rounded-lg border border-border bg-muted/30 p-4">
@@ -255,7 +335,7 @@ const CreateListing = () => {
                 <ServiceRadiusMap selectedTown={selectedTown} radius={serviceRadius} onRadiusChange={setServiceRadius} />
               </div>
 
-              <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+              <Button type="submit" size="lg" className="w-full" disabled={submitting || uploading}>
                 {submitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

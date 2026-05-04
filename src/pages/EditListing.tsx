@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
-import { ArrowLeft, Loader2, Briefcase, Clock, ImagePlus, X, Trash2 } from "lucide-react";
+import { ArrowLeft, Loader2, Briefcase, Clock, ImagePlus, X } from "lucide-react";
 import { serviceCategories } from "@/data/services";
 import LocationSelector from "@/components/LocationSelector";
 import ServiceRadiusMap from "@/components/ServiceRadiusMap";
@@ -35,8 +35,7 @@ const EditListing = () => {
   const [selectedTown, setSelectedTown] = useState<Town | null>(null);
   const [serviceRadius, setServiceRadius] = useState(25);
   const [yearsExperience, setYearsExperience] = useState("");
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(null);
-  const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -73,8 +72,9 @@ const EditListing = () => {
       setLocation(data.location || "");
       setServiceRadius(data.service_radius || 25);
       setYearsExperience(data.years_experience ? String(data.years_experience) : "");
-      setCoverPhotoUrl(data.cover_photo_url);
-      setGalleryUrls((data as any).gallery_urls || []);
+      const cover = data.cover_photo_url ? [data.cover_photo_url] : [];
+      const gallery = (data as any).gallery_urls || [];
+      setImages([...cover, ...gallery]);
       if (data.latitude && data.longitude) {
         setSelectedTown({ name: data.location || "", lat: data.latitude, lng: data.longitude, province: "" });
       }
@@ -96,16 +96,7 @@ const EditListing = () => {
     return urlData.publicUrl;
   };
 
-  const handleCoverPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    const url = await uploadPhoto(file);
-    if (url) setCoverPhotoUrl(url);
-    setUploading(false);
-  };
-
-  const handleGalleryAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImagesAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
     setUploading(true);
@@ -114,13 +105,13 @@ const EditListing = () => {
       const url = await uploadPhoto(file);
       if (url) newUrls.push(url);
     }
-    setGalleryUrls((prev) => [...prev, ...newUrls]);
+    setImages((prev) => [...prev, ...newUrls]);
     setUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeGalleryPhoto = (index: number) => {
-    setGalleryUrls((prev) => prev.filter((_, i) => i !== index));
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -149,8 +140,8 @@ const EditListing = () => {
         longitude: selectedTown?.lng,
         service_radius: serviceRadius,
         years_experience: yearsExperience ? parseInt(yearsExperience) : 0,
-        cover_photo_url: coverPhotoUrl,
-        gallery_urls: galleryUrls,
+        cover_photo_url: images[0] || null,
+        gallery_urls: images.slice(1),
       } as any)
       .eq("id", id)
       .eq("user_id", user.id);
@@ -195,46 +186,24 @@ const EditListing = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-                {/* Cover Photo */}
+                {/* Listing Images */}
                 <div>
-                  <Label>Cover Photo</Label>
-                  <div className="mt-2">
-                    {coverPhotoUrl ? (
-                      <div className="relative inline-block">
-                        <img src={coverPhotoUrl} alt="Cover" className="h-40 w-full max-w-md rounded-lg object-cover" />
+                  <Label>Listing Images</Label>
+                  <p className="mt-1 text-xs text-muted-foreground">The first image will be used as the cover photo.</p>
+                  <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4">
+                    {images.map((url, i) => (
+                      <div key={i} className="relative aspect-square">
+                        <img src={url} alt={`Listing ${i + 1}`} className="h-full w-full rounded-lg object-cover" />
+                        {i === 0 && (
+                          <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">Cover</span>
+                        )}
                         <button
                           type="button"
-                          onClick={() => setCoverPhotoUrl(null)}
-                          className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-destructive-foreground shadow"
+                          onClick={() => removeImage(i)}
+                          aria-label="Remove image"
+                          className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-muted-foreground/70 text-background shadow hover:bg-muted-foreground transition-colors"
                         >
                           <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ) : (
-                      <label className="flex h-32 w-full max-w-md cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors">
-                        <div className="text-center">
-                          <ImagePlus className="mx-auto h-8 w-8 text-muted-foreground" />
-                          <p className="mt-1 text-sm text-muted-foreground">Upload cover photo</p>
-                        </div>
-                        <input type="file" accept="image/*" className="hidden" onChange={handleCoverPhotoChange} />
-                      </label>
-                    )}
-                  </div>
-                </div>
-
-                {/* Gallery Photos */}
-                <div>
-                  <Label>Gallery Photos</Label>
-                  <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4">
-                    {galleryUrls.map((url, i) => (
-                      <div key={i} className="group relative aspect-square">
-                        <img src={url} alt={`Gallery ${i + 1}`} className="h-full w-full rounded-lg object-cover" />
-                        <button
-                          type="button"
-                          onClick={() => removeGalleryPhoto(i)}
-                          className="absolute -right-1 -top-1 rounded-full bg-destructive p-1 text-destructive-foreground shadow opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <Trash2 className="h-3 w-3" />
                         </button>
                       </div>
                     ))}
@@ -249,7 +218,7 @@ const EditListing = () => {
                         accept="image/*"
                         multiple
                         className="hidden"
-                        onChange={handleGalleryAdd}
+                        onChange={handleImagesAdd}
                       />
                     </label>
                   </div>
