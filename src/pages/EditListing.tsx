@@ -72,8 +72,9 @@ const EditListing = () => {
       setLocation(data.location || "");
       setServiceRadius(data.service_radius || 25);
       setYearsExperience(data.years_experience ? String(data.years_experience) : "");
-      setCoverPhotoUrl(data.cover_photo_url);
-      setGalleryUrls((data as any).gallery_urls || []);
+      const cover = data.cover_photo_url ? [data.cover_photo_url] : [];
+      const gallery = (data as any).gallery_urls || [];
+      setImages([...cover, ...gallery]);
       if (data.latitude && data.longitude) {
         setSelectedTown({ name: data.location || "", lat: data.latitude, lng: data.longitude, province: "" });
       }
