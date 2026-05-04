@@ -191,11 +191,6 @@ const Header = () => {
               </Link>
               {user && (
                 <>
-                  {roles.includes("pro") && (
-                    <div className="px-3 py-2">
-                      <RoleSwitcher />
-                    </div>
-                  )}
                   <Link to="/bookings" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">
                       Bookings
