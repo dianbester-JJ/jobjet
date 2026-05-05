@@ -51,7 +51,7 @@ const AppSidebar = () => {
             <img
               src={jobjetLogo}
               alt="JobJet"
-              className={collapsed ? "h-10 w-auto" : "h-16 w-auto"}
+              className={collapsed ? "h-20 w-auto" : "h-32 w-auto"}
             />
           </Link>
         </SidebarHeader>
