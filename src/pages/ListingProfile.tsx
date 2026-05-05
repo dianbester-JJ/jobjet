@@ -466,15 +466,15 @@ const ListingProfile = () => {
               <div className="text-center">
               {(() => {
                 const { amount, label, subtitle } = formatRate(listing.hourly_rate, listing.rate_type, listing.rate_unit, listing.working_hours_per_day);
-                return (
-                  <AppLayout>
+      
+                 return (
                   <>
                     <div className="text-3xl font-bold text-foreground">{amount}</div>
                     <p className="text-muted-foreground">{label.replace("/", "per ")}</p>
                     {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
                   </>
-                  </AppLayout>
                 );
+      
               })()}
               </div>
 
