@@ -1,7 +1,10 @@
-import { createClient, corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.95.0";
 
-// Scheduled function: deletes accounts whose deletion_requested_at is >= 30 days ago.
-// Can be called via cron or manually. No auth required for cron, but checks a shared secret if provided.
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -25,7 +28,6 @@ Deno.serve(async (req) => {
 
     for (const profile of pending ?? []) {
       try {
-        // Send notification email (best-effort) before deletion
         try {
           await admin.functions.invoke("send-transactional-email", {
             body: {
@@ -36,7 +38,7 @@ Deno.serve(async (req) => {
             },
           });
         } catch (_e) {
-          // Email is best-effort; continue with deletion
+          // best-effort
         }
 
         const { error: delErr } = await admin.auth.admin.deleteUser(profile.id);
