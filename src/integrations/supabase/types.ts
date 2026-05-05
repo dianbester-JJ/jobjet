@@ -156,6 +156,7 @@ export type Database = {
           active_role: string
           avatar_url: string | null
           created_at: string
+          deletion_requested_at: string | null
           email: string | null
           full_name: string | null
           id: string
@@ -168,6 +169,7 @@ export type Database = {
           active_role?: string
           avatar_url?: string | null
           created_at?: string
+          deletion_requested_at?: string | null
           email?: string | null
           full_name?: string | null
           id: string
@@ -180,6 +182,7 @@ export type Database = {
           active_role?: string
           avatar_url?: string | null
           created_at?: string
+          deletion_requested_at?: string | null
           email?: string | null
           full_name?: string | null
           id?: string

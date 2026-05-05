@@ -6,8 +6,12 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
-import { Loader2, Save, Briefcase } from "lucide-react";
+import { Loader2, Save, Briefcase, Trash2, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const PersonalDetails = () => {
   const navigate = useNavigate();
@@ -19,6 +23,9 @@ const PersonalDetails = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [location, setLocation] = useState("");
+  const [deletionRequestedAt, setDeletionRequestedAt] = useState<string | null>(null);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth?mode=signin");
@@ -29,7 +36,7 @@ const PersonalDetails = () => {
       if (!user) return;
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, email, phone, location")
+        .select("full_name, email, phone, location, deletion_requested_at")
         .eq("id", user.id)
         .maybeSingle();
       if (data) {
@@ -37,11 +44,50 @@ const PersonalDetails = () => {
         setEmail(data.email || user.email || "");
         setPhone(data.phone || "");
         setLocation(data.location || "");
+        setDeletionRequestedAt((data as any).deletion_requested_at ?? null);
       }
       setLoading(false);
     };
     fetchProfile();
   }, [user]);
+
+  const handleRequestDeletion = async () => {
+    if (!deletePassword) {
+      toast({ title: "Password required", description: "Enter your password to confirm.", variant: "destructive" });
+      return;
+    }
+    setDeleting(true);
+    const { data, error } = await supabase.functions.invoke("request-account-deletion", {
+      body: { password: deletePassword },
+    });
+    setDeleting(false);
+    setDeletePassword("");
+    if (error || (data && data.error)) {
+      toast({
+        title: "Could not schedule deletion",
+        description: (data?.error as string) || error?.message || "Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setDeletionRequestedAt(new Date().toISOString());
+    toast({
+      title: "Account deletion scheduled",
+      description: "Your account will be deleted in 30 days. Sign in again any time before then to cancel.",
+    });
+  };
+
+  const handleCancelDeletion = async () => {
+    if (!user) return;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ deletion_requested_at: null } as any)
+      .eq("id", user.id);
+    if (!error) {
+      setDeletionRequestedAt(null);
+      toast({ title: "Deletion cancelled", description: "Your account will not be deleted." });
+    }
+  };
 
   const handleSave = async () => {
     if (!user) return;
@@ -126,6 +172,71 @@ const PersonalDetails = () => {
               </div>
             </div>
           )}
+
+          {/* Delete Account section */}
+          <div className="mt-8 rounded-xl border border-destructive/30 p-5">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-foreground">Delete Account</h3>
+                {deletionRequestedAt ? (
+                  <>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Your account is scheduled for deletion on{" "}
+                      <strong className="text-foreground">
+                        {new Date(new Date(deletionRequestedAt).getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                      </strong>
+                      . Sign out and back in any time before then to cancel — or click below.
+                    </p>
+                    <Button variant="outline" size="sm" className="mt-3" onClick={handleCancelDeletion}>
+                      Cancel deletion
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Permanently delete your account and all associated data. There's a 30-day grace period — if you sign in again before then, deletion is automatically cancelled. After 30 days, you'll receive an email confirming deletion.
+                    </p>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm" className="mt-3">
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete Account
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Confirm account deletion</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Your account will be deleted in 30 days. You can cancel any time before then by simply signing in again. After 30 days, you'll receive a confirmation email and your data will be permanently removed.
+                            <br /><br />
+                            Please enter your password to confirm.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <Input
+                          type="password"
+                          placeholder="Your password"
+                          value={deletePassword}
+                          onChange={(e) => setDeletePassword(e.target.value)}
+                        />
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={() => setDeletePassword("")}>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={handleRequestDeletion}
+                            disabled={deleting}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Schedule deletion
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
