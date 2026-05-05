@@ -23,6 +23,9 @@ const PersonalDetails = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [location, setLocation] = useState("");
+  const [deletionRequestedAt, setDeletionRequestedAt] = useState<string | null>(null);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth?mode=signin");
@@ -33,7 +36,7 @@ const PersonalDetails = () => {
       if (!user) return;
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, email, phone, location")
+        .select("full_name, email, phone, location, deletion_requested_at")
         .eq("id", user.id)
         .maybeSingle();
       if (data) {
@@ -41,11 +44,50 @@ const PersonalDetails = () => {
         setEmail(data.email || user.email || "");
         setPhone(data.phone || "");
         setLocation(data.location || "");
+        setDeletionRequestedAt((data as any).deletion_requested_at ?? null);
       }
       setLoading(false);
     };
     fetchProfile();
   }, [user]);
+
+  const handleRequestDeletion = async () => {
+    if (!deletePassword) {
+      toast({ title: "Password required", description: "Enter your password to confirm.", variant: "destructive" });
+      return;
+    }
+    setDeleting(true);
+    const { data, error } = await supabase.functions.invoke("request-account-deletion", {
+      body: { password: deletePassword },
+    });
+    setDeleting(false);
+    setDeletePassword("");
+    if (error || (data && data.error)) {
+      toast({
+        title: "Could not schedule deletion",
+        description: (data?.error as string) || error?.message || "Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setDeletionRequestedAt(new Date().toISOString());
+    toast({
+      title: "Account deletion scheduled",
+      description: "Your account will be deleted in 30 days. Sign in again any time before then to cancel.",
+    });
+  };
+
+  const handleCancelDeletion = async () => {
+    if (!user) return;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ deletion_requested_at: null } as any)
+      .eq("id", user.id);
+    if (!error) {
+      setDeletionRequestedAt(null);
+      toast({ title: "Deletion cancelled", description: "Your account will not be deleted." });
+    }
+  };
 
   const handleSave = async () => {
     if (!user) return;
