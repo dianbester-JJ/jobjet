@@ -1,4 +1,9 @@
-import { createClient, corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.95.0";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -15,7 +20,6 @@ Deno.serve(async (req) => {
     const anonKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    // Verify caller's identity using their JWT
     const userClient = createClient(supabaseUrl, anonKey, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -33,7 +37,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Re-verify password by attempting a fresh sign-in
     const verifyClient = createClient(supabaseUrl, anonKey);
     const { error: signInErr } = await verifyClient.auth.signInWithPassword({
       email: userData.user.email!,
@@ -45,7 +48,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Mark deletion requested
     const admin = createClient(supabaseUrl, serviceKey);
     const { error: updateErr } = await admin
       .from("profiles")
