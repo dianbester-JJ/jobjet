@@ -45,6 +45,7 @@ interface Profile {
   full_name: string | null;
   phone: string | null;
   email: string | null;
+  avatar_url: string | null;
 }
 
 interface Review {
