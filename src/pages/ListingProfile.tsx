@@ -391,7 +391,6 @@ const ListingProfile = () => {
               </div>
             </div>
           </div>
-          </div>
 
           {/* Sidebar */}
           <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
