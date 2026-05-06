@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import ProviderProfile from "./pages/ProviderProfile";
+import ProProfile from "./pages/ProProfile";
 import ListingProfile from "./pages/ListingProfile";
 import ProviderDashboard from "./pages/ProviderDashboard";
 
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
             <Route path="/provider/:id" element={<ProviderProfile />} />
+            <Route path="/pro/:userId" element={<ProProfile />} />
             <Route path="/listing/:id" element={<ListingProfile />} />
             <Route path="/provider/dashboard" element={<ProviderDashboard />} />
             

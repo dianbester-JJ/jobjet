@@ -1,4 +1,4 @@
-import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, HelpCircle } from "lucide-react";
+import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, HelpCircle, UserCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
@@ -41,6 +41,7 @@ const AppSidebar = () => {
 
   const proNav = [
     { title: "Listings", url: "/provider/dashboard", icon: LayoutDashboard },
+    ...(user ? [{ title: "Profile", url: `/pro/${user.id}`, icon: UserCircle }] : []),
   ];
   
   return (

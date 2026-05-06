@@ -9,19 +9,20 @@ import { format } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatRate } from "@/lib/rateUtils";
-import ReviewForm from "@/components/ReviewForm";
-import { 
-  Star, 
-  MapPin, 
-  Clock, 
-  BadgeCheck, 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Star,
+  MapPin,
+  Clock,
+  BadgeCheck,
   ArrowLeft,
   Calendar,
   MessageSquare,
   Phone,
   Copy,
   Check,
-  Send
+  Send,
+  ChevronRight
 } from "lucide-react";
 
 interface Listing {
@@ -44,6 +45,7 @@ interface Profile {
   full_name: string | null;
   phone: string | null;
   email: string | null;
+  avatar_url: string | null;
 }
 
 interface Review {
@@ -76,7 +78,7 @@ const ListingProfile = () => {
   const [sendingEnquiry, setSendingEnquiry] = useState(false);
   const [eligibleBookings, setEligibleBookings] = useState<EligibleBooking[]>([]);
   const [selectedBookingId, setSelectedBookingId] = useState<string>("");
-  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  
 
   const category = listing ? serviceCategories.find((c) => c.id === listing.category_id) : null;
 
@@ -121,7 +123,7 @@ const ListingProfile = () => {
 
       const { data: profileData } = await supabase
         .from("profiles")
-        .select("full_name, phone, email")
+        .select("full_name, phone, email, avatar_url")
         .eq("id", listingData.user_id)
         .maybeSingle();
 
@@ -293,6 +295,35 @@ const ListingProfile = () => {
               )}
             </div>
 
+            {/* Pro Banner */}
+            <Link
+              to={`/pro/${listing.user_id}`}
+              className="mt-4 flex items-center justify-between rounded-xl border border-border bg-card p-4 shadow-card transition-all hover:shadow-card-hover hover:-translate-y-0.5"
+            >
+              <div className="flex items-center gap-3">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={providerProfile?.avatar_url || undefined} alt={providerProfile?.full_name || "Pro"} />
+                  <AvatarFallback>
+                    {(providerProfile?.full_name || "P").charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-semibold text-foreground">
+                    {providerProfile?.full_name || "Pro"}
+                  </p>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <Star className="h-4 w-4 fill-primary text-primary" />
+                    {avgRating ? (
+                      <span><span className="font-medium text-foreground">{avgRating}</span> ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})</span>
+                    ) : (
+                      <span>No reviews yet</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-muted-foreground" />
+            </Link>
+
             {/* Provider Info */}
             <div className="mt-6">
               <div className="flex items-start justify-between">
@@ -301,19 +332,10 @@ const ListingProfile = () => {
                     <span className="rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground">
                       {category?.name}
                     </span>
-                    {avgRating && (
-                      <span className="flex items-center gap-1 text-sm font-medium text-foreground">
-                        <Star className="h-4 w-4 fill-primary text-primary" />
-                        {avgRating} ({reviews.length})
-                      </span>
-                    )}
                   </div>
                   <h1 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
                     {listing.title}
                   </h1>
-                  {providerProfile?.full_name && (
-                    <p className="mt-1 text-muted-foreground">by {providerProfile.full_name}</p>
-                  )}
                 </div>
               </div>
 
@@ -366,96 +388,6 @@ const ListingProfile = () => {
                     </>
                   )}
                 </Button>
-              </div>
-
-              {/* Review Form - only if eligible */}
-              {eligibleBookings.length > 0 && selectedBookingId && listing && (
-                <div className="mt-8">
-                  {eligibleBookings.length > 1 && (
-                    <div className="mb-4">
-                      <label className="text-sm font-medium text-foreground">Select booking to review:</label>
-                      <select
-                        value={selectedBookingId}
-                        onChange={(e) => setSelectedBookingId(e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground"
-                      >
-                        {eligibleBookings.map((b) => (
-                          <option key={b.id} value={b.id}>
-                            Booking on {format(new Date(b.service_date), "PPP")}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                  <ReviewForm
-                    bookingId={selectedBookingId}
-                    providerId={listing.user_id}
-                    customerId={user!.id}
-                    onReviewSubmitted={handleReviewSubmitted}
-                  />
-                </div>
-              )}
-
-              {/* Reviews Section */}
-              <div className="mt-8">
-                <h2 className="font-display text-xl font-semibold text-foreground">
-                  Reviews {reviews.length > 0 && `(${reviews.length})`}
-                </h2>
-                <div className="mt-4 space-y-4">
-                  {reviews.length === 0 ? (
-                    <p className="text-muted-foreground text-sm">No reviews yet for this provider.</p>
-                  ) : (
-                    reviews.map((review) => (
-                      <div key={review.id} className="rounded-lg border border-border bg-card p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                              <span className="text-sm font-medium text-muted-foreground">
-                                {(reviewProfiles.get(review.customer_id) || "C")[0]}
-                              </span>
-                            </div>
-                            <div>
-                              <p className="font-medium text-foreground">
-                                {reviewProfiles.get(review.customer_id) || "Customer"}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {format(new Date(review.created_at), "PPP")}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <Star
-                                key={star}
-                                className={`h-4 w-4 ${
-                                  star <= review.rating
-                                    ? "fill-primary text-primary"
-                                    : "text-muted"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        {review.comment && (
-                          <p className="mt-3 text-sm text-muted-foreground">{review.comment}</p>
-                        )}
-                        {review.image_urls && review.image_urls.length > 0 && (
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {review.image_urls.map((url, i) => (
-                              <button
-                                key={i}
-                                onClick={() => setExpandedImage(url)}
-                                className="h-20 w-20 overflow-hidden rounded-lg border border-border transition-opacity hover:opacity-80"
-                              >
-                                <img src={url} alt="" className="h-full w-full object-cover" />
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -516,21 +448,6 @@ const ListingProfile = () => {
         </div>
       </main>
 
-      {/* Image lightbox */}
-      {expandedImage && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setExpandedImage(null)}
-        >
-          <img
-            src={expandedImage}
-            alt="Review image"
-            className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain"
-          />
-        </div>
-      )}
-
-      
     </div>
     </AppLayout>
   );
