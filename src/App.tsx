@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import ProviderProfile from "./pages/ProviderProfile";
+import ProProfile from "./pages/ProProfile";
 import ListingProfile from "./pages/ListingProfile";
 import ProviderDashboard from "./pages/ProviderDashboard";
 
