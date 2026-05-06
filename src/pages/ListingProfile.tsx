@@ -448,21 +448,6 @@ const ListingProfile = () => {
         </div>
       </main>
 
-      {/* Image lightbox */}
-      {expandedImage && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setExpandedImage(null)}
-        >
-          <img
-            src={expandedImage}
-            alt="Review image"
-            className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain"
-          />
-        </div>
-      )}
-
-      
     </div>
     </AppLayout>
   );
