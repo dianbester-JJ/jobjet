@@ -41,6 +41,7 @@ const AppSidebar = () => {
 
   const proNav = [
     { title: "Listings", url: "/provider/dashboard", icon: LayoutDashboard },
+    ...(user ? [{ title: "Profile", url: `/pro/${user.id}`, icon: UserCircle }] : []),
   ];
   
   return (
