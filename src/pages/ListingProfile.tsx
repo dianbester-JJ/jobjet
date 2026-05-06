@@ -9,19 +9,20 @@ import { format } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatRate } from "@/lib/rateUtils";
-import ReviewForm from "@/components/ReviewForm";
-import { 
-  Star, 
-  MapPin, 
-  Clock, 
-  BadgeCheck, 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Star,
+  MapPin,
+  Clock,
+  BadgeCheck,
   ArrowLeft,
   Calendar,
   MessageSquare,
   Phone,
   Copy,
   Check,
-  Send
+  Send,
+  ChevronRight
 } from "lucide-react";
 
 interface Listing {
