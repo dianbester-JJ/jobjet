@@ -78,7 +78,7 @@ const ListingProfile = () => {
   const [sendingEnquiry, setSendingEnquiry] = useState(false);
   const [eligibleBookings, setEligibleBookings] = useState<EligibleBooking[]>([]);
   const [selectedBookingId, setSelectedBookingId] = useState<string>("");
-  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  
 
   const category = listing ? serviceCategories.find((c) => c.id === listing.category_id) : null;
 
