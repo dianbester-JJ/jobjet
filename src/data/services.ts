@@ -4,6 +4,16 @@ import cleaningImg from "@/assets/services/cleaning.jpg";
 import carpentryImg from "@/assets/services/carpentry.jpg";
 import electricalImg from "@/assets/services/electrical.jpg";
 import landscapingImg from "@/assets/services/landscaping.jpg";
+import fabricationImg from "@/assets/services/fabrication.jpg";
+import buildingImg from "@/assets/services/building.jpg";
+import applianceRepairImg from "@/assets/services/appliance-repair.jpg";
+import petServicesImg from "@/assets/services/pet-services.jpg";
+import homeCareImg from "@/assets/services/home-care.jpg";
+import tutoringImg from "@/assets/services/tutoring.jpg";
+import movingImg from "@/assets/services/moving.jpg";
+import automotiveImg from "@/assets/services/automotive.jpg";
+import securityImg from "@/assets/services/security.jpg";
+import itTechImg from "@/assets/services/it-tech.jpg";
 
 export interface ServiceCategory {
   id: string;
