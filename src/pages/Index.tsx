@@ -77,7 +77,7 @@ const Index = () => {
       </section>
 
       {/* Service Categories */}
-      <section className="py-16 md:py-24">
+      <section className="py-6 md:py-8">
         <div className="container">
           <div className="text-center">
             <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">
