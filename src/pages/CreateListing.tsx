@@ -188,10 +188,7 @@ const CreateListing = () => {
                   <SelectContent>
                     {serviceCategories.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>
-                        <span className="flex items-center gap-2">
-                          <span>{cat.icon}</span>
-                          <span>{cat.name}</span>
-                        </span>
+                        {cat.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
