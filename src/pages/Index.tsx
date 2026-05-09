@@ -144,17 +144,17 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24">
+      <section className="py-12 md:py-16">
         <div className="container">
-          <div className="overflow-hidden rounded-2xl bg-gradient-hero p-8 text-center md:p-16">
-            <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
+          <div className="overflow-hidden rounded-2xl bg-gradient-hero px-6 py-10 text-center md:px-12 md:py-14">
+            <h2 className="font-display text-2xl font-bold text-primary-foreground md:text-4xl">
               Are You a Service Pro?
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-primary-foreground/90">
+            <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/90 md:text-base">
               Join thousands of Pros growing their business on JobJet. Get verified, get noticed, get hired.
             </p>
-            <Link to="/become-provider" className="mt-8 inline-block">
-              <Button variant="heroOutline" size="xl">
+            <Link to="/become-provider" className="mt-6 inline-block">
+              <Button variant="heroOutline" size="lg">
                 Start Your Pro Profile
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
