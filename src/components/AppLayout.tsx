@@ -15,10 +15,10 @@ const AppLayout = ({ children, hideFooter = false }: AppLayoutProps) => {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border/50 bg-background/80 backdrop-blur-md px-4">
+          <header className="sticky top-0 z-40 flex h-20 items-center gap-2 border-b border-border/50 bg-background/80 backdrop-blur-md px-4">
             <SidebarTrigger />
             <Link to="/" className="ml-2">
-              <img src={jobjetLogo} alt="JobJet" className="h-14 w-auto object-contain" />
+              <img src={jobjetLogo} alt="JobJet" className="h-20 w-auto object-contain" />
             </Link>
           </header>
           <main className="flex-1">{children}</main>
