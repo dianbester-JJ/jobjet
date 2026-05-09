@@ -29,24 +29,24 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
         </div>
 
-        <div className="container relative z-10 py-10 md:py-14">
+        <div className="container relative z-10 py-16 md:py-24">
           <div className="max-w-2xl">
-            <h1 className="font-display text-2xl font-bold leading-tight text-primary-foreground md:text-3xl animate-fade-in">
+            <h1 className="font-display text-3xl font-bold leading-tight text-primary-foreground md:text-5xl animate-fade-in">
               Affordable, Reliable Service For Your Home
             </h1>
-            <p className="mt-2 text-sm text-primary-foreground/80 md:text-base animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            <p className="mt-4 text-base text-primary-foreground/80 md:text-lg animate-fade-in" style={{ animationDelay: "0.1s" }}>
               Connect with verified painters, plumbers, cleaners, and more across South Africa.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
               <Link to="/services">
-                <Button variant="hero" size="xl">
+                <Button variant="hero" size="lg" className="w-full sm:w-auto">
                   <Search className="mr-2 h-5 w-5" />
                   Find a Service
                 </Button>
               </Link>
               <Link to="/become-provider">
-                <Button variant="heroOutline" size="xl">
+                <Button variant="heroOutline" size="lg" className="w-full sm:w-auto">
                   Join as a Pro
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
