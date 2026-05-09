@@ -11,7 +11,7 @@ const ServiceCategoryCard = ({ category }: ServiceCategoryCardProps) => {
       to={`/services?category=${category.id}`}
       className="group relative overflow-hidden rounded-xl shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1"
     >
-      <div className="aspect-[4/3] overflow-hidden">
+      <div className="aspect-[16/9] sm:aspect-[3/2] overflow-hidden">
         <img
           src={category.image}
           alt={category.name}
