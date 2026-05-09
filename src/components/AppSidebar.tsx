@@ -1,7 +1,6 @@
 import { Home, Search, MessageSquare, User, CalendarDays, LogOut, Briefcase, LayoutDashboard, HelpCircle, UserCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import jobjetLogo from "@/assets/jobjet-logo-transparent.png";
 import {
   Sidebar,
   SidebarContent,
@@ -47,14 +46,7 @@ const AppSidebar = () => {
   return (
     <>
       <Sidebar collapsible="icon">
-        <SidebarHeader className="p-4">
-          <Link to="/" className="flex items-center justify-center">
-            <img
-              src={jobjetLogo}
-              alt="JobJet"
-              className={collapsed ? "h-20 w-auto" : "h-32 w-auto"}
-            />
-          </Link>
+        <SidebarHeader className="p-2">
         </SidebarHeader>
 
         <SidebarContent>
