@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Search, ArrowRight, Shield, Star, Clock } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
@@ -9,6 +10,8 @@ import heroBg from "@/assets/hero-bg.jpg";
 
 const Index = () => {
   const featuredProviders = serviceProviders.slice(0, 4);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const visibleCategories = showAllCategories ? serviceCategories : serviceCategories.slice(0, 6);
 
   return (
         <AppLayout>
@@ -26,12 +29,12 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
         </div>
 
-        <div className="container relative z-10 py-24 md:py-32 lg:py-40">
+        <div className="container relative z-10 py-10 md:py-14">
           <div className="max-w-2xl">
-            <h1 className="font-display text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl animate-fade-in">
+            <h1 className="font-display text-2xl font-bold leading-tight text-primary-foreground md:text-3xl animate-fade-in">
               Affordable, Reliable Service For Your Home
             </h1>
-            <p className="mt-4 text-lg text-primary-foreground/80 md:text-xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            <p className="mt-2 text-sm text-primary-foreground/80 md:text-base animate-fade-in" style={{ animationDelay: "0.1s" }}>
               Connect with verified painters, plumbers, cleaners, and more across South Africa.
             </p>
 
@@ -86,10 +89,20 @@ const Index = () => {
           </div>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {serviceCategories.map((category) => (
+            {visibleCategories.map((category) => (
               <ServiceCategoryCard key={category.id} category={category} />
             ))}
           </div>
+          {serviceCategories.length > 6 && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => setShowAllCategories(!showAllCategories)}
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                {showAllCategories ? "Show Less" : `More Categories (${serviceCategories.length - 6} more)`}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
