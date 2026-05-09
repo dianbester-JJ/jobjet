@@ -26,10 +26,8 @@ interface ServiceRadiusMapProps {
 const Recenter = ({ town, radius }: { town: Town; radius: number }) => {
   const map = useMap();
   useEffect(() => {
-    const center: [number, number] = [town.lat, town.lng];
-    // Fit bounds to the radius circle for nice zoom
-    const circle = L.circle(center, { radius: radius * 1000 });
-    map.fitBounds(circle.getBounds(), { padding: [20, 20] });
+    const bounds = L.latLng(town.lat, town.lng).toBounds(radius * 2000);
+    map.fitBounds(bounds, { padding: [20, 20] });
   }, [town, radius, map]);
   return null;
 };
