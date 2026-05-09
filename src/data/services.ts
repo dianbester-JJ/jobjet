@@ -4,6 +4,16 @@ import cleaningImg from "@/assets/services/cleaning.jpg";
 import carpentryImg from "@/assets/services/carpentry.jpg";
 import electricalImg from "@/assets/services/electrical.jpg";
 import landscapingImg from "@/assets/services/landscaping.jpg";
+import fabricationImg from "@/assets/services/fabrication.jpg";
+import buildingImg from "@/assets/services/building.jpg";
+import applianceRepairImg from "@/assets/services/appliance-repair.jpg";
+import petServicesImg from "@/assets/services/pet-services.jpg";
+import homeCareImg from "@/assets/services/home-care.jpg";
+import tutoringImg from "@/assets/services/tutoring.jpg";
+import movingImg from "@/assets/services/moving.jpg";
+import automotiveImg from "@/assets/services/automotive.jpg";
+import securityImg from "@/assets/services/security.jpg";
+import itTechImg from "@/assets/services/it-tech.jpg";
 
 export interface ServiceCategory {
   id: string;
@@ -75,63 +85,70 @@ export const serviceCategories: ServiceCategory[] = [
     name: "Fabrication",
     icon: "Hammer",
     description: "Welding, metalwork, gates and custom fabrication",
-    image: carpentryImg,
+    image: fabricationImg,
   },
   {
     id: "building",
     name: "Building & Construction",
     icon: "Hammer",
     description: "Bricklaying, plastering, tiling and roofing",
-    image: carpentryImg,
+    image: buildingImg,
   },
   {
     id: "appliance-repair",
     name: "Appliance Repair",
     icon: "Wrench",
     description: "Fridges, washing machines, aircon and more",
-    image: plumbingImg,
+    image: applianceRepairImg,
   },
   {
     id: "pet-services",
     name: "Pet Services",
     icon: "Leaf",
     description: "Dog walking, grooming and pet sitting",
-    image: landscapingImg,
+    image: petServicesImg,
   },
   {
     id: "home-care",
     name: "Home Care",
     icon: "Sparkles",
     description: "Babysitting, elderly care and disability support",
-    image: cleaningImg,
+    image: homeCareImg,
   },
   {
     id: "tutoring",
     name: "Tutoring",
     icon: "Sparkles",
     description: "School subjects, music and language tuition",
-    image: cleaningImg,
+    image: tutoringImg,
   },
   {
     id: "moving",
     name: "Moving & Delivery",
     icon: "Wrench",
     description: "Furniture moving, courier and removal services",
-    image: plumbingImg,
+    image: movingImg,
   },
   {
     id: "automotive",
     name: "Automotive",
     icon: "Wrench",
     description: "Car wash, detailing and panel beating",
-    image: plumbingImg,
+    image: automotiveImg,
   },
   {
     id: "security",
     name: "Security",
     icon: "Zap",
     description: "CCTV installation, alarm systems and guarding",
-    image: electricalImg,
+    image: securityImg,
+  },
+  {
+    id: "it-tech",
+    name: "IT & Tech",
+    icon: "Zap",
+    description: "Computer repair, networking and DSTV installation",
+    image: itTechImg,
   },
   {
     id: "it-tech",
