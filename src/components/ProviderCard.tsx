@@ -25,7 +25,7 @@ const ProviderCard = ({ provider }: ProviderCardProps) => {
           </div>
         )}
         <div className="absolute bottom-3 left-3 rounded-full bg-card/90 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-          {category?.icon} {category?.name}
+          {category?.name}
         </div>
       </div>
       
@@ -54,7 +54,7 @@ const ProviderCard = ({ provider }: ProviderCardProps) => {
 
         <div className="mt-4 flex items-center justify-between">
           <div>
-            <span className="text-lg font-bold text-foreground">${provider.hourlyRate}</span>
+            <span className="text-lg font-bold text-foreground">R{provider.hourlyRate}</span>
             <span className="text-sm text-muted-foreground">/hour</span>
           </div>
           <Link to={`/provider/${provider.id}`}>
