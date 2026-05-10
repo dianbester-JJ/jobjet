@@ -18,7 +18,7 @@ const AppLayout = ({ children, hideFooter = false }: AppLayoutProps) => {
           <header className="sticky top-0 z-40 flex h-20 items-center gap-2 border-b border-border/50 bg-background/80 backdrop-blur-md px-4">
             <SidebarTrigger />
             <Link to="/" className="ml-2">
-              <img src={jobjetLogo} alt="JobJet" className="h-14 w-auto object-contain py-1" />
+              <img src={jobjetLogo} alt="JobJet" className="h-10 w-auto object-contain py-1" />
             </Link>
           </header>
           <main className="flex-1">{children}</main>
