@@ -266,16 +266,16 @@ const ListingProfile = () => {
     <div className="min-h-screen bg-gradient-warm">
       
 
-      <main className="container py-8 md:py-12">
+      <main className="container py-6 sm:py-8 md:py-12">
         <Link
           to="/services"
-          className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-primary"
+          className="mb-4 sm:mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back to Services
         </Link>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 lg:gap-8 lg:grid-cols-3">
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Cover Photo */}
@@ -333,7 +333,7 @@ const ListingProfile = () => {
                       {category?.name}
                     </span>
                   </div>
-                  <h1 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
+                  <h1 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
                     {listing.title}
                   </h1>
                 </div>

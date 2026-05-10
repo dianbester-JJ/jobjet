@@ -70,13 +70,13 @@ const Services = () => {
         <div className="min-h-screen bg-gradient-warm">
       
 
-      <main className="container py-8 md:py-12">
+      <main className="container py-6 sm:py-8 md:py-12">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
             Browse Services
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-2 text-sm sm:text-base text-muted-foreground">
             Find the perfect service provider for your project
           </p>
         </div>
@@ -165,7 +165,7 @@ const Services = () => {
 
         {/* Listings Grid */}
         {loading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="rounded-xl bg-card p-4 animate-pulse">
                 <div className="aspect-[16/10] rounded-lg bg-muted" />
@@ -175,7 +175,7 @@ const Services = () => {
             ))}
           </div>
         ) : filteredListings.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
