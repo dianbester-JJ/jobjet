@@ -150,13 +150,6 @@ export const serviceCategories: ServiceCategory[] = [
     description: "Computer repair, networking and DSTV installation",
     image: itTechImg,
   },
-  {
-    id: "it-tech",
-    name: "IT & Tech",
-    icon: "Zap",
-    description: "Computer repair, networking and DSTV installation",
-    image: electricalImg,
-  },
 ];
 
 export const serviceProviders: ServiceProvider[] = [
