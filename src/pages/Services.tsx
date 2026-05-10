@@ -82,8 +82,8 @@ const Services = () => {
         </div>
 
         {/* Search & Filters */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <div className="mb-6 space-y-4">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
@@ -94,23 +94,60 @@ const Services = () => {
                 className="w-full rounded-lg border border-input bg-card py-3 pl-10 pr-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
-            <div className="w-full md:w-64">
+            <Button
+              variant="outline"
+              className="md:hidden"
+              onClick={() => setShowFilters((s) => !s)}
+            >
+              <SlidersHorizontal className="mr-2 h-4 w-4" />
+              {showFilters ? "Hide Filters" : "Filters"}
+            </Button>
+            {/* Desktop location */}
+            <div className="hidden md:block md:w-64">
               <LocationSelector
                 value={locationFilter}
                 onChange={(value) => setLocationFilter(value)}
                 placeholder="Filter by location..."
               />
             </div>
-            <Button 
-              variant="outline" 
-              className="md:hidden"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <SlidersHorizontal className="mr-2 h-4 w-4" />
-              Filters
-            </Button>
           </div>
-          
+
+          {/* Mobile collapsible filters */}
+          {showFilters && (
+            <div className="space-y-4 rounded-lg border border-border bg-card p-4 md:hidden">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-foreground">Location</label>
+                <LocationSelector
+                  value={locationFilter}
+                  onChange={(value) => setLocationFilter(value)}
+                  placeholder="Filter by location..."
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-foreground">Category</label>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={selectedCategory === "all" ? "default" : "secondary"}
+                    size="sm"
+                    onClick={() => handleCategoryChange("all")}
+                  >
+                    All Services
+                  </Button>
+                  {serviceCategories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={selectedCategory === category.id ? "default" : "secondary"}
+                      size="sm"
+                      onClick={() => handleCategoryChange(category.id)}
+                    >
+                      {category.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Active filters */}
           {locationFilter && (
             <div className="flex items-center gap-2">
@@ -128,8 +165,8 @@ const Services = () => {
           )}
         </div>
 
-        {/* Category Pills */}
-        <div className="mb-8 flex flex-wrap gap-2">
+        {/* Category Pills - desktop only */}
+        <div className="mb-8 hidden flex-wrap gap-2 md:flex">
           <Button
             variant={selectedCategory === "all" ? "default" : "secondary"}
             size="sm"
