@@ -460,7 +460,36 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          active_role: string | null
+          avatar_url: string | null
+          full_name: string | null
+          id: string | null
+          location: string | null
+          phone: string | null
+          roles: string[] | null
+        }
+        Insert: {
+          active_role?: string | null
+          avatar_url?: string | null
+          full_name?: string | null
+          id?: string | null
+          location?: string | null
+          phone?: string | null
+          roles?: string[] | null
+        }
+        Update: {
+          active_role?: string | null
+          avatar_url?: string | null
+          full_name?: string | null
+          id?: string | null
+          location?: string | null
+          phone?: string | null
+          roles?: string[] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
@@ -471,6 +500,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _email: string }; Returns: boolean }
+      is_current_user_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "provider" | "customer"
