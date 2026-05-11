@@ -58,11 +58,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      const { data } = await supabase
-        .from("admin_emails")
-        .select("email")
-        .eq("email", user.email)
-        .maybeSingle();
+      const { data } = await supabase.rpc("is_current_user_admin");
 
       setIsAdmin(!!data);
       setCheckingAdmin(false);
