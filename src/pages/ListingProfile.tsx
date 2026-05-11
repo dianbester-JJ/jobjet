@@ -44,7 +44,7 @@ interface Listing {
 interface Profile {
   full_name: string | null;
   phone: string | null;
-  email: string | null;
+  email?: string | null;
   avatar_url: string | null;
 }
 
@@ -123,7 +123,7 @@ const ListingProfile = () => {
 
       const { data: profileData } = await supabase
         .from("profiles")
-        .select("full_name, phone, email, avatar_url")
+        .select("full_name, phone, avatar_url")
         .eq("id", listingData.user_id)
         .maybeSingle();
 
