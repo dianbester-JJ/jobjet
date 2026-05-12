@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import ReviewForm from "@/components/ReviewForm";
 import ListingCard from "@/components/ListingCard";
+import ShareButton from "@/components/ShareButton";
 import { Star, MapPin, Plus, Trash2, X, Loader2 } from "lucide-react";
 
 interface Profile {
@@ -261,6 +262,13 @@ const ProProfile = () => {
                 </span>
               </div>
             </div>
+            {isOwner && (
+              <ShareButton
+                title={`${profile.full_name || "Pro"} on JobJet`}
+                text={`Check out ${profile.full_name || "this Pro"} on JobJet`}
+                label="Share profile"
+              />
+            )}
           </div>
 
           {/* Listings */}

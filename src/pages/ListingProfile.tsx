@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatRate } from "@/lib/rateUtils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ShareButton from "@/components/ShareButton";
 import {
   Star,
   MapPin,
@@ -422,6 +423,14 @@ const ListingProfile = () => {
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Message Pro
                 </Button>
+
+                <ShareButton
+                  className="w-full"
+                  size="lg"
+                  title={listing.title}
+                  text={`Check out ${listing.title} on JobJet`}
+                  label="Share listing"
+                />
               </div>
             </div>
 
