@@ -151,6 +151,13 @@ export const serviceCategories: ServiceCategory[] = [
     description: "Computer repair, networking and DSTV installation",
     image: itTechImg,
   },
+  {
+    id: "pest-control",
+    name: "Pest Control",
+    icon: "Leaf",
+    description: "Fumigation, rodent removal and insect treatments",
+    image: pestControlImg,
+  },
 ];
 
 export const serviceProviders: ServiceProvider[] = [
