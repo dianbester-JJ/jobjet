@@ -14,6 +14,7 @@ import movingImg from "@/assets/services/moving.jpg";
 import automotiveImg from "@/assets/services/automotive.jpg";
 import securityImg from "@/assets/services/security.jpg";
 import itTechImg from "@/assets/services/it-tech.jpg";
+import pestControlImg from "@/assets/services/pest-control.jpg";
 
 export interface ServiceCategory {
   id: string;
@@ -149,6 +150,13 @@ export const serviceCategories: ServiceCategory[] = [
     icon: "Zap",
     description: "Computer repair, networking and DSTV installation",
     image: itTechImg,
+  },
+  {
+    id: "pest-control",
+    name: "Pest Control",
+    icon: "Leaf",
+    description: "Fumigation, rodent removal and insect treatments",
+    image: pestControlImg,
   },
 ];
 
