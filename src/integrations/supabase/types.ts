@@ -492,6 +492,19 @@ export type Database = {
       }
     }
     Functions: {
+      get_own_email: { Args: never; Returns: string }
+      get_public_provider_profile: {
+        Args: { _user_id: string }
+        Returns: {
+          active_role: string
+          avatar_url: string
+          full_name: string
+          id: string
+          location: string
+          phone: string
+          roles: string[]
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
