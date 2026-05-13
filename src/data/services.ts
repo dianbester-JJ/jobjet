@@ -14,6 +14,7 @@ import movingImg from "@/assets/services/moving.jpg";
 import automotiveImg from "@/assets/services/automotive.jpg";
 import securityImg from "@/assets/services/security.jpg";
 import itTechImg from "@/assets/services/it-tech.jpg";
+import pestControlImg from "@/assets/services/pest-control.jpg";
 
 export interface ServiceCategory {
   id: string;
