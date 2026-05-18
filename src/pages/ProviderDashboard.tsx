@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AppLayout from "@/components/AppLayout";
 import { Plus, Loader2, MessageSquare, Pencil } from "lucide-react";
+import ShareButton from "@/components/ShareButton";
 import { useToast } from "@/hooks/use-toast";
 import { serviceCategories } from "@/data/services";
 
@@ -51,17 +52,20 @@ const ProviderDashboard = () => {
     <div className="min-h-screen bg-gradient-warm">
       
       <main className="container py-8">
-        <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="font-display text-2xl font-bold">Listings</h1>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <Link to="/messages">
-              <Button variant="outline">
+              <Button variant="outline" size="sm">
                 <MessageSquare className="mr-2 h-4 w-4" />
-                Messages
+                <span className="hidden sm:inline">Messages</span>
               </Button>
             </Link>
             <Link to="/create-listing">
-              <Button><Plus className="mr-2 h-4 w-4" />Create Listing</Button>
+              <Button size="sm">
+                <Plus className="mr-2 h-4 w-4" />
+                <span className="hidden sm:inline">Create Listing</span>
+              </Button>
             </Link>
           </div>
         </div>
@@ -85,12 +89,19 @@ const ProviderDashboard = () => {
                       <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">{getCategoryName(l.category_id)}</span>
                       <h3 className="font-semibold">{l.title}</h3>
                     </div>
-                    <div className="flex items-center gap-2">
+                                      <div className="flex items-center gap-2">
                       {l.approved ? (
                         <Badge className="bg-green-100 text-green-800">Live</Badge>
                       ) : (
                         <Badge className="bg-yellow-100 text-yellow-800">Pending Approval</Badge>
                       )}
+                      <ShareButton
+                        title={l.title}
+                        text={`Check out ${l.title} on JobJet`}
+                        url={`${window.location.origin}/listing/${l.id}`}
+                        label=""
+                        size="sm"
+                      />
                       <Link to={`/edit-listing/${l.id}`}>
                         <Button variant="outline" size="sm">
                           <Pencil className="mr-1 h-3 w-3" /> Edit
