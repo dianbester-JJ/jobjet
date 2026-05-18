@@ -84,12 +84,12 @@ const ProviderDashboard = () => {
             ) : (
               listings.map((l) => (
                 <div key={l.id} className="rounded-xl border border-border bg-card p-6">
-                  <div className="flex items-center justify-between">
+                                    <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">{getCategoryName(l.category_id)}</span>
-                      <h3 className="font-semibold">{l.title}</h3>
+                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded shrink-0">{getCategoryName(l.category_id)}</span>
+                      <h3 className="font-semibold truncate">{l.title}</h3>
                     </div>
-                                      <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       {l.approved ? (
                         <Badge className="bg-green-100 text-green-800">Live</Badge>
                       ) : (
