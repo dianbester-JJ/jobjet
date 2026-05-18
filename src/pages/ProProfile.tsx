@@ -275,11 +275,23 @@ const ProProfile = () => {
           {listings.length > 0 && (
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-4">Listings</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {listings.map((l) => (
-                  <ListingCard key={l.id} listing={l} />
+                  <div key={l.id} className="relative">
+                    <ListingCard listing={l} />
+                    <div className="absolute top-2 right-2">
+                      <ShareButton
+                        title={l.title}
+                        text={`Check out ${l.title} on JobJet`}
+                        url={`${window.location.origin}/listing/${l.id}`}
+                        label=""
+                        size="sm"
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
+
             </section>
           )}
 
