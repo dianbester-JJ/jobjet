@@ -417,13 +417,16 @@ const Messages = () => {
       <main className="container py-8">
         <h1 className="font-display text-2xl font-bold text-foreground mb-6">Messages</h1>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3" style={{ height: "calc(100vh - 180px)" }}>
           {/* Conversation List */}
-          <div className="rounded-xl border border-border bg-card shadow-card">
+          <div className={cn(
+            "rounded-xl border border-border bg-card shadow-card flex flex-col h-full",
+            activeConversation ? "hidden lg:flex" : "flex"
+          )}>
             <div className="p-4 border-b border-border">
               <h2 className="font-semibold text-foreground">Conversations</h2>
             </div>
-            <div className="divide-y divide-border max-h-[500px] overflow-y-auto">
+            <div className="divide-y divide-border flex-1 overflow-y-auto">
               {conversations.length === 0 ? (
                 <div className="p-6 text-center text-muted-foreground">
                   <MessageSquare className="mx-auto h-8 w-8 mb-2" />
@@ -459,7 +462,24 @@ const Messages = () => {
           </div>
 
           {/* Chat Area */}
-          <div className="lg:col-span-2 rounded-xl border border-border bg-card shadow-card flex flex-col" style={{ minHeight: "500px" }}>
+          <div className={cn(
+            "lg:col-span-2 rounded-xl border border-border bg-card shadow-card flex flex-col h-full",
+            activeConversation ? "flex" : "hidden lg:flex"
+          )}>
+            {activeConversation && (
+              <div className="flex items-center gap-2 border-b border-border p-3 lg:hidden">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setActiveConversation(null)}
+                >
+                  ← Back
+                </Button>
+                <p className="font-medium text-sm">
+                  {conversations.find(c => c.other_user_id === activeConversation)?.other_user_name || "Conversation"}
+                </p>
+              </div>
+            )}
             {!activeConversation ? (
               <div className="flex flex-1 items-center justify-center text-muted-foreground">
                 <div className="text-center">
