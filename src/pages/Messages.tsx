@@ -412,22 +412,22 @@ const Messages = () => {
 
   return (
     <AppLayout>
-    <div className="min-h-screen bg-gradient-warm">
+    <div className="bg-gradient-warm">
       
-      <main className="container py-4 px-3 lg:py-8 lg:px-6">
+      <main className="w-full max-w-screen-xl mx-auto py-4 px-3 lg:py-8 lg:px-6">
         <h1 className="font-display text-2xl font-bold text-foreground mb-4">Messages</h1>
 
-        <div className="grid gap-4 lg:gap-6 lg:grid-cols-3 lg:h-[calc(100vh-180px)] w-full overflow-hidden">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-6 lg:h-[calc(100vh-180px)] w-full">
           {/* Conversation List */}
           <div className={cn(
             "rounded-xl border border-border bg-card shadow-card flex flex-col min-w-0 overflow-hidden",
-            "lg:h-full h-[calc(100vh-220px)]",
+            "lg:h-full",
             activeConversation ? "hidden lg:flex" : "flex"
           )}>
             <div className="p-4 border-b border-border">
               <h2 className="font-semibold text-foreground">Conversations</h2>
             </div>
-            <div className="divide-y divide-border flex-1 overflow-y-auto">
+            <div className="divide-y divide-border overflow-y-auto max-h-[70vh] lg:flex-1">
               {conversations.length === 0 ? (
                 <div className="p-6 text-center text-muted-foreground">
                   <MessageSquare className="mx-auto h-8 w-8 mb-2" />
@@ -465,7 +465,7 @@ const Messages = () => {
           {/* Chat Area */}
           <div className={cn(
             "lg:col-span-2 rounded-xl border border-border bg-card shadow-card flex flex-col min-w-0 overflow-hidden",
-            "lg:h-full h-[calc(100vh-220px)]",
+            "lg:h-full",
             activeConversation ? "flex" : "hidden lg:flex"
           )}>
             {activeConversation && (
@@ -492,7 +492,7 @@ const Messages = () => {
             ) : (
               <>
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                <div className="overflow-y-auto p-4 space-y-3 h-[50vh] lg:flex-1">
                   {messages.map((msg) => {
                     const isMine = msg.sender_id === user?.id;
 
