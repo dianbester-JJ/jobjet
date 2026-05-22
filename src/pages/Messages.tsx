@@ -414,13 +414,13 @@ const Messages = () => {
     <AppLayout>
     <div className="min-h-screen bg-gradient-warm">
       
-      <main className="container py-8">
-        <h1 className="font-display text-2xl font-bold text-foreground mb-6">Messages</h1>
+      <main className="container py-4 px-3 lg:py-8 lg:px-6">
+        <h1 className="font-display text-2xl font-bold text-foreground mb-4">Messages</h1>
 
-        <div className="grid gap-6 lg:grid-cols-3 lg:h-[calc(100vh-180px)]">
+        <div className="grid gap-4 lg:gap-6 lg:grid-cols-3 lg:h-[calc(100vh-180px)] w-full overflow-hidden">
           {/* Conversation List */}
           <div className={cn(
-            "rounded-xl border border-border bg-card shadow-card flex flex-col",
+            "rounded-xl border border-border bg-card shadow-card flex flex-col min-w-0 overflow-hidden",
             "lg:h-full h-[calc(100vh-220px)]",
             activeConversation ? "hidden lg:flex" : "flex"
           )}>
@@ -464,7 +464,7 @@ const Messages = () => {
 
           {/* Chat Area */}
           <div className={cn(
-            "lg:col-span-2 rounded-xl border border-border bg-card shadow-card flex flex-col",
+            "lg:col-span-2 rounded-xl border border-border bg-card shadow-card flex flex-col min-w-0 overflow-hidden",
             "lg:h-full h-[calc(100vh-220px)]",
             activeConversation ? "flex" : "hidden lg:flex"
           )}>
